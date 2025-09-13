@@ -1,3 +1,76 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "img_vintage_camera",
+      "description": "A vintage film camera on a wooden table.",
+      "imageUrl": "https://picsum.photos/seed/1/600/400",
+      "imageHint": "vintage camera"
+    },
+    {
+      "id": "img_wireless_headphones",
+      "description": "Sleek wireless headphones on a dark background.",
+      "imageUrl": "https://picsum.photos/seed/2/600/400",
+      "imageHint": "wireless headphones"
+    },
+    {
+      "id": "img_ceramic_mug",
+      "description": "A handcrafted ceramic mug with a unique glaze.",
+      "imageUrl": "https://picsum.photos/seed/3/600/400",
+      "imageHint": "ceramic mug"
+    },
+    {
+      "id": "img_leather_journal",
+      "description": "A rustic leather-bound journal with a pen.",
+      "imageUrl": "https://picsum.photos/seed/4/600/400",
+      "imageHint": "leather journal"
+    },
+    {
+      "id": "img_smart_watch",
+      "description": "A modern smart watch displaying the time.",
+      "imageUrl": "https://picsum.photos/seed/5/600/400",
+      "imageHint": "smart watch"
+    },
+    {
+      "id": "img_yoga_mat",
+      "description": "A rolled-up yoga mat ready for a session.",
+      "imageUrl": "https://picsum.photos/seed/6/600/400",
+      "imageHint": "yoga mat"
+    },
+    {
+      "id": "img_gourmet_coffee",
+      "description": "A bag of artisanal gourmet coffee beans.",
+      "imageUrl": "https://picsum.photos/seed/7/600/400",
+      "imageHint": "coffee beans"
+    },
+    {
+      "id": "img_running_shoes",
+      "description": "A pair of colorful and modern running shoes.",
+      "imageUrl": "https://picsum.photos/seed/8/600/400",
+      "imageHint": "running shoes"
+    },
+    {
+      "id": "img_potted_plant",
+      "description": "A lush green succulent in a minimalist pot.",
+      "imageUrl": "https://picsum.photos/seed/9/600/400",
+      "imageHint": "potted plant"
+    },
+    {
+      "id": "img_fountain_pen",
+      "description": "An elegant fountain pen with a gold nib.",
+      "imageUrl": "https://picsum.photos/seed/10/600/400",
+      "imageHint": "fountain pen"
+    },
+    {
+      "id": "img_wool_scarf",
+      "description": "A cozy, warm wool scarf in a plaid pattern.",
+      "imageUrl": "https://picsum.photos/seed/11/600/400",
+      "imageHint": "wool scarf"
+    },
+    {
+      "id": "img_portable_speaker",
+      "description": "A compact and portable bluetooth speaker.",
+      "imageUrl": "https://picsum.photos/seed/12/600/400",
+      "imageHint": "bluetooth speaker"
+    }
+  ]
 }
