@@ -53,7 +53,7 @@ export default function LoginPage() {
         title: 'Login Successful',
         description: 'Welcome back!',
       });
-      router.push('/account');
+      router.replace('/');
     } catch (error: any) {
       toast({
         title: 'Login Failed',
@@ -70,7 +70,7 @@ export default function LoginPage() {
         title: 'Login Successful',
         description: 'Welcome back!',
       });
-      router.push('/account');
+      router.replace('/');
     } catch (error: any) {
        toast({
         title: 'Google Sign-In Failed',

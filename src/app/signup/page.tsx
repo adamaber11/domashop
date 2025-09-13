@@ -61,7 +61,7 @@ export default function SignupPage() {
         title: 'Account Created!',
         description: 'Your account has been successfully created.',
       });
-      router.push('/account');
+      router.replace('/');
     } catch (error: any) {
       toast({
         title: 'Sign Up Failed',
@@ -78,7 +78,7 @@ export default function SignupPage() {
         title: 'Sign Up Successful!',
         description: 'Your account has been created.',
       });
-      router.push('/account');
+      router.replace('/');
     } catch (error: any) {
        toast({
         title: 'Google Sign-Up Failed',
