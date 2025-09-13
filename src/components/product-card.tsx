@@ -20,7 +20,10 @@ interface ProductCardProps {
 
 // This is a mock authentication check. In a real app, you'd use a proper auth context.
 const useUser = () => {
-    const [isLoggedIn] = useState(false); // Change to true to simulate a logged-in user
+    // In a real app, this would be replaced with a real auth check
+    // For now, we'll assume the user is logged in to allow adding to cart,
+    // as per the request to prepare for backend integration.
+    const [isLoggedIn] = useState(true);
     return { isLoggedIn };
 }
 
@@ -35,7 +38,8 @@ export function ProductCard({ product }: ProductCardProps) {
   const router = useRouter();
   const { toast } = useToast();
 
-  const handleAddToCartClick = () => {
+  const handleAddToCartClick = (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent navigating to product page
     if (!isLoggedIn) {
       toast({
         title: 'Please log in',

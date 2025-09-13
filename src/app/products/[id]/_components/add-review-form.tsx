@@ -18,7 +18,8 @@ const reviewSchema = z.object({
 
 // This is a mock authentication check. In a real app, you'd use a proper auth context.
 const useUser = () => {
-    const [isLoggedIn] = useState(true); // Change to false to simulate a logged-out user
+    // In a real app, this would be replaced with a real auth check
+    const [isLoggedIn] = useState(true); // Assume user is logged in to show the form
     return { isLoggedIn };
 }
 
@@ -36,6 +37,7 @@ export function AddReviewForm({ productId }: { productId: string }) {
     });
 
     const onSubmit = (values: z.infer<typeof reviewSchema>) => {
+        // TODO: Replace with API call to submit the review
         console.log('New review submitted:', { productId, ...values });
         toast({
             title: "Review Submitted!",
