@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useCart } from '@/context/cart-context';
 import type { Product } from '@/lib/types';
-import { Plus, Minus, ShoppingCart } from 'lucide-react';
+import { Plus, Minus, ShoppingBag } from 'lucide-react';
 
 export function AddToCartButton({ product }: { product: Product }) {
   const [quantity, setQuantity] = useState(1);
@@ -42,7 +42,7 @@ export function AddToCartButton({ product }: { product: Product }) {
         </Button>
       </div>
       <Button onClick={handleAddToCart} size="lg">
-        <ShoppingCart className="mr-2 h-5 w-5" />
+        <ShoppingBag className="mr-2 h-5 w-5" />
         Add to Cart
       </Button>
     </div>

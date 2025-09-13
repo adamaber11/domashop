@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { Trash2, Minus, Plus, ShoppingCart } from 'lucide-react';
+import { Trash2, Minus, Plus, ShoppingBag } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
@@ -20,7 +20,7 @@ export default function CartPage() {
       {cart.length === 0 ? (
         <Card className="text-center py-12">
             <CardHeader>
-                <ShoppingCart className="mx-auto h-12 w-12 text-muted-foreground" />
+                <ShoppingBag className="mx-auto h-12 w-12 text-muted-foreground" />
             </CardHeader>
             <CardContent>
                 <h2 className="text-2xl font-semibold mb-2">Your cart is empty</h2>
