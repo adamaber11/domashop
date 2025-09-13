@@ -10,10 +10,20 @@ import { Button } from './ui/button';
 import { Eye, ShoppingBag } from 'lucide-react';
 import { useCart } from '@/context/cart-context';
 import { Badge } from './ui/badge';
+import { useRouter } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast';
+import { useState } from 'react';
 
 interface ProductCardProps {
   product: Product;
 }
+
+// This is a mock authentication check. In a real app, you'd use a proper auth context.
+const useUser = () => {
+    const [isLoggedIn] = useState(false); // Change to true to simulate a logged-in user
+    return { isLoggedIn };
+}
+
 
 export function ProductCard({ product }: ProductCardProps) {
   const placeholder = PlaceHolderImages.find(p => p.id === product.imageIds[0]);
@@ -21,11 +31,28 @@ export function ProductCard({ product }: ProductCardProps) {
     ? product.reviews.reduce((acc, review) => acc + review.rating, 0) / product.reviews.length
     : 0;
   const { addToCart } = useCart();
+  const { isLoggedIn } = useUser();
+  const router = useRouter();
+  const { toast } = useToast();
+
+  const handleAddToCartClick = () => {
+    if (!isLoggedIn) {
+      toast({
+        title: 'Please log in',
+        description: 'You need to be logged in to add items to the cart.',
+        variant: 'destructive',
+      });
+      router.push('/login');
+    } else {
+      addToCart(product, 1);
+    }
+  };
+
 
   return (
     <Card className="group flex flex-col h-full overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
       <CardHeader className="p-0">
-        <div className="relative aspect-square w-full overflow-hidden">
+        <div className="relative aspect-[4/3] w-full overflow-hidden">
           <Link href={`/products/${product.id}`} aria-label={`View ${product.name}`}>
             {placeholder && (
               <Image
@@ -72,7 +99,7 @@ export function ProductCard({ product }: ProductCardProps) {
                 <span className="sr-only">View Product</span>
               </Link>
             </Button>
-            <Button variant="outline" size="icon" onClick={() => addToCart(product, 1)}>
+            <Button variant="outline" size="icon" onClick={handleAddToCartClick}>
               <ShoppingBag className="h-5 w-5" />
               <span className="sr-only">Add to Cart</span>
             </Button>
