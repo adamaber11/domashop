@@ -25,7 +25,7 @@ export function NavigationBar() {
   const navLinkClasses = "text-sm font-medium transition-colors hover:text-primary relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:origin-right after:transition-transform after:duration-300 hover:after:scale-x-100";
 
   return (
-    <nav className="bg-background border-b sticky top-16 z-40">
+    <nav className="bg-background border-b sticky top-16 z-40 hidden md:block">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14">
           <div className="flex items-center space-x-6">

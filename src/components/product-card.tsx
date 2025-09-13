@@ -60,7 +60,7 @@ export function ProductCard({ product }: ProductCardProps) {
                 alt={product.description}
                 fill
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
-                sizes="(max-width: 640px) 90vw, (max-width: 768px) 45vw, (max-width: 1024px) 30vw, 23vw"
+                sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, (max-width: 1280px) 30vw, 23vw"
                 data-ai-hint={product.imageHint}
               />
             )}
@@ -72,7 +72,7 @@ export function ProductCard({ product }: ProductCardProps) {
       </CardHeader>
       <CardContent className="p-4 flex-grow">
         <Link href={`/products/${product.id}`} className="hover:text-primary">
-          <CardTitle className="font-headline text-xl leading-tight tracking-tight h-12">
+          <CardTitle className="font-headline text-lg md:text-xl leading-tight tracking-tight h-12 line-clamp-2">
             {product.name}
           </CardTitle>
         </Link>
@@ -85,14 +85,14 @@ export function ProductCard({ product }: ProductCardProps) {
         <div className="flex items-baseline gap-2">
             {product.onSale && typeof product.salePrice === 'number' ? (
                 <>
-                    <p className="text-lg font-semibold text-destructive">${product.salePrice.toFixed(2)}</p>
+                    <p className="text-base md:text-lg font-semibold text-destructive">${product.salePrice.toFixed(2)}</p>
                     <p className="text-sm font-medium text-muted-foreground line-through">${product.price.toFixed(2)}</p>
                 </>
             ) : (
-                <p className="text-lg font-semibold">${product.price.toFixed(2)}</p>
+                <p className="text-base md:text-lg font-semibold">${product.price.toFixed(2)}</p>
             )}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
            <Button asChild variant="outline" size="icon">
               <Link href={`/products/${product.id}`}>
                 <Eye className="h-5 w-5" />

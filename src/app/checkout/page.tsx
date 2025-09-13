@@ -64,37 +64,37 @@ export default function CheckoutPage() {
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h1 className="font-headline text-4xl font-bold mb-8">Checkout</h1>
+      <h1 className="font-headline text-4xl font-bold mb-8 text-center lg:text-left">Checkout</h1>
       <div className="grid lg:grid-cols-3 gap-12 items-start">
         <div className="lg:col-span-2">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <Card>
                 <CardHeader><CardTitle className="font-headline text-2xl">Shipping Information</CardTitle></CardHeader>
-                <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <FormField control={form.control} name="email" render={({ field }) => (
-                    <FormItem className="md:col-span-2">
+                    <FormItem className="sm:col-span-2">
                       <FormLabel>Email</FormLabel>
                       <FormControl><Input placeholder="you@example.com" {...field} /></FormControl>
                       <FormMessage />
                     </FormItem>
                   )} />
                    <FormField control={form.control} name="shippingName" render={({ field }) => (
-                    <FormItem className="md:col-span-2">
+                    <FormItem className="sm:col-span-2">
                       <FormLabel>Full Name</FormLabel>
                       <FormControl><Input placeholder="John Doe" {...field} /></FormControl>
                       <FormMessage />
                     </FormItem>
                   )} />
                    <FormField control={form.control} name="shippingAddress" render={({ field }) => (
-                    <FormItem className="md:col-span-2">
+                    <FormItem className="sm:col-span-2">
                       <FormLabel>Address</FormLabel>
                       <FormControl><Input placeholder="123 Main St" {...field} /></FormControl>
                       <FormMessage />
                     </FormItem>
                   )} />
                   <FormField control={form.control} name="shippingCity" render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="sm:col-span-2 md:col-span-1">
                       <FormLabel>City</FormLabel>
                       <FormControl><Input {...field} /></FormControl>
                       <FormMessage />

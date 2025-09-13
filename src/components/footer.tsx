@@ -5,8 +5,8 @@ export function Footer() {
   return (
     <footer className="bg-muted text-muted-foreground mt-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="space-y-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="space-y-4 md:col-span-1 sm:col-span-2">
              <Link href="/" className="flex items-center space-x-2">
                 <ShoppingCart className="h-8 w-8 text-primary" />
                 <span className="font-extrabold font-headline inline-block text-3xl text-foreground">
@@ -18,7 +18,7 @@ export function Footer() {
             </p>
           </div>
           
-          <div>
+          <div className="text-sm">
             <h3 className="font-headline font-semibold text-foreground mb-4">Shop</h3>
             <ul className="space-y-2">
               <li><Link href="/category" className="hover:text-primary transition-colors">Categories</Link></li>
@@ -26,7 +26,7 @@ export function Footer() {
             </ul>
           </div>
 
-          <div>
+          <div className="text-sm">
             <h3 className="font-headline font-semibold text-foreground mb-4">About</h3>
             <ul className="space-y-2">
               <li><Link href="/about" className="hover:text-primary transition-colors">About Us</Link></li>
@@ -35,7 +35,7 @@ export function Footer() {
             </ul>
           </div>
           
-          <div>
+          <div className="text-sm">
             <h3 className="font-headline font-semibold text-foreground mb-4">Follow Us</h3>
             <div className="flex space-x-4">
               <Link href="#" aria-label="Facebook" className="text-muted-foreground hover:text-primary transition-colors">
