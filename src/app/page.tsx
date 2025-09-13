@@ -5,6 +5,7 @@ import { products } from '@/lib/data';
 import { Product } from '@/lib/types';
 import { ProductCard } from '@/components/product-card';
 import { HeroCarousel } from '@/components/hero-carousel';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -32,11 +33,22 @@ export default function Home() {
           Featured Products
         </h2>
         {filteredProducts.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {filteredProducts.map((product: Product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+          <Carousel 
+            opts={{ align: "start", loop: true }}
+            className="w-full"
+          >
+            <CarouselContent>
+              {filteredProducts.map((product: Product) => (
+                <CarouselItem key={product.id} className="sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
+                  <div className="p-1">
+                    <ProductCard product={product} />
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="absolute left-0 top-1/2 -translate-y-1/2 z-10" />
+            <CarouselNext className="absolute right-0 top-1/2 -translate-y-1/2 z-10" />
+          </Carousel>
         ) : (
           <p className="text-center text-muted-foreground">No products found matching your search.</p>
         )}
