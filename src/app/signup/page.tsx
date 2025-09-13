@@ -33,7 +33,7 @@ const formSchema = z.object({
   lastName: z.string().min(2, 'Last name is too short'),
   email: z.string().email('Invalid email address'),
   password: z.string().min(8, 'Password must be at least 8 characters'),
-  gender: z.enum(['male', 'female', 'other']),
+  gender: z.enum(['male', 'female']),
 });
 
 export default function SignupPage() {
@@ -173,12 +173,6 @@ export default function SignupPage() {
                             <RadioGroupItem value="female" />
                           </FormControl>
                           <FormLabel className="font-normal">Female</FormLabel>
-                        </FormItem>
-                        <FormItem className="flex items-center space-x-2 space-y-0">
-                          <FormControl>
-                            <RadioGroupItem value="other" />
-                          </FormControl>
-                          <FormLabel className="font-normal">Other</FormLabel>
                         </FormItem>
                       </RadioGroup>
                     </FormControl>
