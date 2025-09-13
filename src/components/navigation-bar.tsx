@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, LogIn, UserPlus } from 'lucide-react';
 import { products } from '@/lib/data';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
@@ -55,10 +55,10 @@ export function NavigationBar() {
           
           <div className="flex items-center space-x-2">
             <Button variant="ghost" asChild>
-              <Link href="/login">Log In</Link>
+              <Link href="/login"><LogIn className="mr-2 h-4 w-4" />Log In</Link>
             </Button>
             <Button asChild>
-              <Link href="/signup">Sign Up</Link>
+              <Link href="/signup"><UserPlus className="mr-2 h-4 w-4" />Sign Up</Link>
             </Button>
           </div>
         </div>
