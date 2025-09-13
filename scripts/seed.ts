@@ -1,8 +1,8 @@
 // scripts/seed.ts
 import { collection, doc, writeBatch } from 'firebase/firestore';
-import { db } from '../src/lib/firebase';
-import { products as mockProducts } from '../src/lib/data';
-import type { Product, Review } from '../src/lib/types';
+import { db } from './src/lib/firebase';
+import { products as mockProducts } from './src/lib/data';
+import type { Product, Review } from './src/lib/types';
 
 async function seedDatabase() {
   console.log('Starting to seed the database...');
@@ -34,7 +34,7 @@ async function seedDatabase() {
 
     // Add reviews to the 'reviews' collection
     for (const mockReview of mockReviews) {
-      const reviewRef = doc(reviewsCollection, mockReview.id);
+      const reviewRef = doc(reviewsCollection);
       
       const reviewData: Omit<Review, 'id'> = {
         author: mockReview.author,
