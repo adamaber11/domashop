@@ -13,7 +13,8 @@ export const categories = [
   "Books & Stationery",
   "Pet Supplies",
   "Accessories & Watches",
-  "Digital Products"
+  "Digital Products",
+  "Handmade"
 ];
 
 export const products: Product[] = [
