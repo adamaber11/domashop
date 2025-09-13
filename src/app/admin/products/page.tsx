@@ -1,5 +1,6 @@
+
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -20,7 +21,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Badge } from '@/components/ui/badge';
 import { PlusCircle, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
@@ -40,9 +40,11 @@ import {
 export default function AdminProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [productToDelete, setProductToDelete] = useState<{id: string, name: string} | null>(null);
   const { toast } = useToast();
 
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
+    setLoading(true);
     try {
       const fetchedProducts = await getAllProducts();
       setProducts(fetchedProducts);
@@ -56,20 +58,21 @@ export default function AdminProductsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [toast]);
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [fetchProducts]);
 
-  const handleDelete = async (productId: string, productName: string) => {
+  const handleDelete = async () => {
+    if (!productToDelete) return;
     try {
-      await deleteProduct(productId);
-      setProducts(prev => prev.filter(p => p.id !== productId));
+      await deleteProduct(productToDelete.id);
       toast({
         title: 'Product Deleted',
-        description: `Product "${productName}" has been successfully deleted.`,
+        description: `Product "${productToDelete.name}" has been successfully deleted.`,
       });
+      await fetchProducts(); // Refetch products to update the list
     } catch (error) {
         console.error('Failed to delete product:', error);
         toast({
@@ -77,6 +80,8 @@ export default function AdminProductsPage() {
             description: 'Failed to delete product. Please try again.',
             variant: 'destructive',
         });
+    } finally {
+        setProductToDelete(null);
     }
   }
 
@@ -103,6 +108,7 @@ export default function AdminProductsPage() {
   }
 
   return (
+    <>
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex items-center justify-between mb-8">
         <div>
@@ -168,25 +174,12 @@ export default function AdminProductsPage() {
                                         <DropdownMenuItem asChild>
                                             <Link href={`/admin/products/${product.id}/edit`}><Pencil className="mr-2 h-4 w-4" />Edit</Link>
                                         </DropdownMenuItem>
-                                        <AlertDialog>
-                                            <AlertDialogTrigger asChild>
-                                                <Button variant="ghost" className="w-full justify-start text-sm text-destructive hover:text-destructive p-2 h-auto font-normal">
-                                                    <Trash2 className="mr-2 h-4 w-4" />Delete
-                                                </Button>
-                                            </AlertDialogTrigger>
-                                            <AlertDialogContent>
-                                                <AlertDialogHeader>
-                                                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                                                    <AlertDialogDescription>
-                                                        This action cannot be undone. This will permanently delete the product "{product.name}" and all its associated reviews.
-                                                    </AlertDialogDescription>
-                                                </AlertDialogHeader>
-                                                <AlertDialogFooter>
-                                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                                    <AlertDialogAction onClick={() => handleDelete(product.id, product.name)} className="bg-destructive hover:bg-destructive/90">Delete</AlertDialogAction>
-                                                </AlertDialogFooter>
-                                            </AlertDialogContent>
-                                        </AlertDialog>
+                                        <DropdownMenuItem 
+                                            onSelect={() => setProductToDelete({ id: product.id, name: product.name })}
+                                            className="text-destructive focus:text-destructive focus:bg-destructive/10"
+                                        >
+                                                <Trash2 className="mr-2 h-4 w-4" />Delete
+                                        </DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </TableCell>
@@ -204,5 +197,21 @@ export default function AdminProductsPage() {
         </Table>
       </div>
     </div>
+
+    <AlertDialog open={!!productToDelete} onOpenChange={(open) => !open && setProductToDelete(null)}>
+        <AlertDialogContent>
+            <AlertDialogHeader>
+                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete the product "{productToDelete?.name}" and all its associated reviews.
+                </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+                <AlertDialogCancel onClick={() => setProductToDelete(null)}>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handleDelete} className="bg-destructive hover:bg-destructive/90">Delete</AlertDialogAction>
+            </AlertDialogFooter>
+        </AlertDialogContent>
+    </AlertDialog>
+    </>
   );
 }
