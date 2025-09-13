@@ -25,13 +25,13 @@ export function NavigationBar() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14">
           <div className="flex items-center space-x-6">
-            <Link href="/" className={cn("text-sm font-medium transition-colors hover:text-primary", pathname === '/' ? 'text-primary' : 'text-foreground/60')}>
+            <Link href="/" className={cn("text-sm font-bold transition-colors hover:text-primary", pathname === '/' ? 'text-primary' : 'text-foreground/60')}>
               Home
             </Link>
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="text-sm font-medium text-foreground/60 p-0 hover:bg-transparent hover:text-primary data-[state=open]:text-primary">
+                <Button variant="ghost" className="text-sm font-bold text-foreground/60 p-0 hover:bg-transparent hover:text-primary data-[state=open]:text-primary">
                   Categories
                   <ChevronDown className="ml-1 h-4 w-4" />
                 </Button>
@@ -39,16 +39,16 @@ export function NavigationBar() {
               <DropdownMenuContent align="start">
                 {categories.map((category) => (
                   <DropdownMenuItem key={category} asChild>
-                    <Link href={`/category/${category.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-')}`}>{category}</Link>
+                    <Link href={`/category/${category.toLowerCase().replace(/ & /g, '-')}`}>{category}</Link>
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Link href="/about" className={cn("text-sm font-medium transition-colors hover:text-primary", pathname === '/about' ? 'text-primary' : 'text-foreground/60')}>
+            <Link href="/about" className={cn("text-sm font-bold transition-colors hover:text-primary", pathname === '/about' ? 'text-primary' : 'text-foreground/60')}>
               About
             </Link>
-            <Link href="/contact" className={cn("text-sm font-medium transition-colors hover:text-primary", pathname === '/contact' ? 'text-primary' : 'text-foreground/60')}>
+            <Link href="/contact" className={cn("text-sm font-bold transition-colors hover:text-primary", pathname === '/contact' ? 'text-primary' : 'text-foreground/60')}>
               Contact Us
             </Link>
           </div>

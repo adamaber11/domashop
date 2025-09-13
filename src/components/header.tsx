@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ShoppingCart, User, Search } from 'lucide-react';
+import { ShoppingCart, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/cart-context';
 import { Input } from '@/components/ui/input';
@@ -35,12 +35,6 @@ export function Header() {
         
         <div className="flex items-center justify-end space-x-4">
           <nav className="flex items-center space-x-2">
-            <Button variant="ghost" asChild>
-              <Link href="/account">
-                <User className="h-5 w-5" />
-                <span className="sr-only">Account</span>
-              </Link>
-            </Button>
             <Button variant="ghost" asChild className="relative">
               <Link href="/cart">
                 <ShoppingCart className="h-5 w-5" />
