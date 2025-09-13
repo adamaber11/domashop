@@ -4,9 +4,7 @@ import { useState } from 'react';
 import { products } from '@/lib/data';
 import { Product } from '@/lib/types';
 import { ProductCard } from '@/components/product-card';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Search } from 'lucide-react';
+import { HeroCarousel } from '@/components/hero-carousel';
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -24,18 +22,8 @@ export default function Home() {
         <p className="mt-4 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
           Discover a world of quality products, curated just for you. Your blissful shopping journey starts here.
         </p>
-        <div className="mt-8 max-w-lg mx-auto flex gap-2">
-          <Input
-            type="search"
-            placeholder="Search for products..."
-            className="flex-grow"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            aria-label="Search products"
-          />
-          <Button type="submit" size="icon" aria-label="Search">
-            <Search />
-          </Button>
+        <div className="mt-8 max-w-4xl mx-auto">
+          <HeroCarousel />
         </div>
       </section>
 
