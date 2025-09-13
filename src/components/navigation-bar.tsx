@@ -18,12 +18,14 @@ import { categories } from '@/lib/data';
 export function NavigationBar() {
   const pathname = usePathname();
 
+  const navLinkClasses = "text-sm font-bold transition-colors hover:text-primary relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100";
+
   return (
     <nav className="bg-background border-b sticky top-16 z-40">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14">
           <div className="flex items-center space-x-6">
-            <Link href="/" className={cn("text-sm font-bold transition-colors hover:text-primary", pathname === '/' ? 'text-primary' : 'text-foreground/60')}>
+            <Link href="/" className={cn(navLinkClasses, pathname === '/' ? 'text-primary after:scale-x-100' : 'text-foreground/60')}>
               Home
             </Link>
             
@@ -43,10 +45,10 @@ export function NavigationBar() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Link href="/about" className={cn("text-sm font-bold transition-colors hover:text-primary", pathname === '/about' ? 'text-primary' : 'text-foreground/60')}>
+            <Link href="/about" className={cn(navLinkClasses, pathname === '/about' ? 'text-primary after:scale-x-100' : 'text-foreground/60')}>
               About
             </Link>
-            <Link href="/contact" className={cn("text-sm font-bold transition-colors hover:text-primary", pathname === '/contact' ? 'text-primary' : 'text-foreground/60')}>
+            <Link href="/contact" className={cn(navLinkClasses, pathname === '/contact' ? 'text-primary after:scale-x-100' : 'text-foreground/60')}>
               Contact Us
             </Link>
           </div>
