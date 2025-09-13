@@ -1,9 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { ShoppingCart, User, Package2 } from 'lucide-react';
+import { ShoppingCart, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/cart-context';
+import Image from 'next/image';
 
 export function Header() {
   const { itemCount } = useCart();
@@ -12,7 +13,7 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center">
         <Link href="/" className="mr-6 flex items-center space-x-2">
-          <Package2 className="h-6 w-6" />
+          <Image src="https://picsum.photos/seed/logo/32/32" width={32} height={32} alt="Bazaar Bliss logo" className="rounded-md" data-ai-hint="logo" />
           <span className="font-bold font-headline inline-block">Bazaar Bliss</span>
         </Link>
         <div className="flex flex-1 items-center justify-end space-x-4">
