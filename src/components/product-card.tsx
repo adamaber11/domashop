@@ -35,18 +35,6 @@ export function ProductCard({ product }: ProductCardProps) {
               />
             )}
           </Link>
-          <div className="absolute inset-0 flex items-center justify-center gap-2 bg-black/50 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-            <Button asChild variant="ghost" size="icon" className="text-white hover:bg-white/20 hover:text-white">
-              <Link href={`/products/${product.id}`}>
-                <Eye className="h-6 w-6" />
-                <span className="sr-only">View Product</span>
-              </Link>
-            </Button>
-            <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 hover:text-white" onClick={() => addToCart(product, 1)}>
-              <ShoppingBag className="h-6 w-6" />
-              <span className="sr-only">Add to Cart</span>
-            </Button>
-          </div>
         </div>
       </CardHeader>
       <CardContent className="p-4 flex-grow">
@@ -60,11 +48,21 @@ export function ProductCard({ product }: ProductCardProps) {
           <span className="text-xs text-muted-foreground ml-2">({product.reviews.length} reviews)</span>
         </div>
       </CardContent>
-      <CardFooter className="p-4 pt-0">
+      <CardFooter className="p-4 pt-0 flex justify-between items-center">
         <p className="text-lg font-semibold">${product.price.toFixed(2)}</p>
+        <div className="flex items-center gap-2">
+           <Button asChild variant="outline" size="icon">
+              <Link href={`/products/${product.id}`}>
+                <Eye className="h-5 w-5" />
+                <span className="sr-only">View Product</span>
+              </Link>
+            </Button>
+            <Button variant="outline" size="icon" onClick={() => addToCart(product, 1)}>
+              <ShoppingBag className="h-5 w-5" />
+              <span className="sr-only">Add to Cart</span>
+            </Button>
+        </div>
       </CardFooter>
     </Card>
   );
 }
-
-    
