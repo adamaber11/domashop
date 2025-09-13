@@ -4,11 +4,11 @@ import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { StarRating } from '@/components/star-rating';
 import { Separator } from '@/components/ui/separator';
-import { Button } from '@/components/ui/button';
 import { AddToCartButton } from './_components/add-to-cart-button';
 import AIReviewSummary from '@/components/ai-review-summary';
 import PersonalizedRecommendations from '@/components/personalized-recommendations';
 import { Badge } from '@/components/ui/badge';
+import { AddReviewForm } from './_components/add-review-form';
 
 export async function generateStaticParams() {
   return products.map((product) => ({
@@ -91,6 +91,8 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                 </div>
             ))}
             </div>
+            <Separator className="my-8" />
+            <AddReviewForm productId={product.id} />
         </div>
 
         <div>
