@@ -70,8 +70,8 @@ export function NavigationBar() {
               </Link>
             ) : (
               <>
-                <Button variant="ghost" asChild onClick={() => setIsLoggedIn(true)}>
-                  <Link href="#"><LogIn className="mr-2 h-4 w-4" />Log In</Link>
+                <Button variant="ghost" asChild>
+                  <Link href="/login"><LogIn className="mr-2 h-4 w-4" />Log In</Link>
                 </Button>
                 <Button asChild>
                   <Link href="/signup"><UserPlus className="mr-2 h-4 w-4" />Sign Up</Link>
