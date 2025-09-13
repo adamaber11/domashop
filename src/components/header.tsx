@@ -14,7 +14,7 @@ export function Header() {
         <Link href="/" className="mr-6 flex items-center space-x-2 group transition-transform duration-300 hover:scale-105">
           <ShoppingCart className="h-8 w-8 text-primary" />
           <span className="font-bold font-headline inline-block text-xl">
-            Doma <span className="text-primary">Online</span> Shop
+            Doma
           </span>
         </Link>
         <div className="flex flex-1 items-center justify-end space-x-4">
