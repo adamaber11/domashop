@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { products } from '@/lib/data';
 import { Product } from '@/lib/types';
 import { ProductCard } from '@/components/product-card';
@@ -8,11 +7,8 @@ import { HeroCarousel } from '@/components/hero-carousel';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 
 export default function Home() {
-  const [searchTerm, setSearchTerm] = useState('');
 
-  const filteredProducts = products.filter((product) =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const featuredProducts = products.slice(0, 10);
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -32,15 +28,15 @@ export default function Home() {
         <h2 className="font-headline text-3xl font-bold text-center mb-10">
           Featured Products
         </h2>
-        {filteredProducts.length > 0 ? (
+        {featuredProducts.length > 0 ? (
           <Carousel 
             opts={{ align: "start", loop: true }}
             className="w-full"
           >
             <CarouselContent>
-              {filteredProducts.map((product: Product) => (
-                <CarouselItem key={product.id} className="sm:basis-1/2 md:basis-1/2 lg:basis-1/3">
-                  <div className="p-1">
+              {featuredProducts.map((product: Product) => (
+                <CarouselItem key={product.id} className="sm:basis-1/2 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+                  <div className="p-1 h-full">
                     <ProductCard product={product} />
                   </div>
                 </CarouselItem>
@@ -50,7 +46,7 @@ export default function Home() {
             <CarouselNext className="absolute right-0 top-1/2 -translate-y-1/2 z-10" />
           </Carousel>
         ) : (
-          <p className="text-center text-muted-foreground">No products found matching your search.</p>
+          <p className="text-center text-muted-foreground">No featured products available.</p>
         )}
       </section>
     </div>
