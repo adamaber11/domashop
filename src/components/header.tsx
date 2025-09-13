@@ -13,8 +13,8 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center">
         <Link href="/" className="mr-6 flex items-center space-x-2">
-          <Image src="https://picsum.photos/seed/logo/32/32" width={32} height={32} alt="Douma Online Shop logo" className="rounded-md" data-ai-hint="logo" />
-          <span className="font-bold font-headline inline-block">Douma Online Shop</span>
+          <Image src="https://picsum.photos/seed/logo/32/32" width={32} height={32} alt="Doma Online Shop logo" className="rounded-md" data-ai-hint="logo" />
+          <span className="font-bold font-headline inline-block">Doma Online Shop</span>
         </Link>
         <div className="flex flex-1 items-center justify-end space-x-4">
           <nav className="flex items-center space-x-2">

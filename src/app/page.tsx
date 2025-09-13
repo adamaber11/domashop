@@ -19,7 +19,7 @@ export default function Home() {
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
       <section className="text-center py-16 md:py-24">
         <h1 className="font-headline text-4xl md:text-6xl font-bold tracking-tight">
-          Welcome to Douma Online Shop
+          Welcome to Doma Online Shop
         </h1>
         <p className="mt-4 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
           Discover a world of quality products, curated just for you. Your blissful shopping journey starts here.

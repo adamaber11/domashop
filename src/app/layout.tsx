@@ -7,7 +7,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { CartProvider } from '@/context/cart-context';
 
 export const metadata: Metadata = {
-  title: 'Douma Online Shop',
+  title: 'Doma Online Shop',
   description: 'Your one-stop shop for everything.',
 };
 
