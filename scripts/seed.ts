@@ -1,8 +1,8 @@
 // scripts/seed.ts
 import { collection, doc, writeBatch } from 'firebase/firestore';
-import { db } from './src/lib/firebase';
-import { products as mockProducts } from './src/lib/data';
-import type { Product, Review } from './src/lib/types';
+import { db } from '@/lib/firebase';
+import { products as mockProducts } from '@/lib/data';
+import type { Product, Review } from '@/lib/types';
 
 async function seedDatabase() {
   console.log('Starting to seed the database...');
