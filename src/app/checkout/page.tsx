@@ -146,12 +146,15 @@ export default function CheckoutPage() {
           <Card className="sticky top-24">
             <CardHeader><CardTitle className="font-headline text-2xl">Your Order</CardTitle></CardHeader>
             <CardContent className="space-y-4">
-              {cart.map(({ product, quantity }) => (
-                <div key={product.id} className="flex justify-between items-center text-sm">
-                  <span className="font-medium">{product.name} <span className="text-muted-foreground">x {quantity}</span></span>
-                  <span>${(product.price * quantity).toFixed(2)}</span>
-                </div>
-              ))}
+              {cart.map(({ product, quantity }) => {
+                const price = product.onSale && product.salePrice ? product.salePrice : product.price;
+                return (
+                  <div key={product.id} className="flex justify-between items-center text-sm">
+                    <span className="font-medium">{product.name} <span className="text-muted-foreground">x {quantity}</span></span>
+                    <span>${(price * quantity).toFixed(2)}</span>
+                  </div>
+                );
+              })}
               <Separator />
               <div className="flex justify-between font-bold text-lg">
                 <span>Total</span>

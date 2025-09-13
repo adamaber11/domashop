@@ -7,6 +7,7 @@ import { StarRating } from './star-rating';
 import { Button } from './ui/button';
 import { Eye, ShoppingBag } from 'lucide-react';
 import { useCart } from '@/context/cart-context';
+import { Badge } from './ui/badge';
 
 interface ProductCardProps {
   product: Product;
@@ -35,6 +36,9 @@ export function ProductCard({ product }: ProductCardProps) {
               />
             )}
           </Link>
+          {product.onSale && (
+            <Badge variant="destructive" className="absolute top-2 right-2">Sale</Badge>
+          )}
         </div>
       </CardHeader>
       <CardContent className="p-4 flex-grow">
@@ -49,7 +53,16 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
       </CardContent>
       <CardFooter className="p-4 pt-0 flex justify-between items-center">
-        <p className="text-lg font-semibold">${product.price.toFixed(2)}</p>
+        <div className="flex items-baseline gap-2">
+            {product.onSale && typeof product.salePrice === 'number' ? (
+                <>
+                    <p className="text-lg font-semibold text-destructive">${product.salePrice.toFixed(2)}</p>
+                    <p className="text-sm font-medium text-muted-foreground line-through">${product.price.toFixed(2)}</p>
+                </>
+            ) : (
+                <p className="text-lg font-semibold">${product.price.toFixed(2)}</p>
+            )}
+        </div>
         <div className="flex items-center gap-2">
            <Button asChild variant="outline" size="icon">
               <Link href={`/products/${product.id}`}>

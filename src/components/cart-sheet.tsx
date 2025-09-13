@@ -31,6 +31,7 @@ export function CartSheetContent() {
                 <div className="space-y-4">
                     {cart.map(({ product, quantity }) => {
                     const placeholder = PlaceHolderImages.find(p => p.id === product.imageId);
+                    const price = product.onSale && product.salePrice ? product.salePrice : product.price;
                     return (
                         <div key={product.id} className="flex items-start p-2 border-b">
                             <div className="w-20 h-20 relative mr-4 flex-shrink-0">
@@ -46,7 +47,7 @@ export function CartSheetContent() {
                             </div>
                             <div className="flex-grow">
                                 <Link href={`/products/${product.id}`} className="font-semibold text-sm hover:text-primary">{product.name}</Link>
-                                <p className="text-muted-foreground text-xs">${product.price.toFixed(2)}</p>
+                                <p className="text-muted-foreground text-xs">${price.toFixed(2)}</p>
                                 <div className="flex items-center mt-2">
                                     <Button variant="outline" size="icon" className="h-7 w-7" onClick={() => updateQuantity(product.id, quantity - 1)}><Minus className="h-3 w-3" /></Button>
                                     <Input type="number" value={quantity} readOnly className="h-7 w-10 text-center mx-1 text-sm" />
@@ -54,7 +55,7 @@ export function CartSheetContent() {
                                 </div>
                             </div>
                             <div className="flex flex-col items-end space-y-1">
-                                <p className="font-semibold text-sm">${(product.price * quantity).toFixed(2)}</p>
+                                <p className="font-semibold text-sm">${(price * quantity).toFixed(2)}</p>
                                 <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-destructive h-7 w-7" onClick={() => removeFromCart(product.id)}>
                                 <Trash2 className="h-4 w-4" />
                                 </Button>

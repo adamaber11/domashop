@@ -11,6 +11,8 @@ export type Product = {
   name: string;
   description: string;
   price: number;
+  onSale?: boolean;
+  salePrice?: number;
   category: string;
   imageId: string;
   imageHint: string;

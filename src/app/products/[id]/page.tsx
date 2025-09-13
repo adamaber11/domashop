@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { AddToCartButton } from './_components/add-to-cart-button';
 import AIReviewSummary from '@/components/ai-review-summary';
 import PersonalizedRecommendations from '@/components/personalized-recommendations';
+import { Badge } from '@/components/ui/badge';
 
 export async function generateStaticParams() {
   return products.map((product) => ({
@@ -30,7 +31,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="grid md:grid-cols-2 gap-12 items-start">
-        <div className="w-full">
+        <div className="w-full relative">
           {placeholder && (
             <Image
               src={placeholder.imageUrl}
@@ -42,6 +43,9 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
               priority
             />
           )}
+          {product.onSale && (
+            <Badge variant="destructive" className="absolute top-4 left-4 text-lg">Sale</Badge>
+          )}
         </div>
         
         <div className="space-y-6">
@@ -52,7 +56,16 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
             <span className="text-muted-foreground">{averageRating.toFixed(1)} ({product.reviews.length} reviews)</span>
           </div>
 
-          <p className="text-3xl font-semibold">${product.price.toFixed(2)}</p>
+          <div className="flex items-baseline gap-3">
+            {product.onSale && typeof product.salePrice === 'number' ? (
+                <>
+                    <p className="text-4xl font-bold text-destructive">${product.salePrice.toFixed(2)}</p>
+                    <p className="text-2xl font-semibold text-muted-foreground line-through">${product.price.toFixed(2)}</p>
+                </>
+            ) : (
+                <p className="text-3xl font-semibold">${product.price.toFixed(2)}</p>
+            )}
+          </div>
 
           <p className="text-lg text-muted-foreground">{product.description}</p>
           
