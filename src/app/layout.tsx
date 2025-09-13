@@ -5,6 +5,7 @@ import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import { Toaster } from '@/components/ui/toaster';
 import { CartProvider } from '@/context/cart-context';
+import { NavigationBar } from '@/components/navigation-bar';
 
 export const metadata: Metadata = {
   title: 'Doma Online Shop',
@@ -27,6 +28,7 @@ export default function RootLayout({
       <body className={cn('font-body antialiased min-h-screen flex flex-col')}>
         <CartProvider>
           <Header />
+          <NavigationBar />
           <main className="flex-grow">{children}</main>
           <Footer />
         </CartProvider>
