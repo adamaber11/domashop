@@ -5,6 +5,8 @@ import { ShoppingBag, Search, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/cart-context';
 import { Input } from '@/components/ui/input';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { CartSheetContent } from './cart-sheet';
 
 export function Header() {
   const { itemCount } = useCart();
@@ -35,17 +37,25 @@ export function Header() {
         
         <div className="flex items-center justify-end space-x-4">
           <nav className="flex items-center space-x-2">
-            <Button variant="ghost" asChild className="relative">
-              <Link href="/cart">
-                <ShoppingBag className="h-5 w-5" />
-                {itemCount > 0 && (
-                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs">
-                    {itemCount}
-                  </span>
-                )}
-                <span className="sr-only">Shopping Cart</span>
-              </Link>
-            </Button>
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost" className="relative">
+                  <ShoppingBag className="h-5 w-5" />
+                  {itemCount > 0 && (
+                    <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs">
+                      {itemCount}
+                    </span>
+                  )}
+                  <span className="sr-only">Shopping Cart</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent>
+                <SheetHeader>
+                  <SheetTitle>Your Cart</SheetTitle>
+                </SheetHeader>
+                <CartSheetContent />
+              </SheetContent>
+            </Sheet>
           </nav>
         </div>
       </div>
