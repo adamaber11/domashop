@@ -109,7 +109,7 @@ export function Header() {
 
         <Link href="/" className="mx-auto md:mx-0 md:mr-4 flex items-center space-x-2 group transition-transform duration-300 hover:scale-105">
           <ShoppingCart className="h-8 w-8 text-primary" />
-          <span className="font-extrabold font-headline hidden sm:inline-block text-3xl">
+          <span className="font-extrabold font-headline sm:inline-block text-3xl">
             Do<span className="text-primary">m</span>a
           </span>
         </Link>
