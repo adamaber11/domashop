@@ -22,9 +22,7 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const placeholder = PlaceHolderImages.find(p => p.id === product.imageIds[0]);
-  const averageRating = product.reviews.length > 0
-    ? product.reviews.reduce((acc, review) => acc + review.rating, 0) / product.reviews.length
-    : 0;
+  
   const { addToCart } = useCart();
   const { user, loading } = useAuth();
   const router = useRouter();
@@ -55,7 +53,7 @@ export function ProductCard({ product }: ProductCardProps) {
             {placeholder && (
               <Image
                 src={placeholder.imageUrl}
-                alt={product.description}
+                alt={product.name}
                 fill
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
                 sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, (max-width: 1280px) 30vw, 23vw"
@@ -75,8 +73,8 @@ export function ProductCard({ product }: ProductCardProps) {
           </CardTitle>
         </Link>
         <div className="mt-2 flex items-center">
-          <StarRating rating={averageRating} />
-          <span className="text-xs text-muted-foreground ml-2">({product.reviews.length} reviews)</span>
+          <StarRating rating={product.averageRating} />
+          <span className="text-xs text-muted-foreground ml-2">({product.reviewCount} reviews)</span>
         </div>
       </CardContent>
       <CardFooter className="p-4 pt-0 flex justify-between items-center">

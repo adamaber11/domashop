@@ -3,7 +3,9 @@ export type Review = {
   author: string;
   rating: number;
   text: string;
-  date: string;
+  date: string; // Should be ISO 8601 format
+  productId: string;
+  userId: string;
 };
 
 export type Product = {
@@ -16,7 +18,8 @@ export type Product = {
   category: string;
   imageIds: string[];
   imageHint: string;
-  reviews: Review[];
+  reviewCount: number;
+  averageRating: number;
 };
 
 export type CartItem = {

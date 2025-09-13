@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { getPersonalizedRecommendations } from '@/ai/flows/personalized-product-recommendations';
-import { products as allProducts } from '@/lib/data';
+import { getProductsByCategory } from '@/lib/services/product-service';
 import type { Product } from '@/lib/types';
 import { ProductCard } from './product-card';
 import { Skeleton } from './ui/skeleton';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { getProductById } from '@/lib/services/product-service';
 
 interface PersonalizedRecommendationsProps {
   currentProductId: string;
@@ -20,7 +21,8 @@ export default function PersonalizedRecommendations({ currentProductId }: Person
     const fetchRecommendations = async () => {
       setIsLoading(true);
       try {
-        // Simulate browsing and purchase history
+        // In a real app, browsing and purchase history would come from the user's account data.
+        // We simulate it here for demonstration.
         const browsingHistory = 'prod_002,prod_005';
         const purchaseHistory = 'prod_008';
 
@@ -30,18 +32,18 @@ export default function PersonalizedRecommendations({ currentProductId }: Person
           numberOfRecommendations: 4,
         });
 
-        const recommendedProducts = result.recommendations
-          .map(id => allProducts.find(p => p.id === id.trim()))
-          .filter((p): p is Product => !!p && p.id !== currentProductId);
+        const recommendedProducts = (await Promise.all(
+          result.recommendations.map(id => getProductById(id.trim()))
+        )).filter((p): p is Product => !!p && p.id !== currentProductId);
           
         setRecommendations(recommendedProducts);
       } catch (error) {
-        console.error('Failed to get recommendations:', error);
+        console.error('Failed to get AI recommendations, falling back to category based:', error);
         // Fallback to simple category-based recommendations
-        const currentProduct = allProducts.find(p => p.id === currentProductId);
+        const currentProduct = await getProductById(currentProductId);
         if (currentProduct) {
-          const fallbackRecs = allProducts
-            .filter(p => p.category === currentProduct.category && p.id !== currentProductId)
+          const fallbackRecs = (await getProductsByCategory(currentProduct.category))
+            .filter(p => p.id !== currentProductId)
             .slice(0, 3);
           setRecommendations(fallbackRecs);
         }
@@ -74,7 +76,7 @@ export default function PersonalizedRecommendations({ currentProductId }: Person
   }
 
   return (
-    <Carousel opts={{ align: "start", loop: true }} className="w-full">
+    <Carousel opts={{ align: "start", loop: recommendations.length > 1 }} className="w-full">
       <CarouselContent>
         {recommendations.map(product => (
           <CarouselItem key={product.id} className="md:basis-1/2 lg:basis-full">
@@ -82,8 +84,12 @@ export default function PersonalizedRecommendations({ currentProductId }: Person
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious className="hidden sm:flex"/>
-      <CarouselNext className="hidden sm:flex"/>
+      {recommendations.length > 1 && (
+        <>
+          <CarouselPrevious className="hidden sm:flex"/>
+          <CarouselNext className="hidden sm:flex"/>
+        </>
+      )}
     </Carousel>
   );
 }

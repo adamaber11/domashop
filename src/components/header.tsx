@@ -8,7 +8,8 @@ import { Input } from '@/components/ui/input';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { CartSheetContent } from './cart-sheet';
 import { useState } from 'react';
-import { products } from '@/lib/data';
+import { searchProducts } from '@/lib/services/product-service';
+import type { Product } from '@/lib/types';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,18 +29,16 @@ import { MobileNav } from './mobile-nav';
 export function Header() {
   const { itemCount } = useCart();
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<typeof products>([]);
+  const [searchResults, setSearchResults] = useState<Product[]>([]);
   const isMobile = useIsMobile();
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
     setSearchQuery(query);
     if (query.length > 1) {
-      const results = products.filter((product) =>
-        product.name.toLowerCase().includes(query.toLowerCase())
-      ).slice(0, 5); // Limit results to 5
+      const results = await searchProducts(query, 5);
       setSearchResults(results);
     } else {
       setSearchResults([]);

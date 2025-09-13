@@ -11,17 +11,18 @@ import { StarRatingInput } from './star-rating-input';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/context/auth-context';
+import { addReview } from '@/lib/services/review-service';
 
 const reviewSchema = z.object({
   rating: z.number().min(1, "Please select a rating"),
   text: z.string().min(10, "Review must be at least 10 characters long."),
 });
 
-
-export function AddReviewForm({ productId }: { productId: string }) {
+export function AddReviewForm({ productId, onReviewAdded }: { productId: string, onReviewAdded: () => void }) {
     const { user, loading } = useAuth();
     const { toast } = useToast();
     const [showForm, setShowForm] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const form = useForm<z.infer<typeof reviewSchema>>({
         resolver: zodResolver(reviewSchema),
@@ -31,15 +32,37 @@ export function AddReviewForm({ productId }: { productId: string }) {
         },
     });
 
-    const onSubmit = (values: z.infer<typeof reviewSchema>) => {
-        // TODO: Replace with API call to submit the review
-        console.log('New review submitted:', { productId, userId: user?.uid, ...values });
-        toast({
-            title: "Review Submitted!",
-            description: "Thank you for your feedback. Your review has been submitted for approval.",
-        });
-        form.reset();
-        setShowForm(false);
+    const onSubmit = async (values: z.infer<typeof reviewSchema>) => {
+        if (!user) {
+            toast({ title: 'Authentication Error', description: 'You must be logged in to submit a review.', variant: 'destructive'});
+            return;
+        }
+        setIsSubmitting(true);
+        try {
+            await addReview(productId, {
+                rating: values.rating,
+                text: values.text,
+                author: user.displayName || user.email || 'Anonymous',
+                userId: user.uid,
+            });
+
+            toast({
+                title: "Review Submitted!",
+                description: "Thank you for your feedback. Your review has been added.",
+            });
+            form.reset();
+            setShowForm(false);
+            onReviewAdded(); // Callback to refresh reviews list
+        } catch(error) {
+            console.error('Error submitting review:', error);
+            toast({
+                title: 'Submission Failed',
+                description: 'There was an error submitting your review. Please try again.',
+                variant: 'destructive',
+            });
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     if (loading) {
@@ -102,8 +125,8 @@ export function AddReviewForm({ productId }: { productId: string }) {
                         />
                         <div className="flex justify-end gap-2">
                              <Button type="button" variant="ghost" onClick={() => { form.reset(); setShowForm(false); }}>Cancel</Button>
-                             <Button type="submit" disabled={form.formState.isSubmitting}>
-                                {form.formState.isSubmitting ? "Submitting..." : "Submit Review"}
+                             <Button type="submit" disabled={isSubmitting}>
+                                {isSubmitting ? "Submitting..." : "Submit Review"}
                             </Button>
                         </div>
                     </form>
