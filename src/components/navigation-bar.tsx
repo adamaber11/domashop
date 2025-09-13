@@ -10,13 +10,17 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { ChevronDown, LogIn, UserPlus, User } from 'lucide-react';
+import { ChevronDown, LogIn, UserPlus } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { categories } from '@/lib/data';
+import { useState } from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 
 export function NavigationBar() {
   const pathname = usePathname();
+  // Mock authentication state. In a real app, this would come from a context or auth provider.
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const navLinkClasses = "text-sm font-medium transition-colors hover:text-primary relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:origin-right after:transition-transform after:duration-300 hover:after:scale-x-100";
 
@@ -57,15 +61,23 @@ export function NavigationBar() {
           </div>
           
           <div className="flex items-center space-x-2">
-            <Button variant="ghost" asChild>
-              <Link href="/login"><LogIn className="mr-2 h-4 w-4" />Log In</Link>
-            </Button>
-            <Button asChild>
-              <Link href="/signup"><UserPlus className="mr-2 h-4 w-4" />Sign Up</Link>
-            </Button>
-             <Button variant="outline" size="icon" asChild>
-                <Link href="/account"><User className="h-5 w-5" /><span className="sr-only">Account</span></Link>
-            </Button>
+            {isLoggedIn ? (
+              <Link href="/account">
+                <Avatar className="h-9 w-9 cursor-pointer transition-transform hover:scale-110">
+                  <AvatarImage src="https://picsum.photos/seed/user1/200" alt="User Avatar" />
+                  <AvatarFallback>U</AvatarFallback>
+                </Avatar>
+              </Link>
+            ) : (
+              <>
+                <Button variant="ghost" asChild onClick={() => setIsLoggedIn(true)}>
+                  <Link href="#"><LogIn className="mr-2 h-4 w-4" />Log In</Link>
+                </Button>
+                <Button asChild>
+                  <Link href="/signup"><UserPlus className="mr-2 h-4 w-4" />Sign Up</Link>
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </div>
