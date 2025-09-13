@@ -18,6 +18,7 @@ import Link from 'next/link';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/auth-context';
 
 const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24px" height="24px" {...props}>
@@ -39,6 +40,7 @@ const formSchema = z.object({
 export default function SignupPage() {
   const { toast } = useToast();
   const router = useRouter();
+  const { signUpWithEmail, signInWithGoogle } = useAuth();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -51,23 +53,39 @@ export default function SignupPage() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // In a real app, you would handle user registration here.
-    console.log('Signup form submitted:', values);
-    toast({
-      title: 'Account Created!',
-      description: 'Your account has been successfully created.',
-    });
-    router.push('/login');
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      await signUpWithEmail(values.email, values.password);
+      // Here you could also save other user details (firstName, lastName, gender) to Firestore
+      toast({
+        title: 'Account Created!',
+        description: 'Your account has been successfully created.',
+      });
+      router.push('/account');
+    } catch (error: any) {
+      toast({
+        title: 'Sign Up Failed',
+        description: error.message,
+        variant: 'destructive',
+      });
+    }
   }
 
-  function handleGoogleSignUp() {
-    // In a real app, you would trigger the Google Sign-In flow here.
-    console.log('Sign up with Google clicked');
-    toast({
-      title: 'Signing up with Google...',
-      description: 'This feature will be implemented soon.',
-    });
+  async function handleGoogleSignUp() {
+    try {
+      await signInWithGoogle();
+      toast({
+        title: 'Sign Up Successful!',
+        description: 'Your account has been created.',
+      });
+      router.push('/account');
+    } catch (error: any) {
+       toast({
+        title: 'Google Sign-Up Failed',
+        description: error.message,
+        variant: 'destructive',
+      });
+    }
   }
 
   return (
@@ -182,7 +200,9 @@ export default function SignupPage() {
               />
             </CardContent>
             <CardFooter className="flex flex-col">
-              <Button type="submit" className="w-full">Create account</Button>
+              <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+                {form.formState.isSubmitting ? 'Creating Account...' : 'Create account'}
+              </Button>
               <div className="mt-4 text-center text-sm">
                 Already have an account?{' '}
                 <Link href="/login" className="underline">

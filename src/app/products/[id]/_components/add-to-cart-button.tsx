@@ -8,26 +8,20 @@ import type { Product } from '@/lib/types';
 import { Plus, Minus, ShoppingBag } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/auth-context';
 
-
-// This is a mock authentication check. In a real app, you'd use a proper auth context.
-const useUser = () => {
-    // In a real app, this would be replaced with a real auth check
-    // For now, we'll assume the user is logged in to allow adding to cart,
-    // as per the request to prepare for backend integration.
-    const [isLoggedIn] = useState(true); 
-    return { isLoggedIn };
-}
 
 export function AddToCartButton({ product }: { product: Product }) {
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
-  const { isLoggedIn } = useUser();
+  const { user, loading } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
 
   const handleAddToCart = () => {
-    if (!isLoggedIn) {
+    if (loading) return; // Do nothing while auth state is loading
+    
+    if (!user) {
       toast({
         title: 'Please log in',
         description: 'You need to be logged in to add items to the cart.',
@@ -65,7 +59,7 @@ export function AddToCartButton({ product }: { product: Product }) {
           <Plus className="h-4 w-4" />
         </Button>
       </div>
-      <Button onClick={handleAddToCart} size="lg">
+      <Button onClick={handleAddToCart} size="lg" disabled={loading}>
         <ShoppingBag className="mr-2 h-5 w-5" />
         Add to Cart
       </Button>

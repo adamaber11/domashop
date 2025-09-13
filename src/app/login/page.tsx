@@ -17,6 +17,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/auth-context';
 
 const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24px" height="24px" {...props}>
@@ -35,6 +36,7 @@ const formSchema = z.object({
 export default function LoginPage() {
   const { toast } = useToast();
   const router = useRouter();
+  const { signInWithEmail, signInWithGoogle } = useAuth();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -44,24 +46,38 @@ export default function LoginPage() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // In a real app, you would handle authentication here.
-    console.log('Login form submitted:', values);
-    toast({
-      title: 'Login Successful',
-      description: 'Welcome back!',
-    });
-    // For now, we'll just redirect to the account page.
-    router.push('/account');
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      await signInWithEmail(values.email, values.password);
+      toast({
+        title: 'Login Successful',
+        description: 'Welcome back!',
+      });
+      router.push('/account');
+    } catch (error: any) {
+      toast({
+        title: 'Login Failed',
+        description: error.message,
+        variant: 'destructive',
+      });
+    }
   }
 
-  function handleGoogleSignIn() {
-    // In a real app, you would trigger the Google Sign-In flow here.
-    console.log('Sign in with Google clicked');
-    toast({
-      title: 'Signing in with Google...',
-      description: 'This feature will be implemented soon.',
-    });
+  async function handleGoogleSignIn() {
+    try {
+      await signInWithGoogle();
+      toast({
+        title: 'Login Successful',
+        description: 'Welcome back!',
+      });
+      router.push('/account');
+    } catch (error: any) {
+       toast({
+        title: 'Google Sign-In Failed',
+        description: error.message,
+        variant: 'destructive',
+      });
+    }
   }
 
   return (
@@ -118,7 +134,9 @@ export default function LoginPage() {
               />
             </CardContent>
             <CardFooter className="flex flex-col">
-              <Button type="submit" className="w-full">Sign in</Button>
+              <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+                {form.formState.isSubmitting ? 'Signing in...' : 'Sign in'}
+              </Button>
               <div className="mt-4 text-center text-sm">
                 Don&apos;t have an account?{' '}
                 <Link href="/signup" className="underline">

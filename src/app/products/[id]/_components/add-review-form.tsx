@@ -10,21 +10,16 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { StarRatingInput } from './star-rating-input';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useAuth } from '@/context/auth-context';
 
 const reviewSchema = z.object({
   rating: z.number().min(1, "Please select a rating"),
   text: z.string().min(10, "Review must be at least 10 characters long."),
 });
 
-// This is a mock authentication check. In a real app, you'd use a proper auth context.
-const useUser = () => {
-    // In a real app, this would be replaced with a real auth check
-    const [isLoggedIn] = useState(true); // Assume user is logged in to show the form
-    return { isLoggedIn };
-}
 
 export function AddReviewForm({ productId }: { productId: string }) {
-    const { isLoggedIn } = useUser();
+    const { user, loading } = useAuth();
     const { toast } = useToast();
     const [showForm, setShowForm] = useState(false);
 
@@ -38,7 +33,7 @@ export function AddReviewForm({ productId }: { productId: string }) {
 
     const onSubmit = (values: z.infer<typeof reviewSchema>) => {
         // TODO: Replace with API call to submit the review
-        console.log('New review submitted:', { productId, ...values });
+        console.log('New review submitted:', { productId, userId: user?.uid, ...values });
         toast({
             title: "Review Submitted!",
             description: "Thank you for your feedback. Your review has been submitted for approval.",
@@ -47,7 +42,11 @@ export function AddReviewForm({ productId }: { productId: string }) {
         setShowForm(false);
     };
 
-    if (!isLoggedIn) {
+    if (loading) {
+      return null; // or a skeleton loader
+    }
+
+    if (!user) {
         return (
             <Card className="bg-muted/30">
                 <CardContent className="pt-6">
@@ -103,7 +102,9 @@ export function AddReviewForm({ productId }: { productId: string }) {
                         />
                         <div className="flex justify-end gap-2">
                              <Button type="button" variant="ghost" onClick={() => { form.reset(); setShowForm(false); }}>Cancel</Button>
-                             <Button type="submit">Submit Review</Button>
+                             <Button type="submit" disabled={form.formState.isSubmitting}>
+                                {form.formState.isSubmitting ? "Submitting..." : "Submit Review"}
+                            </Button>
                         </div>
                     </form>
                 </Form>

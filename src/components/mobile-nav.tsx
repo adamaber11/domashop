@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
 import {
   Accordion,
   AccordionContent,
@@ -10,11 +9,14 @@ import {
 } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { LogIn, UserPlus, ShoppingCart } from 'lucide-react';
+import { LogIn, UserPlus, ShoppingCart, LogOut } from 'lucide-react';
 import { categories } from '@/lib/data';
 import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
 import { ScrollArea } from './ui/scroll-area';
+import { useAuth } from '@/context/auth-context';
+import { Skeleton } from './ui/skeleton';
+import { useCart } from '@/context/cart-context';
 
 interface MobileNavProps {
   onLinkClick?: () => void;
@@ -22,13 +24,19 @@ interface MobileNavProps {
 
 export function MobileNav({ onLinkClick }: MobileNavProps) {
   const pathname = usePathname();
-  // Mock authentication state. In a real app, this would come from a context or auth provider.
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { user, loading, signOut: firebaseSignOut } = useAuth();
+  const { clearCart } = useCart();
 
   const handleLinkClick = (href: string) => {
     if (pathname === href) {
         onLinkClick?.();
     }
+  };
+
+  const handleSignOut = async () => {
+    await firebaseSignOut();
+    clearCart();
+    onLinkClick?.();
   };
 
   const navLinkClasses = "flex items-center w-full p-4 text-lg font-semibold";
@@ -48,7 +56,7 @@ export function MobileNav({ onLinkClick }: MobileNavProps) {
       <div className="flex-grow flex flex-col overflow-hidden">
         <ScrollArea className="flex-grow">
             <nav className="divide-y">
-                <Link href="/" onClick={() => handleLinkClick('/')} className={cn(navLinkClasses, pathname === '/' && activeLinkClasses)}>
+                <Link href="/" onClick={() => { handleLinkClick('/'); onLinkClick?.(); }} className={cn(navLinkClasses, pathname === '/' && activeLinkClasses)}>
                   Home
                 </Link>
                 
@@ -63,7 +71,7 @@ export function MobileNav({ onLinkClick }: MobileNavProps) {
                           const categorySlug = category.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-');
                           const href = category === 'All' ? '/category' : `/category/${categorySlug}`;
                           return (
-                            <Link key={category} href={href} onClick={() => handleLinkClick(href)} className={cn("block py-3 text-base", pathname === href && "font-bold text-primary")}>
+                            <Link key={category} href={href} onClick={() => { handleLinkClick(href); onLinkClick?.(); }} className={cn("block py-3 text-base", pathname === href && "font-bold text-primary")}>
                               {category}
                             </Link>
                           );
@@ -73,28 +81,38 @@ export function MobileNav({ onLinkClick }: MobileNavProps) {
                   </AccordionItem>
                 </Accordion>
                 
-                <Link href="/about" onClick={() => handleLinkClick('/about')} className={cn(navLinkClasses, pathname === '/about' && activeLinkClasses)}>
+                <Link href="/about" onClick={() => { handleLinkClick('/about'); onLinkClick?.(); }} className={cn(navLinkClasses, pathname === '/about' && activeLinkClasses)}>
                   About
                 </Link>
                 
-                <Link href="/contact" onClick={() => handleLinkClick('/contact')} className={cn(navLinkClasses, pathname === '/contact' && activeLinkClasses)}>
+                <Link href="/contact" onClick={() => { handleLinkClick('/contact'); onLinkClick?.(); }} className={cn(navLinkClasses, pathname === '/contact' && activeLinkClasses)}>
                   Contact Us
                 </Link>
             </nav>
         </ScrollArea>
 
         <div className="p-4 border-t mt-auto">
-          {isLoggedIn ? (
-            <Link href="/account" onClick={onLinkClick} className="flex items-center space-x-3">
-              <Avatar className="h-12 w-12 cursor-pointer">
-                <AvatarImage src="https://picsum.photos/seed/user1/200" alt="User Avatar" />
-                <AvatarFallback>U</AvatarFallback>
-              </Avatar>
-              <div>
-                <p className="font-semibold">John Doe</p>
-                <p className="text-sm text-muted-foreground">View Account</p>
-              </div>
-            </Link>
+          {loading ? (
+             <div className="space-y-3">
+                <Skeleton className="h-10 w-full" />
+                <Skeleton className="h-10 w-full" />
+            </div>
+          ) : user ? (
+            <div className='space-y-3'>
+              <Link href="/account" onClick={onLinkClick} className="flex items-center space-x-3">
+                <Avatar className="h-12 w-12 cursor-pointer">
+                  <AvatarImage src={user.photoURL || undefined} alt={user.displayName || 'User Avatar'} />
+                  <AvatarFallback>{user.email?.[0]?.toUpperCase()}</AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className="font-semibold">{user.displayName || 'Account'}</p>
+                  <p className="text-sm text-muted-foreground">{user.email}</p>
+                </div>
+              </Link>
+              <Button variant="outline" className="w-full" onClick={handleSignOut}>
+                <LogOut className="mr-2 h-4 w-4" /> Log Out
+              </Button>
+            </div>
           ) : (
             <div className="space-y-3">
               <Button variant="outline" asChild className="w-full">

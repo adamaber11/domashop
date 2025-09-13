@@ -21,8 +21,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const { toast } = useToast();
 
   useEffect(() => {
+    // In a real app with Firebase, you would load the cart from Firestore
+    // For now, we continue using localStorage but clear it on sign out.
     try {
-      const savedCart = localStorage.getItem("bazaar-bliss-cart");
+      const savedCart = localStorage.getItem("doma-cart");
       if (savedCart) {
         setCart(JSON.parse(savedCart));
       }
@@ -33,7 +35,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     try {
-      localStorage.setItem("bazaar-bliss-cart", JSON.stringify(cart));
+      localStorage.setItem("doma-cart", JSON.stringify(cart));
     } catch (error) {
       console.error("Failed to save cart to localStorage", error);
     }
@@ -83,6 +85,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const clearCart = () => {
     setCart([]);
+    try {
+      localStorage.removeItem("doma-cart");
+    } catch (error) {
+      console.error("Failed to clear cart from localStorage", error);
+    }
   };
   
   const itemCount = cart.reduce((total, item) => total + item.quantity, 0);

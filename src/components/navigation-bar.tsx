@@ -8,21 +8,29 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { ChevronDown, LogIn, UserPlus } from 'lucide-react';
+import { ChevronDown, LogIn, UserPlus, LogOut, User as UserIcon } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { categories } from '@/lib/data';
-import { useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { useAuth } from '@/context/auth-context';
+import { Skeleton } from './ui/skeleton';
+import { useCart } from '@/context/cart-context';
 
 export function NavigationBar() {
   const pathname = usePathname();
-  // Mock authentication state. In a real app, this would come from a context or auth provider.
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { user, loading, signOut: firebaseSignOut } = useAuth();
+  const { clearCart } = useCart();
 
   const navLinkClasses = "text-sm font-medium transition-colors hover:text-primary relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:origin-right after:transition-transform after:duration-300 hover:after:scale-x-100";
+
+  const handleSignOut = async () => {
+    await firebaseSignOut();
+    clearCart();
+  };
 
   return (
     <nav className="bg-background border-b sticky top-16 z-40 hidden md:block">
@@ -61,13 +69,31 @@ export function NavigationBar() {
           </div>
           
           <div className="flex items-center space-x-2">
-            {isLoggedIn ? (
-              <Link href="/account">
-                <Avatar className="h-9 w-9 cursor-pointer transition-transform hover:scale-110">
-                  <AvatarImage src="https://picsum.photos/seed/user1/200" alt="User Avatar" />
-                  <AvatarFallback>U</AvatarFallback>
-                </Avatar>
-              </Link>
+            {loading ? (
+              <div className="flex items-center space-x-2">
+                <Skeleton className="h-8 w-20" />
+                <Skeleton className="h-9 w-9 rounded-full" />
+              </div>
+            ) : user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-9 w-9 rounded-full">
+                    <Avatar className="h-9 w-9 cursor-pointer transition-transform hover:scale-110">
+                      <AvatarImage src={user.photoURL || undefined} alt={user.displayName || user.email || 'User Avatar'} />
+                      <AvatarFallback>{user.email?.[0]?.toUpperCase()}</AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem asChild>
+                    <Link href="/account"><UserIcon className="mr-2 h-4 w-4" /> My Account</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleSignOut}>
+                    <LogOut className="mr-2 h-4 w-4" /> Log Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) : (
               <>
                 <Button variant="ghost" asChild>

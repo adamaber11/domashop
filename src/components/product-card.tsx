@@ -12,19 +12,11 @@ import { useCart } from '@/context/cart-context';
 import { Badge } from './ui/badge';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
-import { useState } from 'react';
+import { useAuth } from '@/context/auth-context';
+
 
 interface ProductCardProps {
   product: Product;
-}
-
-// This is a mock authentication check. In a real app, you'd use a proper auth context.
-const useUser = () => {
-    // In a real app, this would be replaced with a real auth check
-    // For now, we'll assume the user is logged in to allow adding to cart,
-    // as per the request to prepare for backend integration.
-    const [isLoggedIn] = useState(true);
-    return { isLoggedIn };
 }
 
 
@@ -34,13 +26,15 @@ export function ProductCard({ product }: ProductCardProps) {
     ? product.reviews.reduce((acc, review) => acc + review.rating, 0) / product.reviews.length
     : 0;
   const { addToCart } = useCart();
-  const { isLoggedIn } = useUser();
+  const { user, loading } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
 
   const handleAddToCartClick = (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent navigating to product page
-    if (!isLoggedIn) {
+    if (loading) return;
+
+    if (!user) {
       toast({
         title: 'Please log in',
         description: 'You need to be logged in to add items to the cart.',
@@ -103,7 +97,7 @@ export function ProductCard({ product }: ProductCardProps) {
                 <span className="sr-only">View Product</span>
               </Link>
             </Button>
-            <Button variant="outline" size="icon" onClick={handleAddToCartClick}>
+            <Button variant="outline" size="icon" onClick={handleAddToCartClick} disabled={loading}>
               <ShoppingBag className="h-5 w-5" />
               <span className="sr-only">Add to Cart</span>
             </Button>
