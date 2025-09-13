@@ -19,14 +19,14 @@ export function ProductCard({ product }: ProductCardProps) {
     <Card className="flex flex-col h-full overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
       <CardHeader className="p-0">
         <Link href={`/products/${product.id}`} aria-label={`View ${product.name}`}>
-          <div className="aspect-w-16 aspect-h-9 overflow-hidden">
+          <div className="relative aspect-[4/3] w-full overflow-hidden">
             {placeholder && (
               <Image
                 src={placeholder.imageUrl}
                 alt={product.description}
-                width={600}
-                height={400}
-                className="object-cover w-full h-full"
+                fill
+                className="object-cover"
+                sizes="(max-width: 640px) 90vw, (max-width: 768px) 45vw, (max-width: 1024px) 30vw, 23vw"
                 data-ai-hint={product.imageHint}
               />
             )}
