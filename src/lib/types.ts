@@ -14,7 +14,7 @@ export type Product = {
   onSale?: boolean;
   salePrice?: number;
   category: string;
-  imageId: string;
+  imageIds: string[];
   imageHint: string;
   reviews: Review[];
 };

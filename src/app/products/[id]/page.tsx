@@ -1,7 +1,5 @@
 import { products } from '@/lib/data';
 import { notFound } from 'next/navigation';
-import Image from 'next/image';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { StarRating } from '@/components/star-rating';
 import { Separator } from '@/components/ui/separator';
 import { AddToCartButton } from './_components/add-to-cart-button';
@@ -9,6 +7,7 @@ import AIReviewSummary from '@/components/ai-review-summary';
 import PersonalizedRecommendations from '@/components/personalized-recommendations';
 import { Badge } from '@/components/ui/badge';
 import { AddReviewForm } from './_components/add-review-form';
+import { ProductGallery } from './_components/product-gallery';
 
 export async function generateStaticParams() {
   return products.map((product) => ({
@@ -23,7 +22,6 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
     notFound();
   }
 
-  const placeholder = PlaceHolderImages.find(p => p.id === product.imageId);
   const averageRating = product.reviews.length > 0
     ? product.reviews.reduce((acc, review) => acc + review.rating, 0) / product.reviews.length
     : 0;
@@ -32,19 +30,9 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="grid md:grid-cols-2 gap-12 items-start">
         <div className="w-full relative">
-          {placeholder && (
-            <Image
-              src={placeholder.imageUrl}
-              alt={product.description}
-              width={800}
-              height={600}
-              className="w-full h-auto object-cover rounded-lg shadow-lg"
-              data-ai-hint={product.imageHint}
-              priority
-            />
-          )}
+          <ProductGallery imageIds={product.imageIds} imageHint={product.imageHint} />
           {product.onSale && (
-            <Badge variant="destructive" className="absolute top-4 left-4 text-lg">Sale</Badge>
+            <Badge variant="destructive" className="absolute top-4 left-4 text-lg z-10">Sale</Badge>
           )}
         </div>
         

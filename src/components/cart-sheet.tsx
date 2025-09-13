@@ -30,7 +30,7 @@ export function CartSheetContent() {
             <ScrollArea className="flex-grow pr-4">
                 <div className="space-y-4">
                     {cart.map(({ product, quantity }) => {
-                    const placeholder = PlaceHolderImages.find(p => p.id === product.imageId);
+                    const placeholder = PlaceHolderImages.find(p => p.id === product.imageIds[0]);
                     const price = product.onSale && product.salePrice ? product.salePrice : product.price;
                     return (
                         <div key={product.id} className="flex items-start p-2 border-b">

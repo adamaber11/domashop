@@ -1,76 +1,63 @@
 {
   "placeholderImages": [
-    {
-      "id": "img_vintage_camera",
-      "description": "A vintage film camera on a wooden table.",
-      "imageUrl": "https://picsum.photos/seed/1/600/400",
-      "imageHint": "vintage camera"
-    },
-    {
-      "id": "img_wireless_headphones",
-      "description": "Sleek wireless headphones on a dark background.",
-      "imageUrl": "https://picsum.photos/seed/2/600/400",
-      "imageHint": "wireless headphones"
-    },
-    {
-      "id": "img_ceramic_mug",
-      "description": "A handcrafted ceramic mug with a unique glaze.",
-      "imageUrl": "https://picsum.photos/seed/3/600/400",
-      "imageHint": "ceramic mug"
-    },
-    {
-      "id": "img_leather_journal",
-      "description": "A rustic leather-bound journal with a pen.",
-      "imageUrl": "https://picsum.photos/seed/4/600/400",
-      "imageHint": "leather journal"
-    },
-    {
-      "id": "img_smart_watch",
-      "description": "A modern smart watch displaying the time.",
-      "imageUrl": "https://picsum.photos/seed/5/600/400",
-      "imageHint": "smart watch"
-    },
-    {
-      "id": "img_yoga_mat",
-      "description": "A rolled-up yoga mat ready for a session.",
-      "imageUrl": "https://picsum.photos/seed/6/600/400",
-      "imageHint": "yoga mat"
-    },
-    {
-      "id": "img_gourmet_coffee",
-      "description": "A bag of artisanal gourmet coffee beans.",
-      "imageUrl": "https://picsum.photos/seed/7/600/400",
-      "imageHint": "coffee beans"
-    },
-    {
-      "id": "img_running_shoes",
-      "description": "A pair of colorful and modern running shoes.",
-      "imageUrl": "https://picsum.photos/seed/8/600/400",
-      "imageHint": "running shoes"
-    },
-    {
-      "id": "img_potted_plant",
-      "description": "A lush green succulent in a minimalist pot.",
-      "imageUrl": "https://picsum.photos/seed/9/600/400",
-      "imageHint": "potted plant"
-    },
-    {
-      "id": "img_fountain_pen",
-      "description": "An elegant fountain pen with a gold nib.",
-      "imageUrl": "https://picsum.photos/seed/10/600/400",
-      "imageHint": "fountain pen"
-    },
-    {
-      "id": "img_wool_scarf",
-      "description": "A cozy, warm wool scarf in a plaid pattern.",
-      "imageUrl": "https://picsum.photos/seed/11/600/400",
-      "imageHint": "wool scarf"
-    },
-    {
-      "id": "img_portable_speaker",
-      "description": "A compact and portable bluetooth speaker.",
-      "imageUrl": "https://picsum.photos/seed/12/600/400",
-      "imageHint": "bluetooth speaker"
-    }
+    { "id": "img_vintage_camera", "description": "A vintage film camera on a wooden table.", "imageUrl": "https://picsum.photos/seed/1/800/600", "imageHint": "vintage camera" },
+    { "id": "img_vintage_camera_2", "description": "Side view of a vintage film camera.", "imageUrl": "https://picsum.photos/seed/101/800/600", "imageHint": "vintage camera side" },
+    { "id": "img_vintage_camera_3", "description": "Close-up of the lens of a vintage camera.", "imageUrl": "https://picsum.photos/seed/102/800/600", "imageHint": "camera lens" },
+    { "id": "img_vintage_camera_4", "description": "A person holding a vintage film camera.", "imageUrl": "https://picsum.photos/seed/103/800/600", "imageHint": "person camera" },
+    
+    { "id": "img_wireless_headphones", "description": "Sleek wireless headphones on a dark background.", "imageUrl": "https://picsum.photos/seed/2/800/600", "imageHint": "wireless headphones" },
+    { "id": "img_wireless_headphones_2", "description": "Wireless headphones on a charging stand.", "imageUrl": "https://picsum.photos/seed/104/800/600", "imageHint": "headphones charging" },
+    { "id": "img_wireless_headphones_3", "description": "A person wearing wireless headphones.", "imageUrl": "https://picsum.photos/seed/105/800/600", "imageHint": "person headphones" },
+    { "id": "img_wireless_headphones_4", "description": "Close-up of the ear cup of wireless headphones.", "imageUrl": "https://picsum.photos/seed/106/800/600", "imageHint": "headphone earcup" },
+
+    { "id": "img_ceramic_mug", "description": "A handcrafted ceramic mug with a unique glaze.", "imageUrl": "https://picsum.photos/seed/3/800/600", "imageHint": "ceramic mug" },
+    { "id": "img_ceramic_mug_2", "description": "A person drinking from a ceramic mug.", "imageUrl": "https://picsum.photos/seed/107/800/600", "imageHint": "person drinking" },
+    { "id": "img_ceramic_mug_3", "description": "Steam rising from a ceramic mug.", "imageUrl": "https://picsum.photos/seed/108/800/600", "imageHint": "mug steam" },
+    { "id": "img_ceramic_mug_4", "description": "A set of ceramic mugs.", "imageUrl": "https://picsum.photos/seed/109/800/600", "imageHint": "mugs set" },
+
+    { "id": "img_leather_journal", "description": "A rustic leather-bound journal with a pen.", "imageUrl": "https://picsum.photos/seed/4/800/600", "imageHint": "leather journal" },
+    { "id": "img_leather_journal_2", "description": "An open leather journal with writing inside.", "imageUrl": "https://picsum.photos/seed/110/800/600", "imageHint": "open journal" },
+    { "id": "img_leather_journal_3", "description": "Close-up of the leather cover of a journal.", "imageUrl": "https://picsum.photos/seed/111/800/600", "imageHint": "leather texture" },
+    { "id": "img_leather_journal_4", "description": "A stack of leather journals.", "imageUrl": "https://picsum.photos/seed/112/800/600", "imageHint": "journals stack" },
+    
+    { "id": "img_smart_watch", "description": "A modern smart watch displaying the time.", "imageUrl": "https://picsum.photos/seed/5/800/600", "imageHint": "smart watch" },
+    { "id": "img_smart_watch_2", "description": "A person tapping the screen of a smart watch.", "imageUrl": "https://picsum.photos/seed/113/800/600", "imageHint": "watch screen" },
+    { "id": "img_smart_watch_3", "description": "The back of a smart watch showing sensors.", "imageUrl": "https://picsum.photos/seed/114/800/600", "imageHint": "watch sensors" },
+    { "id": "img_smart_watch_4", "description": "A smart watch on a charging puck.", "imageUrl": "https://picsum.photos/seed/115/800/600", "imageHint": "watch charging" },
+
+    { "id": "img_yoga_mat", "description": "A rolled-up yoga mat ready for a session.", "imageUrl": "https://picsum.photos/seed/6/800/600", "imageHint": "yoga mat" },
+    { "id": "img_yoga_mat_2", "description": "A person doing yoga on a mat.", "imageUrl": "https://picsum.photos/seed/116/800/600", "imageHint": "person yoga" },
+    { "id": "img_yoga_mat_3", "description": "An unrolled yoga mat from above.", "imageUrl": "https://picsum.photos/seed/117/800/600", "imageHint": "yoga mat top" },
+    { "id": "img_yoga_mat_4", "description": "Close-up of the texture of a yoga mat.", "imageUrl": "https://picsum.photos/seed/118/800/600", "imageHint": "mat texture" },
+
+    { "id": "img_gourmet_coffee", "description": "A bag of artisanal gourmet coffee beans.", "imageUrl": "https://picsum.photos/seed/7/800/600", "imageHint": "coffee beans" },
+    { "id": "img_gourmet_coffee_2", "description": "A cup of freshly brewed coffee.", "imageUrl": "https://picsum.photos/seed/119/800/600", "imageHint": "coffee cup" },
+    { "id": "img_gourmet_coffee_3", "description": "Close-up of roasted coffee beans.", "imageUrl": "https://picsum.photos/seed/120/800/600", "imageHint": "roasted beans" },
+    { "id": "img_gourmet_coffee_4", "description": "A coffee grinder with beans.", "imageUrl": "https://picsum.photos/seed/121/800/600", "imageHint": "coffee grinder" },
+
+    { "id": "img_running_shoes", "description": "A pair of colorful and modern running shoes.", "imageUrl": "https://picsum.photos/seed/8/800/600", "imageHint": "running shoes" },
+    { "id": "img_running_shoes_2", "description": "A person tying the laces of running shoes.", "imageUrl": "https://picsum.photos/seed/122/800/600", "imageHint": "tying shoes" },
+    { "id": "img_running_shoes_3", "description": "The sole of a running shoe.", "imageUrl": "https://picsum.photos/seed/123/800/600", "imageHint": "shoe sole" },
+    { "id": "img_running_shoes_4", "description": "A person running in the shoes.", "imageUrl": "https://picsum.photos/seed/124/800/600", "imageHint": "person running" },
+
+    { "id": "img_potted_plant", "description": "A lush green succulent in a minimalist pot.", "imageUrl": "https://picsum.photos/seed/9/800/600", "imageHint": "potted plant" },
+    { "id": "img_potted_plant_2", "description": "A person watering a potted plant.", "imageUrl": "https://picsum.photos/seed/125/800/600", "imageHint": "watering plant" },
+    { "id": "img_potted_plant_3", "description": "Close-up of the leaves of a succulent.", "imageUrl": "https://picsum.photos/seed/126/800/600", "imageHint": "succulent leaves" },
+    { "id": "img_potted_plant_4", "description": "A collection of different potted plants.", "imageUrl": "https://picsum.photos/seed/127/800/600", "imageHint": "plants collection" },
+
+    { "id": "img_fountain_pen", "description": "An elegant fountain pen with a gold nib.", "imageUrl": "https://picsum.photos/seed/10/800/600", "imageHint": "fountain pen" },
+    { "id": "img_fountain_pen_2", "description": "A person writing with a fountain pen.", "imageUrl": "https://picsum.photos/seed/128/800/600", "imageHint": "person writing" },
+    { "id": "img_fountain_pen_3", "description": "Close-up of a fountain pen's nib.", "imageUrl": "https://picsum.photos/seed/129/800/600", "imageHint": "pen nib" },
+    { "id": "img_fountain_pen_4", "description": "A fountain pen next to an ink bottle.", "imageUrl": "https://picsum.photos/seed/130/800/600", "imageHint": "pen ink" },
+
+    { "id": "img_wool_scarf", "description": "A cozy, warm wool scarf in a plaid pattern.", "imageUrl": "https://picsum.photos/seed/11/800/600", "imageHint": "wool scarf" },
+    { "id": "img_wool_scarf_2", "description": "A person wearing a wool scarf.", "imageUrl": "https://picsum.photos/seed/131/800/600", "imageHint": "person scarf" },
+    { "id": "img_wool_scarf_3", "description": "Close-up of the fabric of a wool scarf.", "imageUrl": "https://picsum.photos/seed/132/800/600", "imageHint": "scarf fabric" },
+    { "id": "img_wool_scarf_4", "description": "A folded wool scarf.", "imageUrl": "https://picsum.photos/seed/133/800/600", "imageHint": "folded scarf" },
+    
+    { "id": "img_portable_speaker", "description": "A compact and portable bluetooth speaker.", "imageUrl": "https://picsum.photos/seed/12/800/600", "imageHint": "bluetooth speaker" },
+    { "id": "img_portable_speaker_2", "description": "A portable speaker on a beach.", "imageUrl": "https://picsum.photos/seed/134/800/600", "imageHint": "speaker beach" },
+    { "id": "img_portable_speaker_3", "description": "A person holding a portable speaker.", "imageUrl": "https://picsum.photos/seed/135/800/600", "imageHint": "person speaker" },
+    { "id": "img_portable_speaker_4", "description": "The controls on top of a portable speaker.", "imageUrl": "https://picsum.photos/seed/136/800/600", "imageHint": "speaker controls" }
   ]
 }

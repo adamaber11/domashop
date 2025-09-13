@@ -14,7 +14,7 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-  const placeholder = PlaceHolderImages.find(p => p.id === product.imageId);
+  const placeholder = PlaceHolderImages.find(p => p.id === product.imageIds[0]);
   const averageRating = product.reviews.length > 0
     ? product.reviews.reduce((acc, review) => acc + review.rating, 0) / product.reviews.length
     : 0;
@@ -23,7 +23,7 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <Card className="group flex flex-col h-full overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
       <CardHeader className="p-0">
-        <div className="relative aspect-[4/3] w-full overflow-hidden">
+        <div className="relative aspect-square w-full overflow-hidden">
           <Link href={`/products/${product.id}`} aria-label={`View ${product.name}`}>
             {placeholder && (
               <Image
@@ -43,7 +43,7 @@ export function ProductCard({ product }: ProductCardProps) {
       </CardHeader>
       <CardContent className="p-4 flex-grow">
         <Link href={`/products/${product.id}`} className="hover:text-primary">
-          <CardTitle className="font-headline text-xl leading-tight tracking-tight">
+          <CardTitle className="font-headline text-xl leading-tight tracking-tight h-12">
             {product.name}
           </CardTitle>
         </Link>

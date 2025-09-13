@@ -23,7 +23,7 @@ export const products: Product[] = [
     description: 'Capture timeless moments with this classic 35mm film camera. Features manual controls for a truly authentic photography experience. Perfect for both beginners and seasoned photographers.',
     price: 175.00,
     category: 'Electronics',
-    imageId: 'img_vintage_camera',
+    imageIds: ['img_vintage_camera', 'img_vintage_camera_2', 'img_vintage_camera_3', 'img_vintage_camera_4'],
     imageHint: 'vintage camera',
     reviews: [
       { id: 'rev_001', author: 'Alex D.', rating: 5, text: 'Absolutely love the nostalgic feel of the photos!', date: '2023-05-20' },
@@ -38,7 +38,7 @@ export const products: Product[] = [
     onSale: true,
     salePrice: 99.99,
     category: 'Electronics',
-    imageId: 'img_wireless_headphones',
+    imageIds: ['img_wireless_headphones', 'img_wireless_headphones_2', 'img_wireless_headphones_3', 'img_wireless_headphones_4'],
     imageHint: 'wireless headphones',
     reviews: [
       { id: 'rev_003', author: 'Chloe M.', rating: 5, text: 'The noise cancellation is a game changer for my commute.', date: '2023-07-01' },
@@ -52,7 +52,7 @@ export const products: Product[] = [
     description: 'Enjoy your favorite beverage in this unique, handcrafted ceramic mug. Each mug is one-of-a-kind, featuring a beautiful glaze and a comfortable, sturdy handle.',
     price: 28.50,
     category: 'Home & Kitchen',
-    imageId: 'img_ceramic_mug',
+    imageIds: ['img_ceramic_mug', 'img_ceramic_mug_2', 'img_ceramic_mug_3', 'img_ceramic_mug_4'],
     imageHint: 'ceramic mug',
     reviews: [
       { id: 'rev_006', author: 'Frank G.', rating: 5, text: 'My new favorite mug for morning coffee. It\'s a work of art.', date: '2023-09-10' },
@@ -64,7 +64,7 @@ export const products: Product[] = [
     description: 'A beautiful, rustic leather-bound journal for your thoughts, sketches, and notes. Contains 200 pages of high-quality, acid-free paper that\'s perfect for any pen.',
     price: 35.00,
     category: 'Books & Stationery',
-    imageId: 'img_leather_journal',
+    imageIds: ['img_leather_journal', 'img_leather_journal_2', 'img_leather_journal_3', 'img_leather_journal_4'],
     imageHint: 'leather journal',
     reviews: [
       { id: 'rev_007', author: 'Grace H.', rating: 5, text: 'The leather is so soft and smells amazing. A joy to write in.', date: '2023-03-12' },
@@ -79,7 +79,7 @@ export const products: Product[] = [
     onSale: true,
     salePrice: 199.00,
     category: 'Accessories & Watches',
-    imageId: 'img_smart_watch',
+    imageIds: ['img_smart_watch', 'img_smart_watch_2', 'img_smart_watch_3', 'img_smart_watch_4'],
     imageHint: 'smart watch',
     reviews: [
       { id: 'rev_009', author: 'Ivy J.', rating: 4, text: 'Does everything I need it to. Wish the battery life was a bit longer.', date: '2023-10-22' },
@@ -92,7 +92,7 @@ export const products: Product[] = [
     description: 'Find your zen on this eco-friendly yoga mat, made from natural tree rubber. Provides excellent grip and cushioning for your practice, while being kind to the planet.',
     price: 65.00,
     category: 'Sports & Fitness',
-    imageId: 'img_yoga_mat',
+    imageIds: ['img_yoga_mat', 'img_yoga_mat_2', 'img_yoga_mat_3', 'img_yoga_mat_4'],
     imageHint: 'yoga mat',
     reviews: [
       { id: 'rev_011', author: 'Karen L.', rating: 5, text: 'No slipping at all, even in hot yoga. Fantastic mat!', date: '2023-08-30' },
@@ -105,7 +105,7 @@ export const products: Product[] = [
     description: 'Start your day with this medium-roast gourmet coffee. A balanced blend of beans from South America with notes of chocolate and citrus. Whole bean, 12oz bag.',
     price: 18.99,
     category: 'Food & Beverages',
-    imageId: 'img_gourmet_coffee',
+    imageIds: ['img_gourmet_coffee', 'img_gourmet_coffee_2', 'img_gourmet_coffee_3', 'img_gourmet_coffee_4'],
     imageHint: 'coffee beans',
     reviews: [
       { id: 'rev_013', author: 'Mia N.', rating: 5, text: 'Smooth, rich, and not bitter. My new go-to coffee.', date: '2024-01-15' },
@@ -120,7 +120,7 @@ export const products: Product[] = [
     onSale: true,
     salePrice: 109.99,
     category: 'Fashion & Clothing',
-    imageId: 'img_running_shoes',
+    imageIds: ['img_running_shoes', 'img_running_shoes_2', 'img_running_shoes_3', 'img_running_shoes_4'],
     imageHint: 'running shoes',
     reviews: [
       { id: 'rev_015', author: 'Olivia P.', rating: 4, text: 'Very comfortable, but they run a half size small.', date: '2023-12-10' },
@@ -133,7 +133,7 @@ export const products: Product[] = [
     description: 'Add a touch of green to your space with this easy-to-care-for succulent. Comes in a stylish, minimalist ceramic pot that fits any decor.',
     price: 22.00,
     category: 'Home & Kitchen',
-    imageId: 'img_potted_plant',
+    imageIds: ['img_potted_plant', 'img_potted_plant_2', 'img_potted_plant_3', 'img_potted_plant_4'],
     imageHint: 'potted plant',
     reviews: [
         { id: 'rev_017', author: 'Quinn R.', rating: 5, text: 'Arrived in perfect condition and looks great on my desk.', date: '2024-02-01' },
@@ -145,7 +145,7 @@ export const products: Product[] = [
     description: 'Experience the art of writing with this elegant fountain pen. Features a smooth-writing gold nib and a balanced body for comfortable use. A timeless gift for any writer.',
     price: 85.00,
     category: 'Books & Stationery',
-    imageId: 'img_fountain_pen',
+    imageIds: ['img_fountain_pen', 'img_fountain_pen_2', 'img_fountain_pen_3', 'img_fountain_pen_4'],
     imageHint: 'fountain pen',
     reviews: [
         { id: 'rev_018', author: 'Rachel S.', rating: 1, text: 'It leaked ink all over my bag. Very disappointed.', date: '2023-11-11' },
@@ -158,7 +158,7 @@ export const products: Product[] = [
     description: 'Stay warm in style with this incredibly soft and cozy wool scarf. The classic plaid pattern and high-quality fabric make it a winter essential.',
     price: 45.00,
     category: 'Fashion & Clothing',
-    imageId: 'img_wool_scarf',
+    imageIds: ['img_wool_scarf', 'img_wool_scarf_2', 'img_wool_scarf_3', 'img_wool_scarf_4'],
     imageHint: 'wool scarf',
     reviews: [
         { id: 'rev_020', author: 'Tina U.', rating: 5, text: 'So warm and not itchy at all! I\'ve worn it every day.', date: '2023-12-01' },
@@ -170,7 +170,7 @@ export const products: Product[] = [
     description: 'Take your music anywhere with the Sonic portable Bluetooth speaker. Delivers impressive sound from a compact, water-resistant design. 15-hour battery life.',
     price: 59.99,
     category: 'Electronics',
-    imageId: 'img_portable_speaker',
+    imageIds: ['img_portable_speaker', 'img_portable_speaker_2', 'img_portable_speaker_3', 'img_portable_speaker_4'],
     imageHint: 'bluetooth speaker',
     reviews: [
         { id: 'rev_021', author: 'Uma V.', rating: 3, text: 'Sound quality is just okay. Good for the price, I guess.', date: '2024-01-05' },
