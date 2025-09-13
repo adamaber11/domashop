@@ -1,5 +1,21 @@
 import type { Product } from './types';
 
+export const categories = [
+  "All",
+  "Fashion & Clothing",
+  "Electronics",
+  "Home & Kitchen",
+  "Furniture",
+  "Beauty & Personal Care",
+  "Toys & Kids",
+  "Food & Beverages",
+  "Sports & Fitness",
+  "Books & Stationery",
+  "Pet Supplies",
+  "Accessories & Watches",
+  "Digital Products"
+];
+
 export const products: Product[] = [
   {
     id: 'prod_001',
@@ -33,7 +49,7 @@ export const products: Product[] = [
     name: 'Handcrafted Ceramic Mug',
     description: 'Enjoy your favorite beverage in this unique, handcrafted ceramic mug. Each mug is one-of-a-kind, featuring a beautiful glaze and a comfortable, sturdy handle.',
     price: 28.50,
-    category: 'Home Goods',
+    category: 'Home & Kitchen',
     imageId: 'img_ceramic_mug',
     imageHint: 'ceramic mug',
     reviews: [
@@ -45,7 +61,7 @@ export const products: Product[] = [
     name: 'Classic Leather Journal',
     description: 'A beautiful, rustic leather-bound journal for your thoughts, sketches, and notes. Contains 200 pages of high-quality, acid-free paper that\'s perfect for any pen.',
     price: 35.00,
-    category: 'Office',
+    category: 'Books & Stationery',
     imageId: 'img_leather_journal',
     imageHint: 'leather journal',
     reviews: [
@@ -58,7 +74,7 @@ export const products: Product[] = [
     name: 'Aura Smart Watch',
     description: 'Stay connected and track your fitness goals with the Aura Smart Watch. Features a vibrant AMOLED display, heart rate monitoring, and seamless smartphone integration.',
     price: 249.00,
-    category: 'Electronics',
+    category: 'Accessories & Watches',
     imageId: 'img_smart_watch',
     imageHint: 'smart watch',
     reviews: [
@@ -71,7 +87,7 @@ export const products: Product[] = [
     name: 'Eco-Friendly Yoga Mat',
     description: 'Find your zen on this eco-friendly yoga mat, made from natural tree rubber. Provides excellent grip and cushioning for your practice, while being kind to the planet.',
     price: 65.00,
-    category: 'Sports & Outdoors',
+    category: 'Sports & Fitness',
     imageId: 'img_yoga_mat',
     imageHint: 'yoga mat',
     reviews: [
@@ -84,7 +100,7 @@ export const products: Product[] = [
     name: 'Gourmet Morning Coffee',
     description: 'Start your day with this medium-roast gourmet coffee. A balanced blend of beans from South America with notes of chocolate and citrus. Whole bean, 12oz bag.',
     price: 18.99,
-    category: 'Groceries',
+    category: 'Food & Beverages',
     imageId: 'img_gourmet_coffee',
     imageHint: 'coffee beans',
     reviews: [
@@ -97,7 +113,7 @@ export const products: Product[] = [
     name: 'Momentum Running Shoes',
     description: 'Lightweight and responsive, the Momentum running shoes are built for speed and comfort. The breathable mesh upper and cushioned sole make them ideal for road running.',
     price: 130.00,
-    category: 'Apparel',
+    category: 'Fashion & Clothing',
     imageId: 'img_running_shoes',
     imageHint: 'running shoes',
     reviews: [
@@ -110,7 +126,7 @@ export const products: Product[] = [
     name: 'Minimalist Succulent Plant',
     description: 'Add a touch of green to your space with this easy-to-care-for succulent. Comes in a stylish, minimalist ceramic pot that fits any decor.',
     price: 22.00,
-    category: 'Home Goods',
+    category: 'Home & Kitchen',
     imageId: 'img_potted_plant',
     imageHint: 'potted plant',
     reviews: [
@@ -122,7 +138,7 @@ export const products: Product[] = [
     name: 'Elegant Fountain Pen',
     description: 'Experience the art of writing with this elegant fountain pen. Features a smooth-writing gold nib and a balanced body for comfortable use. A timeless gift for any writer.',
     price: 85.00,
-    category: 'Office',
+    category: 'Books & Stationery',
     imageId: 'img_fountain_pen',
     imageHint: 'fountain pen',
     reviews: [
@@ -135,7 +151,7 @@ export const products: Product[] = [
     name: 'Cozy Wool Scarf',
     description: 'Stay warm in style with this incredibly soft and cozy wool scarf. The classic plaid pattern and high-quality fabric make it a winter essential.',
     price: 45.00,
-    category: 'Apparel',
+    category: 'Fashion & Clothing',
     imageId: 'img_wool_scarf',
     imageHint: 'wool scarf',
     reviews: [

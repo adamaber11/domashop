@@ -11,11 +11,9 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { ChevronDown, LogIn, UserPlus } from 'lucide-react';
-import { products } from '@/lib/data';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-
-const categories = [...new Set(products.map(p => p.category))];
+import { categories } from '@/lib/data';
 
 export function NavigationBar() {
   const pathname = usePathname();
@@ -39,7 +37,7 @@ export function NavigationBar() {
               <DropdownMenuContent align="start">
                 {categories.map((category) => (
                   <DropdownMenuItem key={category} asChild>
-                    <Link href={`/category/${category.toLowerCase().replace(/ & /g, '-')}`}>{category}</Link>
+                    <Link href={`/category/${category === 'All' ? '' : category.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-')}`}>{category}</Link>
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
