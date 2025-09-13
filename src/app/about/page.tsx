@@ -45,26 +45,24 @@ export default function AboutPage() {
         </div>
 
         <div>
-          <h2 className="font-headline text-3xl font-bold text-center mb-8">Meet The Team</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {Array.from({ length: 4 }).map((_, index) => (
-              <Card key={index} className="text-center">
-                <CardHeader>
-                  <div className="relative w-32 h-32 rounded-full mx-auto overflow-hidden">
-                    <Image
-                      src={`https://picsum.photos/seed/team${index + 1}/200`}
-                      alt={`Team member ${index + 1}`}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <CardTitle className="font-headline text-xl">John Doe</CardTitle>
-                  <p className="text-primary">CEO & Founder</p>
-                </CardContent>
-              </Card>
-            ))}
+          <h2 className="font-headline text-3xl font-bold text-center mb-8">The Founder</h2>
+          <div className="flex justify-center">
+            <Card className="text-center w-full max-w-xs">
+              <CardHeader>
+                <div className="relative w-32 h-32 rounded-full mx-auto overflow-hidden">
+                  <Image
+                    src={`https://picsum.photos/seed/team1/200`}
+                    alt="Founder Adam Aber Desouky"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              </CardHeader>
+              <CardContent>
+                <CardTitle className="font-headline text-xl">Eng. Adam Aber Desouky</CardTitle>
+                <p className="text-primary">CEO & Founder</p>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>
