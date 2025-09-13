@@ -4,6 +4,9 @@ import type { Product } from '@/lib/types';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { StarRating } from './star-rating';
+import { Button } from './ui/button';
+import { Eye, ShoppingBag } from 'lucide-react';
+import { useCart } from '@/context/cart-context';
 
 interface ProductCardProps {
   product: Product;
@@ -14,24 +17,37 @@ export function ProductCard({ product }: ProductCardProps) {
   const averageRating = product.reviews.length > 0
     ? product.reviews.reduce((acc, review) => acc + review.rating, 0) / product.reviews.length
     : 0;
+  const { addToCart } = useCart();
 
   return (
-    <Card className="flex flex-col h-full overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+    <Card className="group flex flex-col h-full overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
       <CardHeader className="p-0">
-        <Link href={`/products/${product.id}`} aria-label={`View ${product.name}`}>
-          <div className="relative aspect-[4/3] w-full overflow-hidden">
+        <div className="relative aspect-[4/3] w-full overflow-hidden">
+          <Link href={`/products/${product.id}`} aria-label={`View ${product.name}`}>
             {placeholder && (
               <Image
                 src={placeholder.imageUrl}
                 alt={product.description}
                 fill
-                className="object-cover"
+                className="object-cover transition-transform duration-300 group-hover:scale-105"
                 sizes="(max-width: 640px) 90vw, (max-width: 768px) 45vw, (max-width: 1024px) 30vw, 23vw"
                 data-ai-hint={product.imageHint}
               />
             )}
+          </Link>
+          <div className="absolute inset-0 flex items-center justify-center gap-2 bg-black/50 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            <Button asChild variant="ghost" size="icon" className="text-white hover:bg-white/20 hover:text-white">
+              <Link href={`/products/${product.id}`}>
+                <Eye className="h-6 w-6" />
+                <span className="sr-only">View Product</span>
+              </Link>
+            </Button>
+            <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 hover:text-white" onClick={() => addToCart(product, 1)}>
+              <ShoppingBag className="h-6 w-6" />
+              <span className="sr-only">Add to Cart</span>
+            </Button>
           </div>
-        </Link>
+        </div>
       </CardHeader>
       <CardContent className="p-4 flex-grow">
         <Link href={`/products/${product.id}`} className="hover:text-primary">
@@ -50,3 +66,5 @@ export function ProductCard({ product }: ProductCardProps) {
     </Card>
   );
 }
+
+    
