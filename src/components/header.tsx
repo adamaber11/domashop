@@ -11,9 +11,11 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center">
-        <Link href="/" className="mr-6 flex items-center space-x-2">
-          <ShoppingCart className="h-8 w-8" />
-          <span className="font-bold font-headline inline-block">Doma Online Shop</span>
+        <Link href="/" className="mr-6 flex items-center space-x-2 group transition-transform duration-300 hover:scale-105">
+          <ShoppingCart className="h-8 w-8 text-primary" />
+          <span className="font-bold font-headline inline-block text-xl">
+            Doma <span className="text-primary">Online</span> Shop
+          </span>
         </Link>
         <div className="flex flex-1 items-center justify-end space-x-4">
           <nav className="flex items-center space-x-2">
