@@ -17,8 +17,10 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { DollarSign, ShoppingBag, Users, BarChart3 } from 'lucide-react';
+import { DollarSign, ShoppingBag, Users, BarChart3, Package } from 'lucide-react';
 import { ChartConfig, ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 const revenueData = [
   { month: 'Jan', revenue: 12000 },
@@ -112,17 +114,17 @@ export default function DashboardPage() {
                 </p>
               </CardContent>
             </Card>
-            <Card>
+             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium">
-                  Active Customers
+                  Products
                 </CardTitle>
-                <Users className="h-5 w-5 text-muted-foreground" />
+                <Package className="h-5 w-5 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">+573</div>
-                <p className="text-xs text-muted-foreground">
-                  +20 since last hour
+                 <div className="text-2xl font-bold">12</div>
+                 <p className="text-xs text-muted-foreground">
+                    2 new products this month
                 </p>
               </CardContent>
             </Card>
@@ -148,17 +150,16 @@ export default function DashboardPage() {
             </Card>
             
             <Card>
-              <CardHeader>
+              <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>Recent Orders</CardTitle>
-                <CardDescription>
-                  The most recent 5 orders from your store.
-                </CardDescription>
+                <Button asChild variant="outline" size="sm">
+                  <Link href="#">View All</Link>
+                </Button>
               </CardHeader>
               <CardContent>
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Order ID</TableHead>
                       <TableHead>Customer</TableHead>
                       <TableHead>Status</TableHead>
                       <TableHead className="text-right">Amount</TableHead>
@@ -167,8 +168,12 @@ export default function DashboardPage() {
                   <TableBody>
                     {recentOrders.map((order) => (
                       <TableRow key={order.id}>
-                        <TableCell className="font-medium">{order.id}</TableCell>
-                        <TableCell>{order.customer}</TableCell>
+                        <TableCell>
+                            <div className="font-medium">{order.customer}</div>
+                            <div className="text-sm text-muted-foreground">
+                                {order.id}
+                            </div>
+                        </TableCell>
                         <TableCell>
                           <Badge 
                             variant={
