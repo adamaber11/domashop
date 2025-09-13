@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { LogIn, UserPlus, ShoppingCart, LogOut } from 'lucide-react';
+import { LogIn, UserPlus, ShoppingCart, LogOut, LayoutDashboard } from 'lucide-react';
 import { categories } from '@/lib/data';
 import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
@@ -88,6 +88,12 @@ export function MobileNav({ onLinkClick }: MobileNavProps) {
                 <Link href="/contact" onClick={() => { handleLinkClick('/contact'); onLinkClick?.(); }} className={cn(navLinkClasses, pathname === '/contact' && activeLinkClasses)}>
                   Contact Us
                 </Link>
+
+                {user && user.email === 'adamaber50@gmail.com' && (
+                    <Link href="/admin/dashboard" onClick={() => { handleLinkClick('/admin/dashboard'); onLinkClick?.(); }} className={cn(navLinkClasses, pathname === '/admin/dashboard' && activeLinkClasses)}>
+                        <LayoutDashboard className="mr-2 h-5 w-5" /> Dashboard
+                    </Link>
+                )}
             </nav>
         </ScrollArea>
 

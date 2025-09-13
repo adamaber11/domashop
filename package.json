@@ -10,7 +10,7 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "seed:db": "node --import tsx/esm --tsconfig tsconfig.json scripts/seed.ts"
+    "seed:db": "tsx scripts/seed.ts"
   },
   "dependencies": {
     "@genkit-ai/googleai": "1.14.1",

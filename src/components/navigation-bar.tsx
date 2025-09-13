@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { ChevronDown, LogIn, UserPlus, LogOut, User as UserIcon } from 'lucide-react';
+import { ChevronDown, LogIn, UserPlus, LogOut, User as UserIcon, LayoutDashboard } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { categories } from '@/lib/data';
@@ -85,6 +85,14 @@ export function NavigationBar() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
+                  {user.email === 'adamaber50@gmail.com' && (
+                    <>
+                      <DropdownMenuItem asChild>
+                        <Link href="/admin/dashboard"><LayoutDashboard className="mr-2 h-4 w-4" /> Dashboard</Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                    </>
+                  )}
                   <DropdownMenuItem asChild>
                     <Link href="/account"><UserIcon className="mr-2 h-4 w-4" /> My Account</Link>
                   </DropdownMenuItem>
