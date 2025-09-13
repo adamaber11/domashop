@@ -1,9 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { ShoppingCart, User } from 'lucide-react';
+import { ShoppingCart, User, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/cart-context';
+import { Input } from '@/components/ui/input';
 
 export function Header() {
   const { itemCount } = useCart();
@@ -17,7 +18,22 @@ export function Header() {
             Do<span className="text-primary">m</span>a
           </span>
         </Link>
-        <div className="flex flex-1 items-center justify-end space-x-4">
+
+        <div className="flex-1 flex justify-center px-4">
+          <div className="w-full max-w-md flex gap-2">
+            <Input
+              type="search"
+              placeholder="Search for products..."
+              className="flex-grow"
+              aria-label="Search products"
+            />
+            <Button type="submit" variant="outline" size="icon" aria-label="Search">
+              <Search />
+            </Button>
+          </div>
+        </div>
+        
+        <div className="flex items-center justify-end space-x-4">
           <nav className="flex items-center space-x-2">
             <Button variant="ghost" asChild>
               <Link href="/account">
