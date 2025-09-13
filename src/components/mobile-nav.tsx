@@ -14,6 +14,7 @@ import { LogIn, UserPlus, ShoppingCart } from 'lucide-react';
 import { categories } from '@/lib/data';
 import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
+import { ScrollArea } from './ui/scroll-area';
 
 interface MobileNavProps {
   onLinkClick?: () => void;
@@ -44,43 +45,45 @@ export function MobileNav({ onLinkClick }: MobileNavProps) {
         </Link>
       </div>
 
-      <nav className="flex-grow flex flex-col justify-between">
-        <div className="divide-y">
-            <Link href="/" onClick={() => handleLinkClick('/')} className={cn(navLinkClasses, pathname === '/' && activeLinkClasses)}>
-              Home
-            </Link>
-            
-            <Accordion type="single" collapsible className="w-full">
-              <AccordionItem value="categories" className="border-b-0">
-                <AccordionTrigger className={cn(navLinkClasses, "py-0 hover:no-underline", pathname.startsWith('/category') && activeLinkClasses)}>
-                  Categories
-                </AccordionTrigger>
-                <AccordionContent className="bg-muted/50">
-                  <div className="pl-8 divide-y">
-                    {categories.map((category) => {
-                      const categorySlug = category.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-');
-                      const href = category === 'All' ? '/category' : `/category/${categorySlug}`;
-                      return (
-                        <Link key={category} href={href} onClick={() => handleLinkClick(href)} className={cn("block py-3 text-base", pathname === href && "font-bold text-primary")}>
-                          {category}
-                        </Link>
-                      );
-                    })}
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-            
-            <Link href="/about" onClick={() => handleLinkClick('/about')} className={cn(navLinkClasses, pathname === '/about' && activeLinkClasses)}>
-              About
-            </Link>
-            
-            <Link href="/contact" onClick={() => handleLinkClick('/contact')} className={cn(navLinkClasses, pathname === '/contact' && activeLinkClasses)}>
-              Contact Us
-            </Link>
-        </div>
+      <div className="flex-grow flex flex-col overflow-hidden">
+        <ScrollArea className="flex-grow">
+            <nav className="divide-y">
+                <Link href="/" onClick={() => handleLinkClick('/')} className={cn(navLinkClasses, pathname === '/' && activeLinkClasses)}>
+                  Home
+                </Link>
+                
+                <Accordion type="single" collapsible className="w-full">
+                  <AccordionItem value="categories" className="border-b-0">
+                    <AccordionTrigger className={cn(navLinkClasses, "py-0 hover:no-underline", pathname.startsWith('/category') && activeLinkClasses)}>
+                      Categories
+                    </AccordionTrigger>
+                    <AccordionContent className="bg-muted/50">
+                      <div className="pl-8 divide-y">
+                        {categories.map((category) => {
+                          const categorySlug = category.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-');
+                          const href = category === 'All' ? '/category' : `/category/${categorySlug}`;
+                          return (
+                            <Link key={category} href={href} onClick={() => handleLinkClick(href)} className={cn("block py-3 text-base", pathname === href && "font-bold text-primary")}>
+                              {category}
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+                
+                <Link href="/about" onClick={() => handleLinkClick('/about')} className={cn(navLinkClasses, pathname === '/about' && activeLinkClasses)}>
+                  About
+                </Link>
+                
+                <Link href="/contact" onClick={() => handleLinkClick('/contact')} className={cn(navLinkClasses, pathname === '/contact' && activeLinkClasses)}>
+                  Contact Us
+                </Link>
+            </nav>
+        </ScrollArea>
 
-        <div className="p-4 border-t">
+        <div className="p-4 border-t mt-auto">
           {isLoggedIn ? (
             <Link href="/account" onClick={onLinkClick} className="flex items-center space-x-3">
               <Avatar className="h-12 w-12 cursor-pointer">
@@ -103,7 +106,7 @@ export function MobileNav({ onLinkClick }: MobileNavProps) {
             </div>
           )}
         </div>
-      </nav>
+      </div>
     </div>
   );
 }
