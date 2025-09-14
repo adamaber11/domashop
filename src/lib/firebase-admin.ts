@@ -1,8 +1,7 @@
-import { config } from 'dotenv';
-config();
 import * as admin from 'firebase-admin';
 
 // Re-construct the service account object from environment variables
+// These variables should be set in your hosting environment (e.g., Firebase Hosting, Vercel).
 const serviceAccount = {
   type: process.env.FIREBASE_TYPE,
   project_id: process.env.FIREBASE_PROJECT_ID,
