@@ -3,8 +3,8 @@ import * as admin from 'firebase-admin';
 let adminApp: admin.app.App;
 
 export function getFirebaseAdminApp() {
-  if (adminApp) {
-    return adminApp;
+  if (admin.apps.length > 0) {
+    return admin.apps[0] as admin.app.App;
   }
 
   // Re-construct the service account object from environment variables
@@ -21,11 +21,16 @@ export function getFirebaseAdminApp() {
     auth_provider_x509_cert_url: process.env.FIREBASE_AUTH_PROVIDER_X509_CERT_URL,
     client_x509_cert_url: process.env.FIREBASE_CLIENT_X509_CERT_URL,
   };
+  
+  if (!serviceAccount.project_id) {
+    console.warn("Firebase Admin SDK not initialized. Missing environment variables.");
+    // Return a mock or minimal object if you want to avoid hard crashes
+    // For now, we will let it fail downstream if it's used without initialization
+    return null as any; 
+  }
 
   // Initialize the app only if it doesn't already exist
-  adminApp = admin.apps.length
-    ? (admin.apps[0] as admin.app.App)
-    : admin.initializeApp({
+  adminApp = admin.initializeApp({
         // @ts-ignore
         credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
       });

@@ -2,8 +2,6 @@
 
 import { db } from '@/lib/firebase';
 import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
-import { getFirebaseAdminApp } from '@/lib/firebase-admin';
-import { getAuth } from 'firebase-admin/auth';
 import type { Order } from '@/lib/types';
 
 
@@ -19,22 +17,19 @@ const mockOrders: Order[] = [
 
 export async function getDashboardStats() {
     try {
-        const adminApp = getFirebaseAdminApp();
-        const auth = getAuth(adminApp);
-
-        const usersPromise = auth.listUsers();
         const productsPromise = getDocs(collection(db, 'products'));
         // In a real app, you would query an 'orders' collection
         // For now, we use mock data for revenue, sales, and recent orders
         const ordersPromise = Promise.resolve(mockOrders);
+        const usersPromise = getDocs(collection(db, 'users'));
 
-        const [userRecords, productsSnapshot, orders] = await Promise.all([
-            usersPromise,
+        const [productsSnapshot, orders, usersSnapshot] = await Promise.all([
             productsPromise,
             ordersPromise,
+            usersPromise,
         ]);
 
-        const totalUsers = userRecords.users.length;
+        const totalUsers = usersSnapshot.size;
         const totalProducts = productsSnapshot.size;
 
         // Calculate stats from mock orders
