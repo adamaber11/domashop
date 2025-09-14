@@ -25,9 +25,9 @@ const productSchema = z.object({
   category: z.string().min(1, 'Please select a category.'),
   onSale: z.boolean().default(false),
   salePrice: z.coerce.number().optional(),
-  imageUrl1: z.string().url('Please enter a valid URL for Image 1.'),
-  imageUrl2: z.string().url('Please enter a valid URL for Image 2.'),
-  imageUrl3: z.string().url('Please enter a valid URL for Image 3.'),
+  imageUrl1: z.string().min(1, 'Please enter a URL for Image 1.'),
+  imageUrl2: z.string().min(1, 'Please enter a URL for Image 2.'),
+  imageUrl3: z.string().min(1, 'Please enter a URL for Image 3.'),
   imageHint: z.string().min(2, 'Image hint is required.'),
 }).refine(data => {
     if (data.onSale && (!data.salePrice || data.salePrice <= 0)) {
