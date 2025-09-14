@@ -18,7 +18,7 @@ const reviewSchema = z.object({
   text: z.string().min(10, "Review must be at least 10 characters long."),
 });
 
-export function AddReviewForm({ productId, onReviewAdded }: { productId: string, onReviewAdded: () => void }) {
+export function AddReviewForm({ productId }: { productId: string }) {
     const { user, loading } = useAuth();
     const { toast } = useToast();
     const [showForm, setShowForm] = useState(false);
@@ -52,7 +52,6 @@ export function AddReviewForm({ productId, onReviewAdded }: { productId: string,
             });
             form.reset();
             setShowForm(false);
-            onReviewAdded(); // Callback to refresh reviews list
         } catch(error) {
             console.error('Error submitting review:', error);
             toast({

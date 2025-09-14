@@ -19,24 +19,8 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
     notFound();
   }
   
-  // We fetch reviews separately and pass them as a prop to client components
-  // that need them. `AddReviewForm` needs a way to re-fetch, which is best done on the client.
-  // For the initial list, we can pass it from the server.
   const initialReviews = await getReviewsByProductId(params.id);
   
-  // This is a workaround for revalidating data on the client after a new review is added.
-  // We'll pass the server action to the form.
-  const fetchProductAndReviews = async () => {
-    'use server';
-    // This is not ideal as it doesn't trigger a re-render.
-    // A better approach would be to use revalidatePath or revalidateTag from 'next/cache'
-    // in the `addReview` server action itself.
-    // For now, we pass a function that the client component can call.
-    const product = await getProductById(params.id);
-    const reviews = await getReviewsByProductId(params.id);
-    return { product, reviews };
-  };
-
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
       <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-start">
@@ -91,11 +75,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
             )) : <p className="text-muted-foreground">Be the first to review this product!</p>}
             </div>
             <Separator className="my-8" />
-            <AddReviewForm productId={product.id} onReviewAdded={() => {
-              // This is a client-side only re-fetch for now.
-              // Proper revalidation needs `revalidatePath` in server actions.
-              window.location.reload();
-            }} />
+            <AddReviewForm productId={product.id} />
         </div>
 
         <div>
