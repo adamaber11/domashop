@@ -34,7 +34,7 @@ export async function getProductById(id: string): Promise<Product | null> {
 
 export async function getAllProducts(): Promise<Product[]> {
   try {
-    const querySnapshot = await getDocs(productsCollection);
+    const querySnapshot = await getDocs(query(productsCollection, orderBy('name')));
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
   } catch (error) {
     console.error("Error fetching all products:", error);
@@ -101,7 +101,7 @@ export async function addProduct(productData: Omit<Product, 'id' | 'reviewCount'
   }
 }
 
-export async function updateProduct(id: string, productData: Partial<Product>): Promise<void> {
+export async function updateProduct(id: string, productData: Partial<Omit<Product, 'id'>>): Promise<void> {
   try {
     const docRef = doc(db, 'products', id);
     await updateDoc(docRef, productData);

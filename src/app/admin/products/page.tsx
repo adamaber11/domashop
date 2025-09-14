@@ -1,6 +1,6 @@
 
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -36,12 +36,32 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useRouter } from 'next/navigation';
+import { Skeleton } from '@/components/ui/skeleton';
 
-export default function AdminProductsPage({ serverProducts }: { serverProducts: Product[] }) {
-  const [products, setProducts] = useState<Product[]>(serverProducts);
+export default function AdminProductsPage() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const [productToDelete, setProductToDelete] = useState<{id: string, name: string} | null>(null);
   const { toast } = useToast();
   const router = useRouter();
+
+  useEffect(() => {
+    async function fetchProducts() {
+        try {
+            const serverProducts = await getAllProducts();
+            setProducts(serverProducts);
+        } catch (error) {
+            toast({
+                title: 'Error fetching products',
+                description: 'Could not load products from the database.',
+                variant: 'destructive',
+            });
+        } finally {
+            setLoading(false);
+        }
+    }
+    fetchProducts();
+  }, [toast]);
 
 
   const handleDelete = async () => {
@@ -52,10 +72,7 @@ export default function AdminProductsPage({ serverProducts }: { serverProducts: 
         title: 'Product Deleted',
         description: `Product "${productToDelete.name}" has been successfully deleted.`,
       });
-      // Optimistically update UI
       setProducts(products.filter(p => p.id !== productToDelete.id));
-      // Or refetch from server
-      // router.refresh();
     } catch (error) {
         console.error('Failed to delete product:', error);
         toast({
@@ -66,6 +83,43 @@ export default function AdminProductsPage({ serverProducts }: { serverProducts: 
     } finally {
         setProductToDelete(null);
     }
+  }
+
+  if (loading) {
+      return (
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div className="flex items-center justify-between mb-8">
+                <Skeleton className="h-10 w-48" />
+                <Skeleton className="h-10 w-32" />
+            </div>
+            <div className="border rounded-lg overflow-hidden">
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead className="w-24"><Skeleton className="h-5 w-full" /></TableHead>
+                            <TableHead><Skeleton className="h-5 w-full" /></TableHead>
+                            <TableHead><Skeleton className="h-5 w-full" /></TableHead>
+                            <TableHead><Skeleton className="h-5 w-full" /></TableHead>
+                            <TableHead><Skeleton className="h-5 w-full" /></TableHead>
+                            <TableHead className="text-right"><Skeleton className="h-5 w-full" /></TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {[...Array(5)].map((_, i) => (
+                             <TableRow key={i}>
+                                <TableCell><Skeleton className="w-16 h-16 rounded-md" /></TableCell>
+                                <TableCell><Skeleton className="h-5 w-40" /></TableCell>
+                                <TableCell><Skeleton className="h-6 w-20 rounded-full" /></TableCell>
+                                <TableCell><Skeleton className="h-5 w-16" /></TableCell>
+                                <TableCell><Skeleton className="h-5 w-24" /></TableCell>
+                                <TableCell className="text-right"><Skeleton className="h-8 w-8" /></TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </div>
+        </div>
+      );
   }
 
 
