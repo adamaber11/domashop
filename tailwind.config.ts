@@ -102,7 +102,7 @@ export default {
           '0%, 70%, 100%': { opacity: '1' },
           '20%, 50%': { opacity: '0' },
         },
-        'fadeIn': {
+        fadeIn: {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
         },
@@ -113,7 +113,7 @@ export default {
         'male-glow': 'male-glow 2s ease-in-out infinite',
         'female-glow': 'female-glow 2.5s ease-in-out infinite',
         'caret-blink': 'caret-blink 1.25s ease-out infinite',
-        'fadeIn': 'fadeIn 0.5s ease-in-out',
+        fadeIn: 'fadeIn 0.5s ease-in-out',
       },
     },
   },

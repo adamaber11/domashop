@@ -1,30 +1,23 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
-import NProgress from 'nprogress';
 
 export function PageLoader() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    NProgress.configure({ showSpinner: false });
+    const handleStart = () => setLoading(true);
+    const handleStop = () => setLoading(false);
 
-    const handleStart = () => NProgress.start();
-    const handleStop = () => NProgress.done();
-
-    // We need to use a mutation observer to detect when the Next.js router
-    // is about to navigate. This is a common workaround for showing a loader
-    // with the App Router.
     const observer = new MutationObserver((mutations) => {
-      // Check if the 'data-next-router-primary-loading' attribute appears on the body
       const isNavigating = Array.from(mutations).some(
         (mutation) =>
           mutation.type === 'attributes' &&
           mutation.attributeName === 'data-next-router-primary-loading'
       );
-      
       if (isNavigating) {
         handleStart();
       }
@@ -35,19 +28,27 @@ export function PageLoader() {
       attributeFilter: ['data-next-router-primary-loading'],
     });
 
-    // Fallback for the initial load and when the observer doesn't fire
+    // Initial load stop
     handleStop();
 
     return () => {
       observer.disconnect();
-      handleStop(); // Ensure it stops on component unmount
+      handleStop();
     };
   }, []);
 
   // On every route change, we call done().
   useEffect(() => {
-    NProgress.done();
+    setLoading(false);
   }, [pathname, searchParams]);
 
-  return null;
+  if (!loading) {
+    return null;
+  }
+
+  return (
+    <div className="page-loader-overlay">
+      <div className="page-loader-spinner"></div>
+    </div>
+  );
 }
