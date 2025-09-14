@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
@@ -26,7 +26,7 @@ const productSchema = z.object({
   category: z.string().min(1, 'Please select a category.'),
   onSale: z.boolean().default(false),
   salePrice: z.coerce.number().optional(),
-  imageIds: z.array(z.string()).min(1, 'Please select at least one image.'),
+  imageIds: z.array(z.string()).length(3, 'You must select exactly 3 images.'),
   imageHint: z.string().min(2, 'Image hint is required.'),
 }).refine(data => {
     if (data.onSale && (!data.salePrice || data.salePrice <= 0)) {
@@ -196,6 +196,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
                             <FormItem>
                                 <div className="mb-4">
                                     <FormLabel className="text-base">Product Images</FormLabel>
+                                     <FormDescription>You must select exactly 3 images for the product.</FormDescription>
                                 </div>
                                 <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4 max-h-96 overflow-y-auto border p-4 rounded-md">
                                 {PlaceHolderImages.map((image) => (
