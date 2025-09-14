@@ -23,9 +23,19 @@ import {
   getCategoryDistribution,
   getTopPerformingProducts,
 } from '@/lib/services/analytics-service';
-import SalesChart from './_components/sales-chart';
-import CategoryChart from './_components/category-chart';
+import dynamic from 'next/dynamic';
+import { Skeleton } from '@/components/ui/skeleton';
 import Image from 'next/image';
+
+const SalesChart = dynamic(() => import('./_components/sales-chart'), {
+  ssr: false,
+  loading: () => <Skeleton className="h-[300px] w-full" />,
+});
+
+const CategoryChart = dynamic(() => import('./_components/category-chart'), {
+  ssr: false,
+  loading: () => <Skeleton className="h-[300px] w-full" />,
+});
 
 export default async function AnalyticsPage() {
   const salesData = await getSalesOverTime();

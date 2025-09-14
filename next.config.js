@@ -59,6 +59,16 @@ const nextConfig = {
       },
     ],
   },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
+  experimental: {
+    optimizePackageImports: [
+      'lucide-react', 
+      '@radix-ui/react-icons',
+      'recharts'
+    ],
+  },
 };
 
 module.exports = nextConfig;

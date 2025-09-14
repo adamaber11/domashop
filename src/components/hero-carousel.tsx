@@ -43,13 +43,13 @@ export function HeroCarousel({ heroImages }: HeroCarouselProps) {
         {heroImages.map((item, index) => (
           <CarouselItem key={index}>
             <Card className="overflow-hidden">
-              <CardContent className="p-0">
+              <CardContent className="p-0 relative aspect-[2.4/1]">
                 <Image
                   src={item.src}
                   alt={item.alt}
-                  width={1200}
-                  height={500}
-                  className="w-full h-auto object-cover aspect-[2.4/1]"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   data-ai-hint={item.hint}
                   priority={index === 0}
                 />
