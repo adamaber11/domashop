@@ -3,15 +3,15 @@
 import { db } from '@/lib/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import type { SiteUser } from '@/lib/types';
-import { auth as adminAuth } from 'firebase-admin';
+import { getAuth } from 'firebase-admin/auth';
 import { getFirebaseAdminApp } from '@/lib/firebase-admin';
 
 // Initialize Firebase Admin SDK
-getFirebaseAdminApp();
+const adminApp = getFirebaseAdminApp();
 
 export async function getAllUsers(): Promise<SiteUser[]> {
   try {
-    const listUsersResult = await adminAuth().listUsers();
+    const listUsersResult = await getAuth(adminApp).listUsers();
     const firestoreUsersSnap = await getDocs(collection(db, 'users'));
     
     const firestoreUsersData: { [uid: string]: any } = {};

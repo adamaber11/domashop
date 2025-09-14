@@ -3,6 +3,7 @@
 import { db } from '@/lib/firebase';
 import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import { getFirebaseAdminApp } from '@/lib/firebase-admin';
+import { getAuth } from 'firebase-admin/auth';
 import type { Order } from '@/lib/types';
 
 
@@ -19,7 +20,7 @@ const mockOrders: Order[] = [
 export async function getDashboardStats() {
     try {
         const adminApp = getFirebaseAdminApp();
-        const auth = adminApp.auth();
+        const auth = getAuth(adminApp);
 
         const usersPromise = auth.listUsers();
         const productsPromise = getDocs(collection(db, 'products'));
