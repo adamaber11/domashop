@@ -18,7 +18,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     }
   }, [user, loading, router]);
 
-  if (loading || !user) {
+  if (loading) {
     return (
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="w-full space-y-8">
@@ -39,6 +39,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     );
   }
 
+  // If user is not the admin, don't render anything, the useEffect will redirect.
+  if (!user || user.email !== 'adamaber50@gmail.com') {
+    return null;
+  }
+  
   return (
     <div>
       <AdminNavbar />
