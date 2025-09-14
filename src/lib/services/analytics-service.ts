@@ -72,8 +72,9 @@ export async function getCategoryDistribution(): Promise<{ category: string; cou
 
 export async function getTopPerformingProducts(count: number): Promise<Product[]> {
     try {
-        // Using a composite index of rating and review count as a proxy for performance
-        const q = query(collection(db, 'products'), orderBy('averageRating', 'desc'), orderBy('reviewCount', 'desc'), limit(count));
+        // A query with multiple orderBys requires a composite index. 
+        // To avoid errors if the index doesn't exist, we simplify the query.
+        const q = query(collection(db, 'products'), orderBy('averageRating', 'desc'), limit(count));
         const querySnapshot = await getDocs(q);
         return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
     } catch (error) {
