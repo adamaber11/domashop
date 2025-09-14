@@ -1,4 +1,7 @@
 import * as admin from 'firebase-admin';
+import { config } from 'dotenv';
+
+config(); // Load environment variables from .env.local
 
 const serviceAccount = {
     "type": "service_account",
