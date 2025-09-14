@@ -63,19 +63,20 @@ export function AnimatedLogo() {
       }
     }
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings, part1, part2, part3, isDeleting, loopNum]);
 
 
   if (!settings) {
     return (
-        <div className="mb-8 text-center">
+        <div className="mb-8 text-center h-20 flex items-center justify-center">
             <Skeleton className="h-12 w-64 mx-auto" />
         </div>
     );
   }
 
   return (
-    <div className="mb-8 text-center">
+    <div className="mb-8 text-center h-20 flex items-center justify-center">
       <h1 className="font-extrabold font-headline text-5xl md:text-6xl inline-block tracking-tighter">
         <span className="text-foreground">{part1}</span>
         <span className="text-primary">{part2}</span>
