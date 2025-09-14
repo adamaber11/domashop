@@ -3,39 +3,123 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from '@/components/ui/skeleton';
 import { getOrdersByUserId } from '@/lib/services/order-service';
-import type { Order } from '@/lib/types';
+import { getUserById, updateUserProfile } from '@/lib/services/user-service';
+import type { Order, SiteUser, ShippingAddress } from '@/lib/types';
 import { format } from 'date-fns';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { useToast } from '@/hooks/use-toast';
+
+const profileSchema = z.object({
+  firstName: z.string().min(2, "First name is required."),
+  lastName: z.string().min(2, "Last name is required."),
+  email: z.string().email(),
+  shippingAddress: z.string().min(5, "Address is too short."),
+  shippingCity: z.string().min(2, "City is too short."),
+  shippingState: z.string().min(2, "State is too short."),
+  shippingZip: z.string().regex(/^\d{5}$/, "Invalid ZIP code."),
+});
+
+type ProfileFormValues = z.infer<typeof profileSchema>;
 
 export default function AccountPage() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
   const [orders, setOrders] = useState<Order[]>([]);
+  const [siteUser, setSiteUser] = useState<SiteUser | null>(null);
   const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
+
+  const form = useForm<ProfileFormValues>({
+    resolver: zodResolver(profileSchema),
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      shippingAddress: '',
+      shippingCity: '',
+      shippingState: '',
+      shippingZip: '',
+    },
+  });
 
   useEffect(() => {
-    if (!authLoading) {
-      if (!user) {
-        router.replace('/login');
-      } else {
-        const fetchOrders = async () => {
-          try {
-            const userOrders = await getOrdersByUserId(user.uid);
-            setOrders(userOrders);
-          } catch (error) {
-            console.error("Failed to fetch user orders:", error);
-          } finally {
-            setLoading(false);
-          }
-        };
-        fetchOrders();
-      }
+    if (!authLoading && !user) {
+      router.replace('/login');
     }
   }, [user, authLoading, router]);
+
+  useEffect(() => {
+    if (user) {
+      const fetchUserData = async () => {
+        setLoading(true);
+        try {
+          const [userOrders, userProfile] = await Promise.all([
+            getOrdersByUserId(user.uid),
+            getUserById(user.uid)
+          ]);
+          setOrders(userOrders);
+          setSiteUser(userProfile);
+
+          if (userProfile) {
+            form.reset({
+              firstName: userProfile.firstName || '',
+              lastName: userProfile.lastName || '',
+              email: user.email || '',
+              shippingAddress: userProfile.shippingAddress?.address || '',
+              shippingCity: userProfile.shippingAddress?.city || '',
+              shippingState: userProfile.shippingAddress?.state || '',
+              shippingZip: userProfile.shippingAddress?.zip || '',
+            });
+          }
+        } catch (error) {
+          console.error("Failed to fetch user data:", error);
+          toast({ title: 'Error', description: 'Could not load your account data.', variant: 'destructive' });
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchUserData();
+    }
+  }, [user, form, toast]);
+
+  async function onSubmit(values: ProfileFormValues) {
+    if (!user) return;
+    try {
+        const shippingAddress: ShippingAddress = {
+            address: values.shippingAddress,
+            city: values.shippingCity,
+            state: values.shippingState,
+            zip: values.shippingZip,
+        };
+
+        await updateUserProfile(user.uid, {
+            firstName: values.firstName,
+            lastName: values.lastName,
+            shippingAddress: shippingAddress,
+        });
+
+        toast({
+            title: "Profile Updated",
+            description: "Your account details have been saved.",
+        });
+    } catch (error) {
+        toast({
+            title: "Update Failed",
+            description: "Could not save your profile. Please try again.",
+            variant: "destructive",
+        });
+    }
+  }
 
   if (authLoading || loading || !user) {
     return (
@@ -94,26 +178,48 @@ export default function AccountPage() {
       <h1 className="font-headline text-4xl font-bold mb-8">My Account</h1>
       <div className="grid gap-8 md:grid-cols-3">
         <div className="md:col-span-1">
-          <Card>
-            <CardHeader>
-              <CardTitle className="font-headline">Profile</CardTitle>
-              <CardDescription>Your personal information.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <h3 className="font-semibold">Name</h3>
-                <p className="text-muted-foreground">{user.displayName || 'N/A'}</p>
-              </div>
-              <div>
-                <h3 className="font-semibold">Email</h3>
-                <p className="text-muted-foreground">{user.email}</p>
-              </div>
-               <div>
-                <h3 className="font-semibold">Default Shipping Address</h3>
-                <p className="text-muted-foreground">123 Main St, Anytown, USA 12345</p>
-              </div>
-            </CardContent>
-          </Card>
+            <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)}>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="font-headline">Profile</CardTitle>
+                            <CardDescription>Manage your personal information.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            <div className="grid grid-cols-2 gap-4">
+                                <FormField control={form.control} name="firstName" render={({ field }) => (
+                                    <FormItem><FormLabel>First Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                                )} />
+                                <FormField control={form.control} name="lastName" render={({ field }) => (
+                                    <FormItem><FormLabel>Last Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                                )} />
+                            </div>
+                             <FormField control={form.control} name="email" render={({ field }) => (
+                                <FormItem><FormLabel>Email</FormLabel><FormControl><Input {...field} readOnly disabled /></FormControl><FormMessage /></FormItem>
+                            )} />
+                             <FormField control={form.control} name="shippingAddress" render={({ field }) => (
+                                <FormItem><FormLabel>Address</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                            )} />
+                             <FormField control={form.control} name="shippingCity" render={({ field }) => (
+                                <FormItem><FormLabel>City</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                            )} />
+                             <div className="grid grid-cols-2 gap-4">
+                                <FormField control={form.control} name="shippingState" render={({ field }) => (
+                                    <FormItem><FormLabel>State</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                                )} />
+                                <FormField control={form.control} name="shippingZip" render={({ field }) => (
+                                    <FormItem><FormLabel>ZIP</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                                )} />
+                            </div>
+                        </CardContent>
+                        <CardFooter>
+                            <Button type="submit" disabled={form.formState.isSubmitting}>
+                                {form.formState.isSubmitting ? "Saving..." : "Save Changes"}
+                            </Button>
+                        </CardFooter>
+                    </Card>
+                </form>
+            </Form>
         </div>
 
         <div className="md:col-span-2">

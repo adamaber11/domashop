@@ -11,7 +11,7 @@ interface AuthContextType {
   user: SiteUser | null;
   loading: boolean;
   signInWithGoogle: () => Promise<void>;
-  signUpWithEmail: (email: string, password: string, firstName: string, lastName: string, gender: string) => Promise<any>;
+  signUpWithEmail: (email: string, password: string, firstName: string, lastName: string) => Promise<any>;
   signInWithEmail: (email: string, password: string) => Promise<any>;
   signOut: () => Promise<void>;
 }
@@ -33,8 +33,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
            // This handles users who were created before the Firestore document was standard
           // or for Google sign-in on first login.
           const newUser: SiteUser = { 
-            ...firebaseUser, 
-            gender: 'not-specified' 
+            ...firebaseUser
           };
           setUser(newUser);
         }
@@ -55,11 +54,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const userDoc = await getDoc(userDocRef);
 
       if (!userDoc.exists()) {
+        const [firstName, ...lastName] = firebaseUser.displayName?.split(' ') || ["", ""];
         await setDoc(userDocRef, {
           email: firebaseUser.email,
           displayName: firebaseUser.displayName,
           photoURL: firebaseUser.photoURL,
-          gender: 'not-specified',
+          firstName: firstName,
+          lastName: lastName.join(' '),
         });
       }
 
@@ -68,7 +69,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const signUpWithEmail = async (email: string, password: string, firstName: string, lastName: string, gender: string) => {
+  const signUpWithEmail = async (email: string, password: string, firstName: string, lastName: string) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const firebaseUser = userCredential.user;
     
@@ -78,8 +79,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await setDoc(userDocRef, {
       firstName,
       lastName,
-      gender,
       email: firebaseUser.email,
+      displayName: `${firstName} ${lastName}`
     });
 
     return userCredential;

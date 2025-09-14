@@ -13,7 +13,7 @@ export type Review = {
 };
 
 export type Product = {
-  id: string;
+  id:string;
   name: string;
   description: string;
   price: number;
@@ -57,7 +57,7 @@ export type Order = {
 export interface SiteUser extends Omit<FirebaseUser, 'metadata'> {
   firstName?: string;
   lastName?: string;
-  gender?: 'male' | 'female' | 'not-specified';
+  shippingAddress?: ShippingAddress;
   // Properties from firebase-admin UserRecord
   metadata?: UserMetadata;
   disabled?: boolean;

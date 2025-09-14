@@ -1,8 +1,45 @@
 'use server';
 
 import { db } from '@/lib/firebase';
-import { collection, getDocs } from 'firebase/firestore';
-import type { SiteUser } from '@/lib/types';
+import { collection, getDocs, doc, getDoc, updateDoc } from 'firebase/firestore';
+import type { SiteUser, ShippingAddress } from '@/lib/types';
+import { revalidatePath } from 'next/cache';
+
+
+export async function getUserById(uid: string): Promise<SiteUser | null> {
+    try {
+        const userDocRef = doc(db, 'users', uid);
+        const userDoc = await getDoc(userDocRef);
+        if (userDoc.exists()) {
+            return { uid: userDoc.id, ...userDoc.data() } as SiteUser;
+        }
+        return null;
+    } catch (error) {
+        console.error(`Error fetching user ${uid}:`, error);
+        throw new Error('Failed to fetch user data.');
+    }
+}
+
+export async function updateUserProfile(uid: string, data: {
+    firstName: string;
+    lastName: string;
+    shippingAddress: ShippingAddress;
+}): Promise<void> {
+    try {
+        const userDocRef = doc(db, 'users', uid);
+        await updateDoc(userDocRef, {
+            firstName: data.firstName,
+            lastName: data.lastName,
+            displayName: `${data.firstName} ${data.lastName}`,
+            shippingAddress: data.shippingAddress
+        });
+        revalidatePath('/account');
+    } catch (error) {
+        console.error(`Error updating profile for user ${uid}:`, error);
+        throw new Error('Failed to update user profile.');
+    }
+}
+
 
 export async function getAllUsers(): Promise<SiteUser[]> {
   try {
