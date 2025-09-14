@@ -1,4 +1,4 @@
-import type { User as FirebaseUser } from 'firebase/auth';
+import type { User as FirebaseUser, UserInfo, UserMetadata } from 'firebase/auth';
 
 export type Review = {
   id: string;
@@ -30,8 +30,15 @@ export type CartItem = {
 };
 
 // Extends Firebase's User type with our custom fields
-export interface SiteUser extends FirebaseUser {
+// and fields from Firebase Admin SDK's UserRecord
+export interface SiteUser extends Omit<FirebaseUser, 'metadata'> {
   firstName?: string;
   lastName?: string;
   gender?: 'male' | 'female' | 'not-specified';
+  // Properties from firebase-admin UserRecord
+  metadata?: UserMetadata;
+  disabled?: boolean;
+  emailVerified?: boolean;
+  providerData?: UserInfo[];
+  toJSON?: () => object;
 }
