@@ -34,7 +34,7 @@ const formSchema = z.object({
   lastName: z.string().min(2, 'Last name is too short'),
   email: z.string().email('Invalid email address'),
   password: z.string().min(8, 'Password must be at least 8 characters'),
-  gender: z.enum(['male', 'female']),
+  gender: z.enum(['male', 'female'], { required_error: 'Please select a gender.' }),
 });
 
 export default function SignupPage() {
@@ -49,14 +49,12 @@ export default function SignupPage() {
       lastName: '',
       email: '',
       password: '',
-      gender: 'male',
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      await signUpWithEmail(values.email, values.password);
-      // Here you could also save other user details (firstName, lastName, gender) to Firestore
+      await signUpWithEmail(values.email, values.password, values.firstName, values.lastName, values.gender);
       toast({
         title: 'Account Created!',
         description: 'Your account has been successfully created.',

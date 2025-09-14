@@ -1,3 +1,5 @@
+import type { User as FirebaseUser } from 'firebase/auth';
+
 export type Review = {
   id: string;
   author: string;
@@ -26,3 +28,10 @@ export type CartItem = {
   product: Product;
   quantity: number;
 };
+
+// Extends Firebase's User type with our custom fields
+export interface SiteUser extends FirebaseUser {
+  firstName?: string;
+  lastName?: string;
+  gender?: 'male' | 'female' | 'not-specified';
+}

@@ -88,10 +88,20 @@ export default {
             height: '0',
           },
         },
+        'male-glow': {
+          '0%, 100%': { boxShadow: '0 0 8px rgba(59, 130, 246, 0.5)' },
+          '50%': { boxShadow: '0 0 16px rgba(59, 130, 246, 0.9)' },
+        },
+        'female-glow': {
+          '0%, 100%': { boxShadow: '0 0 8px rgba(236, 72, 153, 0.5)' },
+          '50%': { boxShadow: '0 0 16px rgba(236, 72, 153, 0.9)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        'male-glow': 'male-glow 2.5s ease-in-out infinite',
+        'female-glow': 'female-glow 2.5s ease-in-out infinite',
       },
     },
   },

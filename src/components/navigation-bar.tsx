@@ -78,7 +78,11 @@ export function NavigationBar() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-9 w-9 rounded-full">
-                    <Avatar className="h-9 w-9 cursor-pointer transition-transform hover:scale-110">
+                    <Avatar className={cn(
+                        "h-9 w-9 cursor-pointer transition-transform hover:scale-110",
+                        user.gender === 'male' && 'animate-male-glow',
+                        user.gender === 'female' && 'animate-female-glow'
+                    )}>
                       <AvatarImage src={user.photoURL || undefined} alt={user.displayName || user.email || 'User Avatar'} />
                       <AvatarFallback>{user.email?.[0]?.toUpperCase()}</AvatarFallback>
                     </Avatar>
