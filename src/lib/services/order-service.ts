@@ -1,7 +1,7 @@
 'use server';
 
 import { db } from '@/lib/firebase';
-import { collection, getDocs, doc, addDoc, updateDoc, query, orderBy, Timestamp } from 'firebase/firestore';
+import { collection, getDocs, doc, addDoc, updateDoc, query, where, orderBy, Timestamp } from 'firebase/firestore';
 import type { Order } from '@/lib/types';
 import { revalidatePath } from 'next/cache';
 
@@ -20,6 +20,21 @@ export async function getAllOrders(): Promise<Order[]> {
     throw new Error('Failed to fetch orders.');
   }
 }
+
+export async function getOrdersByUserId(userId: string): Promise<Order[]> {
+  try {
+    const q = query(ordersCollection, where('userId', '==', userId), orderBy('date', 'desc'));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+    } as Order));
+  } catch (error) {
+    console.error(`Error fetching orders for user ${userId}:`, error);
+    throw new Error('Failed to fetch user orders.');
+  }
+}
+
 
 export async function addOrder(orderData: Omit<Order, 'id' | 'date'>): Promise<string> {
   try {
