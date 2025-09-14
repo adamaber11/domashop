@@ -25,7 +25,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
       <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-start">
         <div className="w-full relative">
-          <ProductGallery imageIds={product.imageIds} imageHint={product.imageHint} />
+          <ProductGallery imageUrls={product.imageUrls} imageHint={product.imageHint} />
           {product.onSale && (
             <Badge variant="destructive" className="absolute top-4 left-4 text-sm md:text-base z-10">Sale</Badge>
           )}

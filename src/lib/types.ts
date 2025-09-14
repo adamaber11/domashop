@@ -18,7 +18,7 @@ export type Product = {
   onSale?: boolean;
   salePrice?: number;
   category: string;
-  imageIds: string[];
+  imageUrls: string[];
   imageHint: string;
   reviewCount: number;
   averageRating: number;

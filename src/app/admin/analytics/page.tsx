@@ -26,7 +26,6 @@ import {
 import SalesChart from './_components/sales-chart';
 import CategoryChart from './_components/category-chart';
 import Image from 'next/image';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 export default async function AnalyticsPage() {
   const salesData = await getSalesOverTime();
@@ -96,13 +95,13 @@ export default async function AnalyticsPage() {
                 </TableHeader>
                 <TableBody>
                   {topProducts.map((product) => {
-                    const placeholder = PlaceHolderImages.find(p => p.id === product.imageIds[0]);
+                    const imageUrl = product.imageUrls?.[0];
                     return (
                         <TableRow key={product.id}>
                         <TableCell>
-                            {placeholder && (
+                            {imageUrl && (
                                 <Image
-                                    src={placeholder.imageUrl}
+                                    src={imageUrl}
                                     alt={product.name}
                                     width={48}
                                     height={48}

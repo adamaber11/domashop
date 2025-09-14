@@ -17,7 +17,6 @@ import {
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
 import Image from 'next/image';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { useIsMobile } from '@/hooks/use-mobile';
 import {
   Dialog,
@@ -61,14 +60,14 @@ export function Header() {
         <DropdownMenu open={true}>
           <DropdownMenuContent className="w-[var(--radix-dropdown-menu-trigger-width)] mt-2" align="start">
             {searchResults.map((product) => {
-              const placeholder = PlaceHolderImages.find(p => p.id === product.imageIds[0]);
+              const imageUrl = product.imageUrls?.[0];
               return (
                 <DropdownMenuItem key={product.id} asChild onSelect={() => setSearchOpen(false)}>
                   <Link href={`/products/${product.id}`} className="flex items-center gap-4">
                     <div className="w-12 h-12 relative flex-shrink-0">
-                        {placeholder && (
+                        {imageUrl && (
                           <Image
-                            src={placeholder.imageUrl}
+                            src={imageUrl}
                             alt={product.name}
                             fill
                             className="rounded-md object-cover"

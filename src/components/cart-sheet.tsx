@@ -7,7 +7,6 @@ import { Separator } from '@/components/ui/separator';
 import { Trash2, Minus, Plus, ShoppingBag } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { ScrollArea } from './ui/scroll-area';
 import { SheetFooter } from './ui/sheet';
 
@@ -30,14 +29,14 @@ export function CartSheetContent() {
             <ScrollArea className="flex-grow pr-4">
                 <div className="space-y-4">
                     {cart.map(({ product, quantity }) => {
-                    const placeholder = PlaceHolderImages.find(p => p.id === product.imageIds[0]);
+                    const imageUrl = product.imageUrls?.[0];
                     const price = product.onSale && product.salePrice ? product.salePrice : product.price;
                     return (
                         <div key={product.id} className="flex items-start p-2 border-b">
                             <div className="w-20 h-20 relative mr-4 flex-shrink-0">
-                                {placeholder && (
+                                {imageUrl && (
                                 <Image
-                                    src={placeholder.imageUrl}
+                                    src={imageUrl}
                                     alt={product.name}
                                     fill
                                     className="rounded-md object-cover"

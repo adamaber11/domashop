@@ -4,7 +4,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { Product } from '@/lib/types';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { StarRating } from './star-rating';
 import { Button } from './ui/button';
 import { Eye, ShoppingBag } from 'lucide-react';
@@ -21,7 +20,7 @@ interface ProductCardProps {
 
 
 export function ProductCard({ product }: ProductCardProps) {
-  const placeholder = PlaceHolderImages.find(p => p.id === product.imageIds[0]);
+  const imageUrl = product.imageUrls?.[0];
   
   const { addToCart } = useCart();
   const { user, loading } = useAuth();
@@ -50,9 +49,9 @@ export function ProductCard({ product }: ProductCardProps) {
       <CardHeader className="p-0">
         <div className="relative aspect-[4/3] w-full overflow-hidden">
           <Link href={`/products/${product.id}`} aria-label={`View ${product.name}`}>
-            {placeholder && (
+            {imageUrl && (
               <Image
-                src={placeholder.imageUrl}
+                src={imageUrl}
                 alt={product.name}
                 fill
                 className="object-cover transition-transform duration-300 group-hover:scale-105"

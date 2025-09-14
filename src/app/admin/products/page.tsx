@@ -26,7 +26,6 @@ import { Badge } from '@/components/ui/badge';
 import { PlusCircle, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
 import { deleteProduct, getAllProducts } from '@/lib/services/product-service';
 import type { Product } from '@/lib/types';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { useToast } from '@/hooks/use-toast';
 import {
   DropdownMenu,
@@ -154,14 +153,14 @@ export default function AdminProductsPage() {
           <TableBody>
             {products.length > 0 ? (
                 products.map((product) => {
-                    const placeholder = PlaceHolderImages.find(p => p.id === product.imageIds[0]);
+                    const imageUrl = product.imageUrls?.[0];
                     return (
                         <TableRow key={product.id}>
                             <TableCell>
                                 <div className="w-16 h-16 relative">
-                                    {placeholder && (
+                                    {imageUrl && (
                                         <Image
-                                        src={placeholder.imageUrl}
+                                        src={imageUrl}
                                         alt={product.name}
                                         fill
                                         className="rounded-md object-cover"
