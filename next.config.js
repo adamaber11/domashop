@@ -39,6 +39,12 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'www.apple.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
 };
