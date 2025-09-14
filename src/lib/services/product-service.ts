@@ -55,12 +55,15 @@ export async function getProductsByCategory(category: string): Promise<Product[]
 
 export async function getFeaturedProducts(count: number): Promise<Product[]> {
    try {
-    const q = query(productsCollection, orderBy('averageRating', 'desc'), limit(count));
+    const q = query(productsCollection, where('isFeatured', '==', true), limit(count));
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
   } catch (error) {
     console.error("Error fetching featured products:", error);
-    throw new Error('Failed to fetch featured products.');
+    // Fallback in case of index error etc.
+    const fallbackQuery = query(productsCollection, limit(count));
+    const fallbackSnapshot = await getDocs(fallbackQuery);
+    return fallbackSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
   }
 }
 
@@ -93,6 +96,7 @@ export async function addProduct(productData: Omit<Product, 'id' | 'reviewCount'
       ...productData,
       reviewCount: 0,
       averageRating: 0,
+      isFeatured: productData.isFeatured || false,
     });
     return docRef.id;
   } catch (error) {

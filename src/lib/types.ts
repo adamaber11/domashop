@@ -24,6 +24,7 @@ export type Product = {
   imageHint: string;
   reviewCount: number;
   averageRating: number;
+  isFeatured?: boolean;
 };
 
 export type CartItem = {

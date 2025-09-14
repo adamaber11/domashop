@@ -25,6 +25,7 @@ const productSchema = z.object({
   category: z.string().min(1, 'Please select a category.'),
   onSale: z.boolean().default(false),
   salePrice: z.coerce.number().optional(),
+  isFeatured: z.boolean().default(false),
   imageUrl1: z.string().min(1, 'Please enter a URL for Image 1.'),
   imageUrl2: z.string().min(1, 'Please enter a URL for Image 2.'),
   imageUrl3: z.string().min(1, 'Please enter a URL for Image 3.'),
@@ -56,6 +57,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
             category: '',
             onSale: false,
             salePrice: undefined,
+            isFeatured: false,
             imageUrl1: '',
             imageUrl2: '',
             imageUrl3: '',
@@ -76,6 +78,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
                         category: fetchedProduct.category,
                         onSale: fetchedProduct.onSale || false,
                         salePrice: fetchedProduct.salePrice,
+                        isFeatured: fetchedProduct.isFeatured || false,
                         imageUrl1: fetchedProduct.imageUrls[0] || '',
                         imageUrl2: fetchedProduct.imageUrls[1] || '',
                         imageUrl3: fetchedProduct.imageUrls[2] || '',
@@ -107,6 +110,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
                 category: values.category,
                 onSale: values.onSale,
                 salePrice: values.salePrice,
+                isFeatured: values.isFeatured,
                 imageUrls: [values.imageUrl1, values.imageUrl2, values.imageUrl3],
                 imageHint: values.imageHint,
             };
@@ -193,6 +197,15 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
                             )} />
                         )}
                     </div>
+                     <FormField control={form.control} name="isFeatured" render={({ field }) => (
+                        <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4">
+                            <FormControl><Checkbox checked={field.value} onCheckedChange={field.onChange} /></FormControl>
+                            <div className="space-y-1 leading-none">
+                                <FormLabel>Featured Product</FormLabel>
+                                <FormDescription>Featured products appear on the homepage.</FormDescription>
+                            </div>
+                        </FormItem>
+                    )} />
 
                      <div className="space-y-4 rounded-md border p-4">
                          <FormLabel>Product Images</FormLabel>
