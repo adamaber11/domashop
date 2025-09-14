@@ -33,7 +33,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
            // This handles users who were created before the Firestore document was standard
           // or for Google sign-in on first login.
           const newUser: SiteUser = { 
-            ...firebaseUser
+            ...firebaseUser,
+            gender: 'not-specified'
           };
           setUser(newUser);
         }
@@ -61,6 +62,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           photoURL: firebaseUser.photoURL,
           firstName: firstName,
           lastName: lastName.join(' '),
+          gender: 'not-specified'
         });
       }
 
@@ -80,7 +82,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       firstName,
       lastName,
       email: firebaseUser.email,
-      displayName: `${firstName} ${lastName}`
+      displayName: `${firstName} ${lastName}`,
+      gender: 'not-specified'
     });
 
     return userCredential;

@@ -58,6 +58,7 @@ export interface SiteUser extends Omit<FirebaseUser, 'metadata'> {
   firstName?: string;
   lastName?: string;
   shippingAddress?: ShippingAddress;
+  gender?: 'male' | 'female' | 'not-specified';
   // Properties from firebase-admin UserRecord
   metadata?: UserMetadata;
   disabled?: boolean;
