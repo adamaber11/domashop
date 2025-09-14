@@ -10,9 +10,12 @@ type NewReview = Omit<Review, 'id' | 'date' | 'productId'>;
 export async function getReviewsByProductId(productId: string): Promise<Review[]> {
   try {
     const reviewsCollection = collection(db, 'reviews');
-    const q = query(reviewsCollection, where('productId', '==', productId), orderBy('date', 'desc'));
+    // Removed orderBy('date', 'desc') to avoid composite index requirement.
+    // Sorting will be done in-memory after fetching.
+    const q = query(reviewsCollection, where('productId', '==', productId));
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => {
+    
+    const reviews = querySnapshot.docs.map(doc => {
         const data = doc.data();
         return {
             id: doc.id,
@@ -20,6 +23,10 @@ export async function getReviewsByProductId(productId: string): Promise<Review[]
             date: (data.date as Timestamp).toDate().toISOString(),
         } as Review;
     });
+
+    // Sort by date in descending order (newest first)
+    return reviews.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
   } catch (error) {
     console.error(`Error fetching reviews for product ${productId}:`, error);
     throw new Error('Failed to fetch reviews.');
