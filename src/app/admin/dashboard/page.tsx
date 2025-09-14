@@ -1,6 +1,5 @@
-'use client';
+'use server';
 
-import { useEffect, useState } from 'react';
 import {
   Card,
   CardContent,
@@ -22,68 +21,9 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { getDashboardStats } from '@/lib/services/dashboard-service';
 import type { Order } from '@/lib/types';
-import { Skeleton } from '@/components/ui/skeleton';
 
-interface DashboardStats {
-  totalRevenue: number;
-  totalSales: number;
-  totalProducts: number;
-  totalUsers: number;
-  recentOrders: Order[];
-}
-
-export default function DashboardPage() {
-  const [stats, setStats] = useState<DashboardStats | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const dashboardStats = await getDashboardStats();
-        setStats(dashboardStats);
-      } catch (error) {
-        console.error('Failed to fetch dashboard stats:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchStats();
-  }, []);
-
-  if (loading || !stats) {
-    return (
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <header className="mb-8">
-          <Skeleton className="h-10 w-1/3 mb-2" />
-          <Skeleton className="h-4 w-1/2" />
-        </header>
-        <main className="grid gap-6">
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            <Skeleton className="h-32 rounded-lg" />
-            <Skeleton className="h-32 rounded-lg" />
-            <Skeleton className="h-32 rounded-lg" />
-            <Skeleton className="h-32 rounded-lg" />
-          </div>
-          <Card>
-            <CardHeader>
-              <Skeleton className="h-8 w-40" />
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {[...Array(5)].map((_, i) => (
-                  <div key={i} className="flex justify-between items-center">
-                    <Skeleton className="h-5 w-1/4" />
-                    <Skeleton className="h-5 w-1/4" />
-                    <Skeleton className="h-5 w-1/4" />
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </main>
-      </div>
-    );
-  }
+export default async function DashboardPage() {
+  const stats = await getDashboardStats();
 
   return (
     <div className="bg-muted/40 min-h-screen">

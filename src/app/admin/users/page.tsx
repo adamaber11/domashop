@@ -1,6 +1,5 @@
-'use client';
+'use server';
 
-import { useState, useEffect, useCallback } from 'react';
 import {
   Table,
   TableBody,
@@ -12,60 +11,11 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { MoreHorizontal } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { Skeleton } from '@/components/ui/skeleton';
 import { getAllUsers } from '@/lib/services/user-service';
-import type { SiteUser } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 
-export default function AdminUsersPage() {
-  const [users, setUsers] = useState<SiteUser[]>([]);
-  const [loading, setLoading] = useState(true);
-  const { toast } = useToast();
-
-  const fetchUsers = useCallback(async () => {
-    setLoading(true);
-    try {
-      const fetchedUsers = await getAllUsers();
-      setUsers(fetchedUsers);
-    } catch (error) {
-      console.error('Failed to fetch users:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to fetch users.',
-        variant: 'destructive',
-      });
-    } finally {
-      setLoading(false);
-    }
-  }, [toast]);
-
-  useEffect(() => {
-    fetchUsers();
-  }, [fetchUsers]);
-
-  if (loading) {
-    return (
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <Skeleton className="h-10 w-48" />
-        </div>
-        <div className="space-y-4">
-          {[...Array(5)].map((_, i) => (
-            <div key={i} className="flex items-center space-x-4 p-4 border rounded-lg">
-              <Skeleton className="h-10 w-10 rounded-full" />
-              <div className="flex-grow space-y-2">
-                <Skeleton className="h-4 w-1/4" />
-                <Skeleton className="h-4 w-1/2" />
-              </div>
-              <Skeleton className="h-6 w-24" />
-              <Skeleton className="h-8 w-8" />
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
+export default async function AdminUsersPage() {
+  const users = await getAllUsers();
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">

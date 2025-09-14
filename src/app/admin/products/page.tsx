@@ -1,6 +1,6 @@
 
 'use client';
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -24,11 +24,10 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Badge } from '@/components/ui/badge';
 import { PlusCircle, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
-import { getAllProducts, deleteProduct } from '@/lib/services/product-service';
+import { deleteProduct, getAllProducts } from '@/lib/services/product-service';
 import type { Product } from '@/lib/types';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { useToast } from '@/hooks/use-toast';
-import { Skeleton } from '@/components/ui/skeleton';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -36,33 +35,14 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { useRouter } from 'next/navigation';
 
-export default function AdminProductsPage() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+export default function AdminProductsPage({ serverProducts }: { serverProducts: Product[] }) {
+  const [products, setProducts] = useState<Product[]>(serverProducts);
   const [productToDelete, setProductToDelete] = useState<{id: string, name: string} | null>(null);
   const { toast } = useToast();
+  const router = useRouter();
 
-  const fetchProducts = useCallback(async () => {
-    setLoading(true);
-    try {
-      const fetchedProducts = await getAllProducts();
-      setProducts(fetchedProducts);
-    } catch (error) {
-      console.error('Failed to fetch products:', error);
-       toast({
-        title: 'Error',
-        description: 'Failed to fetch products.',
-        variant: 'destructive',
-      });
-    } finally {
-      setLoading(false);
-    }
-  }, [toast]);
-
-  useEffect(() => {
-    fetchProducts();
-  }, [fetchProducts]);
 
   const handleDelete = async () => {
     if (!productToDelete) return;
@@ -72,7 +52,10 @@ export default function AdminProductsPage() {
         title: 'Product Deleted',
         description: `Product "${productToDelete.name}" has been successfully deleted.`,
       });
-      await fetchProducts(); // Refetch products to update the list
+      // Optimistically update UI
+      setProducts(products.filter(p => p.id !== productToDelete.id));
+      // Or refetch from server
+      // router.refresh();
     } catch (error) {
         console.error('Failed to delete product:', error);
         toast({
@@ -85,27 +68,6 @@ export default function AdminProductsPage() {
     }
   }
 
-  if (loading) {
-     return (
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <Skeleton className="h-10 w-48" />
-          <Skeleton className="h-10 w-32" />
-        </div>
-        <div className="space-y-4">
-          {[...Array(5)].map((_, i) => (
-            <div key={i} className="flex items-center space-x-4 p-4 border rounded-lg">
-                <Skeleton className="h-16 w-16 rounded-md" />
-                <Skeleton className="h-6 flex-grow" />
-                <Skeleton className="h-6 w-24" />
-                <Skeleton className="h-6 w-24" />
-                <Skeleton className="h-8 w-8" />
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
 
   return (
     <>

@@ -3,6 +3,7 @@
 import { db } from '@/lib/firebase';
 import { collection, getDocs, addDoc, doc, runTransaction, query, where, orderBy, Timestamp } from 'firebase/firestore';
 import type { Review } from '@/lib/types';
+import { revalidatePath } from 'next/cache';
 
 type NewReview = Omit<Review, 'id' | 'date' | 'productId'>;
 
@@ -28,8 +29,6 @@ export async function getReviewsByProductId(productId: string): Promise<Review[]
 export async function addReview(productId: string, reviewData: NewReview): Promise<string> {
     try {
         const productRef = doc(db, 'products', productId);
-        const reviewsCollection = collection(db, 'reviews');
-
         const newReviewRef = doc(collection(db, 'reviews')); // Create a ref with a new ID
 
         await runTransaction(db, async (transaction) => {
@@ -57,6 +56,9 @@ export async function addReview(productId: string, reviewData: NewReview): Promi
                 averageRating: newAverageRating,
             });
         });
+
+        // Revalidate the product page path to show the new review
+        revalidatePath(`/products/${productId}`);
 
         return newReviewRef.id;
 
