@@ -170,13 +170,13 @@ export function MobileNav({ onLinkClick }: MobileNavProps) {
             <div className='space-y-3'>
               <Link href="/account" onClick={onLinkClick} className="flex items-center space-x-3">
                 <Avatar className={cn(
-                  "h-12 w-12 cursor-pointer",
+                  "h-14 w-14 cursor-pointer",
                   displayGender === 'male' && 'animate-male-glow',
                   displayGender === 'female' && 'animate-female-glow'
                 )}>
                   <AvatarImage src={user.photoURL || undefined} alt={user.displayName || 'User Avatar'} />
                   <AvatarFallback>
-                    {displayGender === 'male' ? <BoyIcon className="w-10 h-10" /> : displayGender === 'female' ? <GirlIcon className="w-10 h-10" /> : user.email?.[0]?.toUpperCase()}
+                    {displayGender === 'male' ? <BoyIcon className="w-12 h-12" /> : displayGender === 'female' ? <GirlIcon className="w-12 h-12" /> : user.email?.[0]?.toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
                 <div>

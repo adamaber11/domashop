@@ -124,20 +124,20 @@ export function NavigationBar() {
             {loading ? (
               <div className="flex items-center space-x-2">
                 <Skeleton className="h-8 w-20" />
-                <Skeleton className="h-9 w-9 rounded-full" />
+                <Skeleton className="h-10 w-10 rounded-full" />
               </div>
             ) : user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-9 w-9 rounded-full">
+                  <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                     <Avatar className={cn(
-                        "h-9 w-9 cursor-pointer transition-transform hover:scale-110",
+                        "h-10 w-10 cursor-pointer transition-transform hover:scale-110",
                         displayGender === 'male' && 'animate-male-glow',
                         displayGender === 'female' && 'animate-female-glow'
                     )}>
                       <AvatarImage src={user.photoURL || undefined} alt={user.displayName || user.email || 'User Avatar'} />
                       <AvatarFallback>
-                        {displayGender === 'male' ? <BoyIcon className="w-8 h-8" /> : displayGender === 'female' ? <GirlIcon className="w-8 h-8" /> : user.email?.[0]?.toUpperCase()}
+                        {displayGender === 'male' ? <BoyIcon className="w-9 h-9" /> : displayGender === 'female' ? <GirlIcon className="w-9 h-9" /> : user.email?.[0]?.toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
                   </Button>
