@@ -17,25 +17,22 @@ import { ScrollArea } from './ui/scroll-area';
 import { useAuth } from '@/context/auth-context';
 import { Skeleton } from './ui/skeleton';
 import { useCart } from '@/context/cart-context';
-
-interface MobileNavProps {
-  onLinkClick?: () => void;
-}
+import { useMemo } from 'react';
 
 const BoyIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" {...props}>
-    <g fill-rule="evenodd">
+    <g fillRule="evenodd">
       <path d="m180.34 205.89v-28.74c0-26.26-19.49-33.3-32.93-33.3-13.45 0-32.94 7.04-32.94 33.3v28.74h65.87z" fill="#a56a42"/>
       <path d="m115.34 167.06c-13.44 0-32.93-7.03-32.93-33.3v-28.74h65.86v28.74c0 26.27-19.49 33.3-32.93 33.3z" fill="#a56a42" transform="translate(32.13)"/>
       <path d="m128.51 166.75c-16.24 0-35.83-8.4-35.83-33.27v-28.74h71.64v28.74c0 24.87-19.59 33.27-35.81 33.27z" fill="#ffdba6"/>
       <path d="m128.51 123.6c-20.06 0-32.93 12.3-32.93 28.74v5.33h65.87v-5.33c0-16.44-12.87-28.74-32.94-28.74z" fill="#ffdba6"/>
       <path d="m128.51 166.75c-16.24 0-35.83-8.4-35.83-33.27v-28.74h71.64v28.74c0 24.87-19.59 33.27-35.81 33.27z" fill="#ffdba6"/>
       <path d="m128.51 123.6c-20.06 0-32.93 12.3-32.93 28.74v5.33h65.87v-5.33c0-16.44-12.87-28.74-32.94-28.74z" fill="#ffdba6"/>
-      <path d="m150.81 106.94c-12.44 0-22.31-4.14-22.31-9.25 0-5.11 9.87-9.25 22.31-9.25s22.31 4.14 22.31 9.25c0 5.11-9.87 9.25-22.31 9.25z" fill="#462c19"/>
-      <path d="m106.21 106.94c-12.44 0-22.31-4.14-22.31-9.25 0-5.11 9.87-9.25 22.31-9.25s22.31 4.14 22.31 9.25c0 5.11-9.87 9.25-22.31 9.25z" fill="#462c19"/>
-      <path d="m128.51 123.6c-20.06 0-32.93-12.3-32.93-28.74v-11.8h65.87v11.8c0 16.44-12.87 28.74-32.94 28.74z" fill="#ffdba6"/>
+      <path d="m150.81 106.94c-12.44 0-22.31-4.14-22.31-9.25 0-5.11 9.87-9.25 22.31-9.25s22.31 4.14 22.31 9.25c0 5.11-9.87 9.25-22.31 9.25z" fill="#d3976e"/>
+      <path d="m106.21 106.94c-12.44 0-22.31-4.14-22.31-9.25 0-5.11 9.87-9.25 22.31-9.25s22.31 4.14 22.31 9.25c0 5.11-9.87 9.25-22.31 9.25z" fill="#d3976e"/>
+      <path d="m128.51 123.6c-20.06 0-32.93-12.3-32.93-28.74v-11.8h65.87v11.8c0 16.44-12.87-28.74-32.94-28.74z" fill="#ffdba6"/>
       <path d="m128.51 113.88c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z" fill="#e8b983"/>
-      <path d="m128.51 123.6c-20.06 0-32.93-12.3-32.93-28.74v-11.8h65.87v11.8c0 16.44-12.87 28.74-32.94 28.74z" fill="#ffdba6"/>
+      <path d="m128.51 123.6c-20.06 0-32.93-12.3-32.93-28.74v-11.8h65.87v11.8c0 16.44-12.87-28.74-32.94-28.74z" fill="#ffdba6"/>
       <path d="m137.49 133.15c0 1.9-1.32 3.44-2.96 3.44h-12.04c-1.64 0-2.96-1.54-2.96-3.44 0-1.9 1.32-3.44 2.96-3.44h12.04c1.64 0 2.96 1.54 2.96 3.44z" fill="#fff"/>
       <path d="m154.51 123.4c-4.48 5.75-13.62 9.5-26 9.5-12.38 0-21.52-3.75-26-9.5h52z" fill="#f2aeae"/>
       <path d="m137.49 133.15c0 1.9-1.32 3.44-2.96 3.44h-12.04c-1.64 0-2.96-1.54-2.96-3.44 0-1.9 1.32-3.44 2.96-3.44h12.04c1.64 0 2.96 1.54 2.96 3.44z" fill="#fff"/>
@@ -49,9 +46,9 @@ const BoyIcon = (props: React.SVGProps<SVGSVGElement>) => (
 
 const GirlIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" {...props}>
-    <g fill-rule="evenodd">
+    <g fillRule="evenodd">
       <path d="m173.23 113.3c-15.93-1.07-28.7-14.07-28.7-30.29v-2.06c0-10.74-8.98-19.55-20-19.55s-20 8.81-20 19.55v2.06c0 16.22-12.77 29.22-28.7 30.29-19.04 1.28-21.6 22.9-21.6 37.13 0 13.56 1.7 24.52 2.3 28.57h134.4c.6-4.05 2.3-15.01 2.3-28.57 0-14.23-2.56-35.85-21.6-37.13z" fill="#ffdba6"/>
-      <g fill-rule="nonzero">
+      <g fillRule="nonzero">
         <path d="m183.13 61.4c-32.96 0-32.96-29.33-32.96-29.33-32.96 0-32.96 29.33-32.96 29.33v34.92h-19.55c-10.74 0-19.55 8.81-19.55 19.55s8.81 19.55 19.55 19.55h105.02c10.74 0 19.55-8.81 19.55-19.55s-8.81-19.55-19.55-19.55h-19.55z" fill="#d3976e"/>
         <path d="m183.13 61.4c-32.96 0-32.96-29.33-32.96-29.33-32.96 0-32.96 29.33-32.96 29.33v34.92h-19.55c-10.74 0-19.55 8.81-19.55 19.55s8.81 19.55 19.55 19.55h105.02c10.74 0 19.55-8.81 19.55-19.55s-8.81-19.55-19.55-19.55h-19.55z" fill="#d3976e"/>
       </g>
@@ -88,6 +85,11 @@ export function MobileNav({ onLinkClick }: MobileNavProps) {
 
   const navLinkClasses = "flex items-center w-full p-4 text-lg font-semibold";
   const activeLinkClasses = "bg-accent text-accent-foreground";
+
+  const userGender = user?.gender;
+  const randomGender = useMemo(() => Math.random() < 0.5 ? 'male' : 'female', []);
+  const displayGender = userGender === 'not-specified' ? randomGender : userGender;
+
 
   return (
     <div className="flex flex-col h-full">
@@ -155,12 +157,12 @@ export function MobileNav({ onLinkClick }: MobileNavProps) {
               <Link href="/account" onClick={onLinkClick} className="flex items-center space-x-3">
                 <Avatar className={cn(
                   "h-12 w-12 cursor-pointer",
-                  user.gender === 'male' && 'animate-male-glow',
-                  user.gender === 'female' && 'animate-female-glow'
+                  displayGender === 'male' && 'animate-male-glow',
+                  displayGender === 'female' && 'animate-female-glow'
                 )}>
                   <AvatarImage src={user.photoURL || undefined} alt={user.displayName || 'User Avatar'} />
                   <AvatarFallback>
-                    {user.gender === 'male' ? <BoyIcon className="w-10 h-10" /> : user.gender === 'female' ? <GirlIcon className="w-10 h-10" /> : user.email?.[0]?.toUpperCase()}
+                    {displayGender === 'male' ? <BoyIcon className="w-10 h-10" /> : displayGender === 'female' ? <GirlIcon className="w-10 h-10" /> : user.email?.[0]?.toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
                 <div>

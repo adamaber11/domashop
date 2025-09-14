@@ -30,7 +30,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (userDoc.exists()) {
           setUser({ ...firebaseUser, ...userDoc.data() } as SiteUser);
         } else {
-          setUser(firebaseUser as SiteUser);
+           // This handles users who were created before the Firestore document was standard
+          // or for Google sign-in on first login.
+          const newUser: SiteUser = { 
+            ...firebaseUser, 
+            gender: 'not-specified' 
+          };
+          setUser(newUser);
         }
       } else {
         setUser(null);
@@ -45,15 +51,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const result = await signInWithPopup(auth, provider);
       const firebaseUser = result.user;
-      // Store additional user info if it's their first time
       const userDocRef = doc(db, "users", firebaseUser.uid);
       const userDoc = await getDoc(userDocRef);
+
       if (!userDoc.exists()) {
         await setDoc(userDocRef, {
           email: firebaseUser.email,
           displayName: firebaseUser.displayName,
           photoURL: firebaseUser.photoURL,
-          gender: 'not-specified', // Google sign-in doesn't provide gender
+          gender: 'not-specified',
         });
       }
 
@@ -66,10 +72,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const firebaseUser = userCredential.user;
     
-    // Update Firebase Auth profile
     await updateProfile(firebaseUser, { displayName: `${firstName} ${lastName}` });
     
-    // Store additional info in Firestore
     const userDocRef = doc(db, "users", firebaseUser.uid);
     await setDoc(userDocRef, {
       firstName,
