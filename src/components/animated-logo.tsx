@@ -4,67 +4,53 @@
 import { useState, useEffect } from 'react';
 import { getSiteSettings } from '@/lib/services/settings-service';
 import type { SiteSettings } from '@/lib/types';
-import { cn } from '@/lib/utils';
 import { Skeleton } from './ui/skeleton';
 
 export function AnimatedLogo() {
   const [settings, setSettings] = useState<SiteSettings | null>(null);
-  const [part1, setPart1] = useState('');
-  const [part2, setPart2] = useState('');
-  const [part3, setPart3] = useState('');
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [loopNum, setLoopNum] = useState(0);
-  
-  const typingSpeed = 150;
-  const deletingSpeed = 100;
-  const pauseDuration = 1500;
+  const [visibleChars, setVisibleChars] = useState(0);
+  const [isErasing, setIsErasing] = useState(false);
 
   useEffect(() => {
     getSiteSettings().then(setSettings);
   }, []);
 
+  const fullLogoText = settings ? `${settings.logoTextPart1}${settings.logoTextPart2}${settings.logoTextPart3}` : '';
+  const part1Length = settings ? settings.logoTextPart1.length : 0;
+  const part2Length = settings ? settings.logoTextPart2.length : 0;
+
   useEffect(() => {
     if (!settings) return;
 
-    const toRotate = [
-        [settings.logoTextPart1, settings.logoTextPart2, settings.logoTextPart3]
-    ];
-    
-    let ticker = setInterval(() => {
-      tick();
-    }, isDeleting ? deletingSpeed : typingSpeed);
+    const totalLength = fullLogoText.length;
+    let timer: NodeJS.Timeout;
 
-    return () => clearInterval(ticker);
-
-    function tick() {
-      const i = loopNum % toRotate.length;
-      const [fullText1, fullText2, fullText3] = toRotate[i];
-      let newPart1 = part1, newPart2 = part2, newPart3 = part3;
-
-      if (isDeleting) {
-        if (newPart3.length > 0) newPart3 = fullText3.substring(0, newPart3.length - 1);
-        else if (newPart2.length > 0) newPart2 = fullText2.substring(0, newPart2.length - 1);
-        else if (newPart1.length > 0) newPart1 = fullText1.substring(0, newPart1.length - 1);
+    if (isErasing) {
+      if (visibleChars > 0) {
+        timer = setTimeout(() => {
+          setVisibleChars(prev => prev - 1);
+        }, 80); 
       } else {
-        if (newPart1.length < fullText1.length) newPart1 = fullText1.substring(0, newPart1.length + 1);
-        else if (newPart2.length < fullText2.length) newPart2 = fullText2.substring(0, newPart2.length + 1);
-        else if (newPart3.length < fullText3.length) newPart3 = fullText3.substring(0, newPart3.length + 1);
+        // After erasing, pause then start writing again
+        timer = setTimeout(() => {
+          setIsErasing(false);
+        }, 1000);
       }
-      
-      setPart1(newPart1);
-      setPart2(newPart2);
-      setPart3(newPart3);
-
-      if (!isDeleting && newPart1 === fullText1 && newPart2 === fullText2 && newPart3 === fullText3) {
-        setTimeout(() => setIsDeleting(true), pauseDuration);
-      } else if (isDeleting && newPart1 === '' && newPart2 === '' && newPart3 === '') {
-        setIsDeleting(false);
-        setLoopNum(loopNum + 1);
+    } else {
+      if (visibleChars < totalLength) {
+        timer = setTimeout(() => {
+          setVisibleChars(prev => prev + 1);
+        }, 150);
+      } else {
+         // After writing, pause then start erasing
+        timer = setTimeout(() => {
+          setIsErasing(true);
+        }, 2500);
       }
     }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [settings, part1, part2, part3, isDeleting, loopNum]);
+    return () => clearTimeout(timer);
+  }, [visibleChars, isErasing, settings, fullLogoText.length]);
 
 
   if (!settings) {
@@ -75,13 +61,34 @@ export function AnimatedLogo() {
     );
   }
 
+  const renderLogo = () => {
+    return fullLogoText.split('').map((char, index) => {
+      let colorClass = 'text-foreground';
+      if (index >= part1Length && index < part1Length + part2Length) {
+        colorClass = 'text-primary';
+      }
+
+      return (
+        <span
+          key={index}
+          className={`
+            transition-opacity duration-300
+            ${colorClass}
+            ${index < visibleChars ? 'opacity-100' : 'opacity-0'}
+          `}
+          style={{ animation: index < visibleChars ? `fadeIn 0.5s ease-in-out` : 'none' }}
+        >
+          {char}
+        </span>
+      );
+    });
+  };
+
   return (
     <div className="mb-8 text-center h-20 flex items-center justify-center">
       <h1 className="font-extrabold font-headline text-5xl md:text-6xl inline-block tracking-tighter">
-        <span className="text-foreground">{part1}</span>
-        <span className="text-primary">{part2}</span>
-        <span className="text-foreground">{part3}</span>
-        <span className="animate-caret-blink border-r-4 border-foreground"></span>
+        {renderLogo()}
+        <span className="animate-caret-blink border-r-4 border-foreground ml-1"></span>
       </h1>
     </div>
   );
