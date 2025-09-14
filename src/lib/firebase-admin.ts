@@ -16,12 +16,13 @@ const serviceAccount = {
     "client_x509_cert_url": process.env.FIREBASE_CLIENT_X509_CERT_URL
 };
 
-export function getFirebaseAdminApp() {
-  if (admin.apps.length > 0) {
-    return admin.apps[0] as admin.app.App;
-  }
+// Initialize the app only once
+const adminApp = admin.apps.length 
+    ? admin.apps[0] as admin.app.App 
+    : admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
+      });
 
-  return admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
-  });
+export function getFirebaseAdminApp() {
+  return adminApp;
 }
