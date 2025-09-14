@@ -1,3 +1,4 @@
+
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
@@ -11,7 +12,7 @@ interface AuthContextType {
   user: SiteUser | null;
   loading: boolean;
   signInWithGoogle: () => Promise<void>;
-  signUpWithEmail: (email: string, password: string, firstName: string, lastName: string) => Promise<any>;
+  signUpWithEmail: (email: string, password: string, firstName: string, lastName: string, gender: 'male' | 'female') => Promise<any>;
   signInWithEmail: (email: string, password: string) => Promise<any>;
   signOut: () => Promise<void>;
 }
@@ -71,7 +72,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const signUpWithEmail = async (email: string, password: string, firstName: string, lastName: string) => {
+  const signUpWithEmail = async (email: string, password: string, firstName: string, lastName: string, gender: 'male' | 'female') => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const firebaseUser = userCredential.user;
     
@@ -83,7 +84,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       lastName,
       email: firebaseUser.email,
       displayName: `${firstName} ${lastName}`,
-      gender: 'not-specified'
+      gender,
     });
 
     return userCredential;

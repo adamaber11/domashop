@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -35,6 +36,7 @@ const formSchema = z.object({
   lastName: z.string().min(2, 'Last name is too short'),
   email: z.string().email('Invalid email address'),
   password: z.string().min(8, 'Password must be at least 8 characters'),
+  gender: z.enum(['male', 'female'], { required_error: 'Please select a gender.' }),
 });
 
 export default function SignupPage() {
@@ -54,7 +56,7 @@ export default function SignupPage() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      await signUpWithEmail(values.email, values.password, values.firstName, values.lastName);
+      await signUpWithEmail(values.email, values.password, values.firstName, values.lastName, values.gender);
       toast({
         title: 'Account Created!',
         description: 'Your account has been successfully created.',
@@ -141,7 +143,7 @@ export default function SignupPage() {
                   )}
                 />
               </div>
-              <FormField
+               <FormField
                 control={form.control}
                 name="email"
                 render={({ field }) => (
@@ -162,6 +164,36 @@ export default function SignupPage() {
                     <FormLabel>Password</FormLabel>
                     <FormControl>
                       <Input type="password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="gender"
+                render={({ field }) => (
+                  <FormItem className="space-y-3">
+                    <FormLabel>Gender</FormLabel>
+                    <FormControl>
+                      <RadioGroup
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        className="flex space-x-4"
+                      >
+                        <FormItem className="flex items-center space-x-2 space-y-0">
+                          <FormControl>
+                            <RadioGroupItem value="male" />
+                          </FormControl>
+                          <FormLabel className="font-normal">Male</FormLabel>
+                        </FormItem>
+                        <FormItem className="flex items-center space-x-2 space-y-0">
+                          <FormControl>
+                            <RadioGroupItem value="female" />
+                          </FormControl>
+                          <FormLabel className="font-normal">Female</FormLabel>
+                        </FormItem>
+                      </RadioGroup>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
