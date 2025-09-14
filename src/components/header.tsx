@@ -91,45 +91,34 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center">
-        <div className="md:hidden flex items-center">
-          <Sheet open={mobileNavOpen} onOpenChange={setMobileNavOpen}>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Menu className="h-6 w-6" />
-                <span className="sr-only">Open Menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="w-full max-w-xs pr-0">
-              <MobileNav onLinkClick={() => setMobileNavOpen(false)} />
-            </SheetContent>
-          </Sheet>
+      <div className="container flex h-16 items-center justify-between">
+        <div className="flex items-center gap-2">
+            <div className="md:hidden">
+                <Sheet open={mobileNavOpen} onOpenChange={setMobileNavOpen}>
+                    <SheetTrigger asChild>
+                    <Button variant="ghost" size="icon">
+                        <Menu className="h-6 w-6" />
+                        <span className="sr-only">Open Menu</span>
+                    </Button>
+                    </SheetTrigger>
+                    <SheetContent side="left" className="w-full max-w-xs pr-0">
+                        <MobileNav onLinkClick={() => setMobileNavOpen(false)} />
+                    </SheetContent>
+                </Sheet>
+            </div>
+            
+            <Link href="/" className="flex items-center space-x-2 group transition-transform duration-300 hover:scale-105">
+                <ShoppingCart className="h-8 w-8 text-primary" />
+                <span className="font-extrabold font-headline sm:inline-block text-3xl">
+                    Do<span className="text-primary">m</span>a
+                </span>
+            </Link>
         </div>
 
-        <Link href="/" className="md:mr-4 flex items-center space-x-2 group transition-transform duration-300 hover:scale-105">
-          <ShoppingCart className="h-8 w-8 text-primary" />
-          <span className="font-extrabold font-headline sm:inline-block text-3xl">
-            Do<span className="text-primary">m</span>a
-          </span>
-        </Link>
-
-        <div className="flex-1 hidden md:flex justify-center md:px-4">
-           {isMobile ? (
-              <Dialog open={searchOpen} onOpenChange={setSearchOpen}>
-                <DialogTrigger asChild>
-                   <Button variant="ghost" size="icon" aria-label="Search">
-                      <Search />
-                    </Button>
-                </DialogTrigger>
-                <DialogContent className="top-1/4">
-                  <SearchContent />
-                </DialogContent>
-              </Dialog>
-           ) : (
-             <div className="w-full max-w-md">
-                <SearchContent />
-             </div>
-           )}
+        <div className="flex-1 hidden md:flex justify-center px-4 lg:px-8">
+           <div className="w-full max-w-md">
+              <SearchContent />
+           </div>
         </div>
         
         <div className="flex items-center justify-end space-x-1 sm:space-x-2">
