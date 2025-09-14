@@ -15,7 +15,7 @@ export async function Footer() {
              <Link href="/" className="flex items-center space-x-2">
                 <ShoppingCart className="h-8 w-8 text-primary" />
                 <span className="font-extrabold font-headline inline-block text-3xl text-foreground">
-                    {settings.logoTextPrimary}<span className="text-primary">{settings.logoTextSecondary}</span>
+                    {settings.logoTextPart1}<span className="text-primary">{settings.logoTextPart2}</span>{settings.logoTextPart3}
                 </span>
             </Link>
             <p className="text-sm">
@@ -60,7 +60,7 @@ export async function Footer() {
         </div>
         
         <div className="mt-12 border-t border-border pt-6 text-center text-sm">
-          <p>&copy; {new Date().getFullYear()} {settings.logoTextPrimary}{settings.logoTextSecondary} Online Shop. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} {settings.logoTextPart1}{settings.logoTextPart2}{settings.logoTextPart3} Online Shop. All rights reserved.</p>
         </div>
       </div>
     </footer>

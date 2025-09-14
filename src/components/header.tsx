@@ -117,7 +117,7 @@ export function Header() {
                 <ShoppingCart className="h-8 w-8 text-primary" />
                 <span className="font-extrabold font-headline sm:inline-block text-3xl">
                     {settings ? (
-                      <>{settings.logoTextPrimary}<span className="text-primary">{settings.logoTextSecondary}</span></>
+                      <>{settings.logoTextPart1}<span className="text-primary">{settings.logoTextPart2}</span>{settings.logoTextPart3}</>
                     ) : (
                       <>Do<span className="text-primary">m</span>a</>
                     )}

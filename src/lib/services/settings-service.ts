@@ -11,8 +11,9 @@ const settingsDocRef = doc(db, 'settings', SETTINGS_DOC_ID);
 const defaultSettings: Omit<SiteSettings, 'id'> = {
   welcomeHeadline: 'Welcome to Doma Online Shop',
   welcomeSubheading: 'Discover a world of quality products, curated just for you. Your blissful shopping journey starts here.',
-  logoTextPrimary: 'Do',
-  logoTextSecondary: 'ma',
+  logoTextPart1: 'Do',
+  logoTextPart2: 'm',
+  logoTextPart3: 'a',
   socials: {
     facebook: '#',
     twitter: '#',
@@ -31,7 +32,10 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     const docSnap = await getDoc(settingsDocRef);
 
     if (docSnap.exists()) {
-      return { id: docSnap.id, ...docSnap.data() } as SiteSettings;
+      const data = docSnap.data();
+      // Merge with defaults to ensure new fields exist
+      const settings = { ...defaultSettings, ...data };
+      return { id: docSnap.id, ...settings } as SiteSettings;
     } else {
       // If settings don't exist, create them with default values
       await setDoc(settingsDocRef, defaultSettings);

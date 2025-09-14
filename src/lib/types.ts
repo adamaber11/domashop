@@ -63,8 +63,9 @@ export interface SiteSettings {
   id: string;
   welcomeHeadline: string;
   welcomeSubheading: string;
-  logoTextPrimary: string;
-  logoTextSecondary: string;
+  logoTextPart1: string;
+  logoTextPart2: string;
+  logoTextPart3: string;
   socials: {
     facebook: string;
     twitter: string;

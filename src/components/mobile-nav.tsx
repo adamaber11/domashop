@@ -17,7 +17,10 @@ import { ScrollArea } from './ui/scroll-area';
 import { useAuth } from '@/context/auth-context';
 import { Skeleton } from './ui/skeleton';
 import { useCart } from '@/context/cart-context';
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
+import { getSiteSettings } from '@/lib/services/settings-service';
+import type { SiteSettings } from '@/lib/types';
+
 
 const BoyIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" {...props}>
@@ -49,7 +52,7 @@ const GirlIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <g fillRule="evenodd">
       <path d="m173.23 113.3c-15.93-1.07-28.7-14.07-28.7-30.29v-2.06c0-10.74-8.98-19.55-20-19.55s-20 8.81-20 19.55v2.06c0 16.22-12.77 29.22-28.7 30.29-19.04 1.28-21.6 22.9-21.6 37.13 0 13.56 1.7 24.52 2.3 28.57h134.4c.6-4.05 2.3-15.01 2.3-28.57 0-14.23-2.56-35.85-21.6-37.13z" fill="#ffdba6"/>
       <g fillRule="nonzero">
-        <path d="m183.13 61.4c-32.96 0-32.96-29.33-32.96-29.33-32.96 0-32.96 29.33-32.96 29.33v34.92h-19.55c-10.74 0-19.55 8.81-19.55 19.55s8.81 19.55 19.55 19.55h105.02c10.74 0 19.55-8.81 19.55-19.55s-8.81-19.55-19.55-19.55h-19.55z" fill="#d3976e"/>
+        <path d="m183.13 61.4c-32.96 0-32.96-29.33-32.96-29.33-32.96 0-32.96 29.33-32.96 29.33v34.92h-19.55c-10.74 0-19.55 8.81-19.55 19.55s8.81 19.55 19.55 19.55h105.02c-10.74 0-19.55-8.81-19.55-19.55s8.81-19.55 19.55-19.55h-19.55z" fill="#d3976e"/>
         <path d="m183.13 61.4c-32.96 0-32.96-29.33-32.96-29.33-32.96 0-32.96 29.33-32.96 29.33v34.92h-19.55c-10.74 0-19.55 8.81-19.55 19.55s8.81 19.55 19.55 19.55h105.02c10.74 0 19.55-8.81 19.55-19.55s-8.81-19.55-19.55-19.55h-19.55z" fill="#d3976e"/>
       </g>
       <path d="m173.23 113.3c-15.93-1.07-28.7-14.07-28.7-30.29v-2.06c0-10.74-8.98-19.55-20-19.55s-20 8.81-20 19.55v2.06c0 16.22-12.77 29.22-28.7 30.29-19.04 1.28-21.6 22.9-21.6 37.13 0 13.56 1.7 24.52 2.3 28.57h134.4c.6-4.05 2.3-15.01 2.3-28.57 0-14.23-2.56-35.85-21.6-37.13z" fill="#ffdba6"/>
@@ -65,11 +68,18 @@ const GirlIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-
+interface MobileNavProps {
+    onLinkClick?: () => void;
+}
 export function MobileNav({ onLinkClick }: MobileNavProps) {
   const pathname = usePathname();
   const { user, loading, signOut: firebaseSignOut } = useAuth();
   const { clearCart } = useCart();
+  const [settings, setSettings] = useState<SiteSettings | null>(null);
+
+  useEffect(() => {
+    getSiteSettings().then(setSettings);
+  }, []);
 
   const handleLinkClick = (href: string) => {
     if (pathname === href) {
@@ -97,7 +107,11 @@ export function MobileNav({ onLinkClick }: MobileNavProps) {
         <Link href="/" onClick={onLinkClick} className="flex items-center space-x-2">
             <ShoppingCart className="h-8 w-8 text-primary" />
             <span className="font-extrabold font-headline text-3xl">
-                Do<span className="text-primary">m</span>a
+                {settings ? (
+                  <>{settings.logoTextPart1}<span className="text-primary">{settings.logoTextPart2}</span>{settings.logoTextPart3}</>
+                ) : (
+                  <>Do<span className="text-primary">m</span>a</>
+                )}
             </span>
         </Link>
       </div>

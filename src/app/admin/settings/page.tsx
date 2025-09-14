@@ -20,8 +20,9 @@ import { Trash2 } from 'lucide-react';
 const settingsSchema = z.object({
     welcomeHeadline: z.string().min(5, 'Headline must be at least 5 characters.'),
     welcomeSubheading: z.string().min(10, 'Subheading must be at least 10 characters.'),
-    logoTextPrimary: z.string().min(1, 'Primary logo text is required.'),
-    logoTextSecondary: z.string().min(1, 'Secondary logo text is required.'),
+    logoTextPart1: z.string().min(1, 'Logo Part 1 is required.'),
+    logoTextPart2: z.string().min(1, 'Logo Part 2 is required.'),
+    logoTextPart3: z.string().min(1, 'Logo Part 3 is required.'),
     socials: z.object({
         facebook: z.string().min(1, 'Facebook URL is required.'),
         twitter: z.string().min(1, 'Twitter URL is required.'),
@@ -48,8 +49,9 @@ export default function SettingsPage() {
         defaultValues: {
             welcomeHeadline: '',
             welcomeSubheading: '',
-            logoTextPrimary: 'Do',
-            logoTextSecondary: 'ma',
+            logoTextPart1: 'Do',
+            logoTextPart2: 'm',
+            logoTextPart3: 'a',
             socials: {
                 facebook: '#',
                 twitter: '#',
@@ -142,14 +144,17 @@ export default function SettingsPage() {
                     <Card>
                         <CardHeader>
                             <CardTitle>Site Logo</CardTitle>
-                            <CardDescription>Manage the text-based logo.</CardDescription>
+                            <CardDescription>Manage the text-based logo. The middle part will be accent-colored.</CardDescription>
                         </CardHeader>
-                        <CardContent className="grid grid-cols-2 gap-4">
-                            <FormField control={form.control} name="logoTextPrimary" render={({ field }) => (
-                                <FormItem><FormLabel>Logo Primary Text</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                        <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <FormField control={form.control} name="logoTextPart1" render={({ field }) => (
+                                <FormItem><FormLabel>Logo Part 1 (Black)</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                             )} />
-                            <FormField control={form.control} name="logoTextSecondary" render={({ field }) => (
-                                <FormItem><FormLabel>Logo Secondary (Accent) Text</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                            <FormField control={form.control} name="logoTextPart2" render={({ field }) => (
+                                <FormItem><FormLabel>Logo Part 2 (Orange)</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                            )} />
+                            <FormField control={form.control} name="logoTextPart3" render={({ field }) => (
+                                <FormItem><FormLabel>Logo Part 3 (Black)</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                             )} />
                         </CardContent>
                     </Card>
