@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { MoreHorizontal, User, Mail, Calendar, UserPlus } from 'lucide-react';
+import { MoreHorizontal } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getAllUsers } from '@/lib/services/user-service';
@@ -49,7 +49,6 @@ export default function AdminUsersPage() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-between mb-8">
           <Skeleton className="h-10 w-48" />
-           <Skeleton className="h-10 w-32" />
         </div>
         <div className="space-y-4">
           {[...Array(5)].map((_, i) => (
@@ -75,10 +74,6 @@ export default function AdminUsersPage() {
           <h1 className="text-3xl font-bold tracking-tight font-headline">Users</h1>
           <p className="text-muted-foreground">Manage all registered users.</p>
         </div>
-         <Button>
-          <UserPlus className="mr-2 h-5 w-5" />
-          Add User
-        </Button>
       </div>
 
       <div className="border rounded-lg overflow-hidden">

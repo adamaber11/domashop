@@ -1,6 +1,6 @@
 'use client';
 
-import { Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { useEffect, useState } from 'react';
 import {
   Card,
   CardContent,
@@ -17,49 +17,74 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { DollarSign, ShoppingBag, Users, BarChart3, Package } from 'lucide-react';
-import { ChartConfig, ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
+import { DollarSign, ShoppingBag, Users, Package } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { getDashboardStats } from '@/lib/services/dashboard-service';
+import type { Order } from '@/lib/types';
+import { Skeleton } from '@/components/ui/skeleton';
 
-const revenueData = [
-  { month: 'Jan', revenue: 12000 },
-  { month: 'Feb', revenue: 15000 },
-  { month: 'Mar', revenue: 18000 },
-  { month: 'Apr', revenue: 22000 },
-  { month: 'May', revenue: 25000 },
-  { month: 'Jun', revenue: 28000 },
-];
-
-const salesData = [
-  { name: 'Jan', sales: 400 },
-  { name: 'Feb', sales: 300 },
-  { name: 'Mar', sales: 500 },
-  { name: 'Apr', sales: 450 },
-  { name: 'May', sales: 600 },
-  { name: 'Jun', sales: 800 },
-];
-
-const chartConfig: ChartConfig = {
-    revenue: {
-      label: 'Revenue',
-      color: 'hsl(var(--primary))',
-    },
-    sales: {
-      label: 'Sales',
-      color: 'hsl(var(--accent))',
-    },
-};
-
-const recentOrders = [
-  { id: 'ORD001', customer: 'Olivia Martin', amount: 250.0, status: 'Fulfilled' },
-  { id: 'ORD002', customer: 'Jackson Lee', amount: 150.0, status: 'Processing' },
-  { id: 'ORD003', customer: 'Isabella Nguyen', amount: 350.0, status: 'Fulfilled' },
-  { id: 'ORD004', customer: 'William Kim', amount: 450.0, status: 'Fulfilled' },
-  { id: 'ORD005', customer: 'Sofia Davis', amount: 550.0, status: 'Cancelled' },
-];
+interface DashboardStats {
+  totalRevenue: number;
+  totalSales: number;
+  totalProducts: number;
+  totalUsers: number;
+  recentOrders: Order[];
+}
 
 export default function DashboardPage() {
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const dashboardStats = await getDashboardStats();
+        setStats(dashboardStats);
+      } catch (error) {
+        console.error('Failed to fetch dashboard stats:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStats();
+  }, []);
+
+  if (loading || !stats) {
+    return (
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <header className="mb-8">
+          <Skeleton className="h-10 w-1/3 mb-2" />
+          <Skeleton className="h-4 w-1/2" />
+        </header>
+        <main className="grid gap-6">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            <Skeleton className="h-32 rounded-lg" />
+            <Skeleton className="h-32 rounded-lg" />
+            <Skeleton className="h-32 rounded-lg" />
+            <Skeleton className="h-32 rounded-lg" />
+          </div>
+          <Card>
+            <CardHeader>
+              <Skeleton className="h-8 w-40" />
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {[...Array(5)].map((_, i) => (
+                  <div key={i} className="flex justify-between items-center">
+                    <Skeleton className="h-5 w-1/4" />
+                    <Skeleton className="h-5 w-1/4" />
+                    <Skeleton className="h-5 w-1/4" />
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-muted/40 min-h-screen">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -68,7 +93,7 @@ export default function DashboardPage() {
             Admin Dashboard
           </h1>
           <p className="text-muted-foreground">
-            Welcome back, Adam! Here's an overview of your store.
+            An overview of your store's performance.
           </p>
         </header>
 
@@ -82,9 +107,9 @@ export default function DashboardPage() {
                 <DollarSign className="h-5 w-5 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">$120,000.00</div>
+                <div className="text-2xl font-bold">${stats.totalRevenue.toFixed(2)}</div>
                 <p className="text-xs text-muted-foreground">
-                  +20.1% from last month
+                  From all completed orders.
                 </p>
               </CardContent>
             </Card>
@@ -94,27 +119,13 @@ export default function DashboardPage() {
                 <ShoppingBag className="h-5 w-5 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">+1,200</div>
+                <div className="text-2xl font-bold">+{stats.totalSales}</div>
                 <p className="text-xs text-muted-foreground">
-                  +180.1% from last month
+                  Total orders placed.
                 </p>
               </CardContent>
             </Card>
             <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">
-                  New Orders
-                </CardTitle>
-                <BarChart3 className="h-5 w-5 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">+235</div>
-                <p className="text-xs text-muted-foreground">
-                  +35 from last week
-                </p>
-              </CardContent>
-            </Card>
-             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium">
                   Products
@@ -122,78 +133,81 @@ export default function DashboardPage() {
                 <Package className="h-5 w-5 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                 <div className="text-2xl font-bold">12</div>
+                 <div className="text-2xl font-bold">{stats.totalProducts}</div>
                  <p className="text-xs text-muted-foreground">
-                    2 new products this month
+                    Total active products.
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Users
+                </CardTitle>
+                <Users className="h-5 w-5 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{stats.totalUsers}</div>
+                <p className="text-xs text-muted-foreground">
+                  Total registered users.
                 </p>
               </CardContent>
             </Card>
           </div>
-
-          <div className="grid gap-6 lg:grid-cols-2">
-             <Card>
-              <CardHeader>
-                <CardTitle>Revenue Overview</CardTitle>
-                <CardDescription>January - June 2024</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ChartContainer config={chartConfig} className="h-[250px] w-full">
-                    <LineChart data={revenueData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                        <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={8} />
-                        <YAxis tickLine={false} axisLine={false} tickMargin={8} tickFormatter={(value) => `$${Number(value) / 1000}k`} />
-                        <Tooltip content={<ChartTooltipContent indicator="dot" />} />
-                        <Line type="monotone" dataKey="revenue" stroke="hsl(var(--primary))" strokeWidth={3} dot={true} />
-                    </LineChart>
-                </ChartContainer>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between">
+          
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div>
                 <CardTitle>Recent Orders</CardTitle>
-                <Button asChild variant="outline" size="sm">
-                  <Link href="#">View All</Link>
-                </Button>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Customer</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead className="text-right">Amount</TableHead>
+                <CardDescription>A list of the 5 most recent orders.</CardDescription>
+              </div>
+              <Button asChild variant="outline" size="sm">
+                <Link href="#">View All</Link>
+              </Button>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Order ID</TableHead>
+                    <TableHead>Customer</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="text-right">Amount</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {stats.recentOrders.length > 0 ? stats.recentOrders.map((order) => (
+                    <TableRow key={order.id}>
+                      <TableCell className="font-medium">{order.id.substring(0, 7)}...</TableCell>
+                      <TableCell>
+                          <div className="font-medium">{order.customerName}</div>
+                          <div className="text-sm text-muted-foreground hidden md:inline">
+                              {order.customerEmail}
+                          </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge 
+                          variant={
+                              order.status === 'Delivered' ? 'default' : 
+                              order.status === 'Processing' ? 'secondary' : 'destructive'
+                          }
+                        >
+                          {order.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        ${order.total.toFixed(2)}
+                      </TableCell>
                     </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {recentOrders.map((order) => (
-                      <TableRow key={order.id}>
-                        <TableCell>
-                            <div className="font-medium">{order.customer}</div>
-                            <div className="text-sm text-muted-foreground">
-                                {order.id}
-                            </div>
-                        </TableCell>
-                        <TableCell>
-                          <Badge 
-                            variant={
-                                order.status === 'Fulfilled' ? 'default' : 
-                                order.status === 'Processing' ? 'secondary' : 'destructive'
-                            }
-                          >
-                            {order.status}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="text-right">
-                          ${order.amount.toFixed(2)}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          </div>
+                  )) : (
+                    <TableRow>
+                      <TableCell colSpan={4} className="text-center h-24">No orders found.</TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
         </main>
       </div>
     </div>

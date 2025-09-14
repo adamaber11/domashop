@@ -29,6 +29,16 @@ export type CartItem = {
   quantity: number;
 };
 
+export type Order = {
+    id: string;
+    customerName: string;
+    customerEmail: string;
+    total: number;
+    status: 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled';
+    date: string; // ISO 8601 format
+};
+
+
 // Extends Firebase's User type with our custom fields
 // and fields from Firebase Admin SDK's UserRecord
 export interface SiteUser extends Omit<FirebaseUser, 'metadata'> {
