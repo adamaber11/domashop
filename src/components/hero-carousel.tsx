@@ -10,24 +10,27 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "./ui/card";
+import type { HeroImage } from "@/lib/types";
+import { Skeleton } from "./ui/skeleton";
 
-const carouselItems = [
-  {
-    src: "https://picsum.photos/seed/101/1200/500",
-    alt: "A stunning landscape with mountains and a lake.",
-    hint: "landscape mountains"
-  },
-  {
-    src: "https://picsum.photos/seed/102/1200/500",
-    alt: "A modern city skyline at night with illuminated buildings.",
-    hint: "city skyline"
-  },
-];
+interface HeroCarouselProps {
+  heroImages: HeroImage[];
+}
 
-export function HeroCarousel() {
+export function HeroCarousel({ heroImages }: HeroCarouselProps) {
   const plugin = React.useRef(
     Autoplay({ delay: 2000, stopOnInteraction: true })
   );
+
+  if (!heroImages || heroImages.length === 0) {
+    return (
+      <Card className="overflow-hidden">
+        <CardContent className="p-0">
+          <Skeleton className="w-full aspect-[2.4/1]" />
+        </CardContent>
+      </Card>
+    )
+  }
 
   return (
     <Carousel
@@ -37,7 +40,7 @@ export function HeroCarousel() {
       onMouseLeave={plugin.current.reset}
     >
       <CarouselContent>
-        {carouselItems.map((item, index) => (
+        {heroImages.map((item, index) => (
           <CarouselItem key={index}>
             <Card className="overflow-hidden">
               <CardContent className="p-0">
@@ -48,6 +51,7 @@ export function HeroCarousel() {
                   height={500}
                   className="w-full h-auto object-cover aspect-[2.4/1]"
                   data-ai-hint={item.hint}
+                  priority={index === 0}
                 />
               </CardContent>
             </Card>

@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -8,7 +7,7 @@ import { useCart } from '@/context/cart-context';
 import { Input } from '@/components/ui/input';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { CartSheetContent } from './cart-sheet';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { searchProducts } from '@/lib/services/product-service';
 import type { Product } from '@/lib/types';
 import {
@@ -24,6 +23,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { MobileNav } from './mobile-nav';
+import { getSiteSettings } from '@/lib/services/settings-service';
+import type { SiteSettings } from '@/lib/types';
 
 
 export function Header() {
@@ -33,6 +34,11 @@ export function Header() {
   const isMobile = useIsMobile();
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [settings, setSettings] = useState<SiteSettings | null>(null);
+
+  useEffect(() => {
+    getSiteSettings().then(setSettings);
+  }, []);
 
   const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
@@ -110,7 +116,11 @@ export function Header() {
             <Link href="/" className="flex items-center space-x-2 group transition-transform duration-300 hover:scale-105">
                 <ShoppingCart className="h-8 w-8 text-primary" />
                 <span className="font-extrabold font-headline sm:inline-block text-3xl">
-                    Do<span className="text-primary">m</span>a
+                    {settings ? (
+                      <>{settings.logoTextPrimary}<span className="text-primary">{settings.logoTextSecondary}</span></>
+                    ) : (
+                      <>Do<span className="text-primary">m</span>a</>
+                    )}
                 </span>
             </Link>
         </div>

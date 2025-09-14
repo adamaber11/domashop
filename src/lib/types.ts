@@ -52,3 +52,24 @@ export interface SiteUser extends Omit<FirebaseUser, 'metadata'> {
   providerData?: UserInfo[];
   toJSON?: () => object;
 }
+
+export interface HeroImage {
+  src: string;
+  alt: string;
+  hint: string;
+}
+
+export interface SiteSettings {
+  id: string;
+  welcomeHeadline: string;
+  welcomeSubheading: string;
+  logoTextPrimary: string;
+  logoTextSecondary: string;
+  socials: {
+    facebook: string;
+    twitter: string;
+    instagram: string;
+    linkedin: string;
+  };
+  heroImages: HeroImage[];
+}

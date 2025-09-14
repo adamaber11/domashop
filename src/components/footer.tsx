@@ -1,7 +1,12 @@
+'use server';
+
 import { ShoppingCart, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
 import Link from 'next/link';
+import { getSiteSettings } from '@/lib/services/settings-service';
 
-export function Footer() {
+export async function Footer() {
+  const settings = await getSiteSettings();
+
   return (
     <footer className="bg-muted text-muted-foreground mt-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -10,7 +15,7 @@ export function Footer() {
              <Link href="/" className="flex items-center space-x-2">
                 <ShoppingCart className="h-8 w-8 text-primary" />
                 <span className="font-extrabold font-headline inline-block text-3xl text-foreground">
-                    Do<span className="text-primary">m</span>a
+                    {settings.logoTextPrimary}<span className="text-primary">{settings.logoTextSecondary}</span>
                 </span>
             </Link>
             <p className="text-sm">
@@ -38,16 +43,16 @@ export function Footer() {
           <div className="text-sm">
             <h3 className="font-headline font-semibold text-foreground mb-4">Follow Us</h3>
             <div className="flex space-x-4">
-              <Link href="#" aria-label="Facebook" className="text-muted-foreground hover:text-primary transition-colors">
+              <Link href={settings.socials.facebook} target="_blank" aria-label="Facebook" className="text-muted-foreground hover:text-primary transition-colors">
                 <Facebook className="h-6 w-6" />
               </Link>
-              <Link href="#" aria-label="Twitter" className="text-muted-foreground hover:text-primary transition-colors">
+              <Link href={settings.socials.twitter} target="_blank" aria-label="Twitter" className="text-muted-foreground hover:text-primary transition-colors">
                 <Twitter className="h-6 w-6" />
               </Link>
-              <Link href="#" aria-label="Instagram" className="text-muted-foreground hover:text-primary transition-colors">
+              <Link href={settings.socials.instagram} target="_blank" aria-label="Instagram" className="text-muted-foreground hover:text-primary transition-colors">
                 <Instagram className="h-6 w-6" />
               </Link>
-               <Link href="#" aria-label="LinkedIn" className="text-muted-foreground hover:text-primary transition-colors">
+               <Link href={settings.socials.linkedin} target="_blank" aria-label="LinkedIn" className="text-muted-foreground hover:text-primary transition-colors">
                 <Linkedin className="h-6 w-6" />
               </Link>
             </div>
@@ -55,7 +60,7 @@ export function Footer() {
         </div>
         
         <div className="mt-12 border-t border-border pt-6 text-center text-sm">
-          <p>&copy; {new Date().getFullYear()} Doma Online Shop. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} {settings.logoTextPrimary}{settings.logoTextSecondary} Online Shop. All rights reserved.</p>
         </div>
       </div>
     </footer>

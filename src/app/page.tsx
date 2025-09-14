@@ -4,21 +4,23 @@ import { ProductCard } from '@/components/product-card';
 import { HeroCarousel } from '@/components/hero-carousel';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { getFeaturedProducts } from '@/lib/services/product-service';
+import { getSiteSettings } from '@/lib/services/settings-service';
 
 export default async function Home() {
   const featuredProducts = await getFeaturedProducts(10);
+  const settings = await getSiteSettings();
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
       <section className="text-center py-16 md:py-24">
         <h1 className="font-headline text-4xl md:text-6xl font-bold tracking-tight">
-          Welcome to Doma Online Shop
+          {settings.welcomeHeadline}
         </h1>
         <p className="mt-4 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Discover a world of quality products, curated just for you. Your blissful shopping journey starts here.
+          {settings.welcomeSubheading}
         </p>
         <div className="mt-8 max-w-4xl mx-auto">
-          <HeroCarousel />
+          <HeroCarousel heroImages={settings.heroImages} />
         </div>
       </section>
 
