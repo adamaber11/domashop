@@ -20,6 +20,18 @@ import { useAuth } from '@/context/auth-context';
 import { Skeleton } from './ui/skeleton';
 import { useCart } from '@/context/cart-context';
 
+const BoyIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+  </svg>
+);
+
+const GirlIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+  </svg>
+);
+
 export function NavigationBar() {
   const pathname = usePathname();
   const { user, loading, signOut: firebaseSignOut } = useAuth();
@@ -84,7 +96,9 @@ export function NavigationBar() {
                         user.gender === 'female' && 'animate-female-glow'
                     )}>
                       <AvatarImage src={user.photoURL || undefined} alt={user.displayName || user.email || 'User Avatar'} />
-                      <AvatarFallback>{user.email?.[0]?.toUpperCase()}</AvatarFallback>
+                      <AvatarFallback>
+                        {user.gender === 'male' ? <BoyIcon className="w-6 h-6" /> : user.gender === 'female' ? <GirlIcon className="w-6 h-6" /> : user.email?.[0]?.toUpperCase()}
+                      </AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>

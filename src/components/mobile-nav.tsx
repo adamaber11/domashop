@@ -22,6 +22,19 @@ interface MobileNavProps {
   onLinkClick?: () => void;
 }
 
+const BoyIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+  </svg>
+);
+
+const GirlIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+  </svg>
+);
+
+
 export function MobileNav({ onLinkClick }: MobileNavProps) {
   const pathname = usePathname();
   const { user, loading, signOut: firebaseSignOut } = useAuth();
@@ -112,7 +125,9 @@ export function MobileNav({ onLinkClick }: MobileNavProps) {
                   user.gender === 'female' && 'animate-female-glow'
                 )}>
                   <AvatarImage src={user.photoURL || undefined} alt={user.displayName || 'User Avatar'} />
-                  <AvatarFallback>{user.email?.[0]?.toUpperCase()}</AvatarFallback>
+                  <AvatarFallback>
+                    {user.gender === 'male' ? <BoyIcon className="w-8 h-8" /> : user.gender === 'female' ? <GirlIcon className="w-8 h-8" /> : user.email?.[0]?.toUpperCase()}
+                  </AvatarFallback>
                 </Avatar>
                 <div>
                   <p className="font-semibold">{user.displayName || user.firstName || 'Account'}</p>
