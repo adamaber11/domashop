@@ -1,4 +1,6 @@
 import type { User as FirebaseUser, UserInfo, UserMetadata } from 'firebase/auth';
+import type { Timestamp } from 'firebase/firestore';
+
 
 export type Review = {
   id: string;
@@ -29,13 +31,23 @@ export type CartItem = {
   quantity: number;
 };
 
+export type ShippingAddress = {
+    address: string;
+    city: string;
+    state: string;
+    zip: string;
+};
+
 export type Order = {
     id: string;
+    userId: string;
     customerName: string;
     customerEmail: string;
     total: number;
     status: 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled';
-    date: string; // ISO 8601 format
+    date: Timestamp;
+    items: CartItem[];
+    shippingAddress: ShippingAddress;
 };
 
 

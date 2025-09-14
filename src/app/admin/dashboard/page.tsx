@@ -20,7 +20,7 @@ import { DollarSign, ShoppingBag, Users, Package } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { getDashboardStats } from '@/lib/services/dashboard-service';
-import type { Order } from '@/lib/types';
+import { format } from 'date-fns';
 
 export default async function DashboardPage() {
   const stats = await getDashboardStats();
@@ -102,7 +102,7 @@ export default async function DashboardPage() {
                 <CardDescription>A list of the 5 most recent orders.</CardDescription>
               </div>
               <Button asChild variant="outline" size="sm">
-                <Link href="#">View All</Link>
+                <Link href="/admin/orders">View All</Link>
               </Button>
             </CardHeader>
             <CardContent>
@@ -111,6 +111,7 @@ export default async function DashboardPage() {
                   <TableRow>
                     <TableHead>Order ID</TableHead>
                     <TableHead>Customer</TableHead>
+                    <TableHead>Date</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead className="text-right">Amount</TableHead>
                   </TableRow>
@@ -125,6 +126,7 @@ export default async function DashboardPage() {
                               {order.customerEmail}
                           </div>
                       </TableCell>
+                       <TableCell>{format(order.date.toDate(), 'PPP')}</TableCell>
                       <TableCell>
                         <Badge 
                           variant={
@@ -141,7 +143,7 @@ export default async function DashboardPage() {
                     </TableRow>
                   )) : (
                     <TableRow>
-                      <TableCell colSpan={4} className="text-center h-24">No orders found.</TableCell>
+                      <TableCell colSpan={5} className="text-center h-24">No orders found.</TableCell>
                     </TableRow>
                   )}
                 </TableBody>

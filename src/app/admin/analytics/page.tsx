@@ -17,7 +17,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { BarChart, LineChart, PieChart } from 'lucide-react';
+import { LineChart, PieChart } from 'lucide-react';
 import {
   getSalesOverTime,
   getCategoryDistribution,

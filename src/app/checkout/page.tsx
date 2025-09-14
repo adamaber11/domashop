@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useCart } from '@/context/cart-context';
+import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
@@ -12,6 +13,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/componen
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
 import { Separator } from '@/components/ui/separator';
+import { addOrder } from '@/lib/services/order-service';
+import { useState } from 'react';
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -28,14 +31,16 @@ const formSchema = z.object({
 
 export default function CheckoutPage() {
   const { cart, cartTotal, clearCart } = useCart();
+  const { user } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: '',
-      shippingName: '',
+      email: user?.email || '',
+      shippingName: user?.displayName || '',
       shippingAddress: '',
       shippingCity: '',
       shippingState: '',
@@ -48,18 +53,52 @@ export default function CheckoutPage() {
   });
 
   if (cart.length === 0) {
-    router.push('/');
+    // Redirect to home if cart is empty, but wait for client-side navigation
+    if (typeof window !== 'undefined') {
+      router.push('/');
+    }
     return null;
   }
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log('Order submitted:', values);
-    toast({
-      title: 'Order Placed!',
-      description: 'Thank you for your purchase. A confirmation has been sent to your email.',
-    });
-    clearCart();
-    router.push('/account');
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (!user) {
+      toast({ title: 'Authentication Error', description: 'You must be logged in to place an order.', variant: 'destructive'});
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      await addOrder({
+        userId: user.uid,
+        customerName: values.shippingName,
+        customerEmail: values.email,
+        total: cartTotal,
+        status: 'Processing',
+        items: cart,
+        shippingAddress: {
+          address: values.shippingAddress,
+          city: values.shippingCity,
+          state: values.shippingState,
+          zip: values.shippingZip,
+        }
+      });
+
+      toast({
+        title: 'Order Placed!',
+        description: 'Thank you for your purchase. A confirmation has been sent to your email.',
+      });
+      clearCart();
+      router.push('/account');
+
+    } catch (error) {
+      console.error("Failed to place order:", error);
+      toast({
+        title: 'Order Failed',
+        description: 'There was an error placing your order. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -137,7 +176,9 @@ export default function CheckoutPage() {
                 </CardContent>
               </Card>
 
-              <Button type="submit" size="lg" className="w-full">Place Order</Button>
+              <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
+                {isSubmitting ? 'Placing Order...' : 'Place Order'}
+              </Button>
             </form>
           </Form>
         </div>
