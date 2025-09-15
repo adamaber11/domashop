@@ -5,6 +5,7 @@ import { HeroCarousel } from "@/components/hero-carousel";
 import { ProductCard } from "@/components/product-card";
 import { getFeaturedProducts } from "@/lib/services/product-service";
 import { getSiteSettings } from "@/lib/services/settings-service";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 
@@ -29,8 +30,11 @@ export default async function HomePage() {
         </h2>
         <HeroCarousel heroImages={settings.heroImages} />
         <div className="mt-8 flex justify-center">
-            <Link href="/category" className="text-lg font-semibold text-foreground/80 hover:text-primary transition-colors relative after:content-[''] after:absolute after:bottom-0 after:start-1/2 after:-translate-x-1/2 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:origin-center after:transition-transform after:duration-300">
-                Shop Now
+            <Link href="/category" className="group text-lg font-semibold text-foreground/80 hover:text-primary transition-colors relative after:content-[''] after:absolute after:bottom-0 after:start-1/2 after:-translate-x-1/2 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:origin-center after:transition-transform after:duration-300">
+                <span className="flex items-center gap-2">
+                    Shop Now
+                    <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+                </span>
             </Link>
         </div>
       </div>
