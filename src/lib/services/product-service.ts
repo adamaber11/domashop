@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { db } from '@/lib/firebase';
@@ -81,17 +82,21 @@ export async function getFeaturedProducts(count: number): Promise<Product[]> {
 
 export async function searchProducts(searchQuery: string, count: number): Promise<Product[]> {
   try {
-    const lowerCaseQuery = searchQuery.toLowerCase();
-    
+    // Split the search query into individual words and convert to lower case
+    const searchWords = searchQuery.toLowerCase().split(' ').filter(word => word);
+
     // Firestore doesn't support case-insensitive "contains" search natively.
-    // A common strategy for small-to-medium datasets is to fetch all products 
-    // and filter them on the server. For very large datasets, a third-party
-    // search service like Algolia or Typesense is recommended.
+    // We fetch all products and filter them on the server.
+    // For large datasets, a third-party search service (e.g., Algolia) is recommended.
     const querySnapshot = await getDocs(query(productsCollection, orderBy('name')));
     
     const products = querySnapshot.docs
       .map(doc => ({ id: doc.id, ...doc.data() } as Product))
-      .filter(product => product.name.toLowerCase().includes(lowerCaseQuery));
+      .filter(product => {
+        const productNameLower = product.name.toLowerCase();
+        // Check if all search words are present in the product name
+        return searchWords.every(word => productNameLower.includes(word));
+      });
 
     return products.slice(0, count);
 
@@ -100,6 +105,7 @@ export async function searchProducts(searchQuery: string, count: number): Promis
     throw new Error('Failed to search for products.');
   }
 }
+
 
 export async function addProduct(productData: Omit<Product, 'id' | 'reviewCount' | 'averageRating'>): Promise<string> {
   try {
