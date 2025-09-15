@@ -101,7 +101,7 @@ export function NavigationBar() {
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className={cn('text-base p-0 data-[state=open]:text-primary transition-colors hover:bg-transparent', inactiveClasses.replace('text-foreground/80', ''), pathname.startsWith('/category') ? activeClasses : '')}>
+                <Button variant="ghost" className={cn('p-0 text-base data-[state=open]:text-primary', inactiveClasses, pathname.startsWith('/category') ? activeClasses : '')}>
                   Categories
                   <ChevronDown className="ms-1 h-4 w-4" />
                 </Button>
