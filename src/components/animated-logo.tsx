@@ -5,11 +5,15 @@ import { useState, useEffect } from 'react';
 import { getSiteSettings } from '@/lib/services/settings-service';
 import type { SiteSettings } from '@/lib/types';
 import { Skeleton } from './ui/skeleton';
+import { usePathname, useRouter } from '@/navigation';
+import { useLocale } from 'next-intl';
 
 export function AnimatedLogo() {
   const [settings, setSettings] = useState<SiteSettings | null>(null);
   const [visibleChars, setVisibleChars] = useState(0);
   const [isErasing, setIsErasing] = useState(false);
+  const locale = useLocale();
+  const router = useRouter();
 
   useEffect(() => {
     getSiteSettings().then(setSettings);
@@ -85,10 +89,10 @@ export function AnimatedLogo() {
   };
 
   return (
-    <div className="mb-8 text-center h-20 flex items-center justify-center">
-      <h1 className="font-extrabold font-headline text-5xl md:text-6xl inline-block tracking-tighter">
+    <div className="mb-8 text-center h-20 flex items-center justify-center" onClick={() => router.push('/', {locale})}>
+      <h1 className="font-extrabold font-headline text-5xl md:text-6xl inline-block tracking-tighter cursor-pointer">
         {renderLogo()}
-        <span className="animate-caret-blink border-r-4 border-foreground ml-1"></span>
+        <span className="animate-caret-blink border-r-4 border-foreground ms-1"></span>
       </h1>
     </div>
   );

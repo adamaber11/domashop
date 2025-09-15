@@ -2,7 +2,7 @@
 
 'use client';
 
-import Link from 'next/link';
+import {Link, usePathname} from '@/navigation';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,7 +12,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { ChevronDown, LogIn, UserPlus, LogOut, User as UserIcon, LayoutDashboard } from 'lucide-react';
-import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { categories } from '@/lib/data';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
@@ -20,6 +19,7 @@ import { useAuth } from '@/context/auth-context';
 import { Skeleton } from './ui/skeleton';
 import { useCart } from '@/context/cart-context';
 import { useMemo } from 'react';
+import {useTranslations} from 'next-intl';
 
 const BoyIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" {...props}>
@@ -69,6 +69,7 @@ const GirlIcon = (props: React.SVGProps<SVGSVGElement>) => (
 
 
 export function NavigationBar() {
+  const t = useTranslations('NavigationBar');
   const pathname = usePathname();
   const { user, loading, signOut: firebaseSignOut } = useAuth();
   const { clearCart } = useCart();
@@ -90,14 +91,14 @@ export function NavigationBar() {
         <div className="flex items-center justify-between h-14">
           <div className="flex items-center space-x-6">
             <Link href="/" className={cn(navLinkClasses, pathname === '/' ? 'text-primary after:scale-x-100' : 'text-foreground/80')}>
-              Home
+              {t('home')}
             </Link>
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className={cn(navLinkClasses, 'p-0 data-[state=open]:text-primary data-[state=open]:after:scale-x-100', pathname.startsWith('/category') ? 'text-primary after:scale-x-100' : 'text-foreground/80' )}>
-                  Categories
-                  <ChevronDown className="ml-1 h-4 w-4" />
+                  {t('categories')}
+                  <ChevronDown className="ms-1 h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start">
@@ -113,10 +114,10 @@ export function NavigationBar() {
             </DropdownMenu>
 
             <Link href="/about" className={cn(navLinkClasses, pathname === '/about' ? 'text-primary after:scale-x-100' : 'text-foreground/80')}>
-              About
+              {t('about')}
             </Link>
             <Link href="/contact" className={cn(navLinkClasses, pathname === '/contact' ? 'text-primary after:scale-x-100' : 'text-foreground/80')}>
-              Contact Us
+              {t('contact')}
             </Link>
           </div>
           
@@ -146,27 +147,27 @@ export function NavigationBar() {
                   {user.email === 'adamaber50@gmail.com' && (
                     <>
                       <DropdownMenuItem asChild>
-                        <Link href="/admin/dashboard"><LayoutDashboard className="mr-2 h-4 w-4" /> Dashboard</Link>
+                        <Link href="/admin/dashboard"><LayoutDashboard className="mr-2 h-4 w-4" /> {t('dashboard')}</Link>
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                     </>
                   )}
                   <DropdownMenuItem asChild>
-                    <Link href="/account"><UserIcon className="mr-2 h-4 w-4" /> My Account</Link>
+                    <Link href="/account"><UserIcon className="mr-2 h-4 w-4" /> {t('myAccount')}</Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut}>
-                    <LogOut className="mr-2 h-4 w-4" /> Log Out
+                    <LogOut className="mr-2 h-4 w-4" /> {t('logOut')}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
               <>
                 <Button variant="ghost" asChild>
-                  <Link href="/login"><LogIn className="mr-2 h-4 w-4" />Log In</Link>
+                  <Link href="/login"><LogIn className="mr-2 h-4 w-4" />{t('logIn')}</Link>
                 </Button>
                 <Button asChild>
-                  <Link href="/signup"><UserPlus className="mr-2 h-4 w-4" />Sign Up</Link>
+                  <Link href="/signup"><UserPlus className="mr-2 h-4 w-4" />{t('signUp')}</Link>
                 </Button>
               </>
             )}

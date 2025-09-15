@@ -1,7 +1,7 @@
 "use client";
 
 import Image from 'next/image';
-import Link from 'next/link';
+import {Link} from '@/navigation';
 import type { Product } from '@/lib/types';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { StarRating } from './star-rating';
@@ -9,7 +9,7 @@ import { Button } from './ui/button';
 import { Eye, ShoppingBag } from 'lucide-react';
 import { useCart } from '@/context/cart-context';
 import { Badge } from './ui/badge';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/context/auth-context';
 
@@ -73,7 +73,7 @@ export function ProductCard({ product }: ProductCardProps) {
         </Link>
         <div className="mt-2 flex items-center">
           <StarRating rating={product.averageRating} />
-          <span className="text-xs text-muted-foreground ml-2">({product.reviewCount} reviews)</span>
+          <span className="text-xs text-muted-foreground ms-2">({product.reviewCount} reviews)</span>
         </div>
       </CardContent>
       <CardFooter className="p-4 pt-0 flex justify-between items-center">

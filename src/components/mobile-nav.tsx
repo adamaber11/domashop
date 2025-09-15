@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import {Link, usePathname} from '@/navigation';
 import {
   Accordion,
   AccordionContent,
@@ -12,7 +12,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { LogIn, UserPlus, ShoppingCart, LogOut, LayoutDashboard } from 'lucide-react';
 import { categories } from '@/lib/data';
 import { cn } from '@/lib/utils';
-import { usePathname } from 'next/navigation';
 import { ScrollArea } from './ui/scroll-area';
 import { useAuth } from '@/context/auth-context';
 import { Skeleton } from './ui/skeleton';
@@ -129,7 +128,7 @@ export function MobileNav({ onLinkClick }: MobileNavProps) {
                       Categories
                     </AccordionTrigger>
                     <AccordionContent className="bg-muted/50">
-                      <div className="pl-8 divide-y">
+                      <div className="ps-8 divide-y">
                         {categories.map((category) => {
                           const categorySlug = category.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-');
                           const href = category === 'All' ? '/category' : `/category/${categorySlug}`;

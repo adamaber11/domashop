@@ -1,0 +1,19 @@
+{
+    "HomePage": {
+        "welcomeHeadline": "Welcome to Doma Online Shop",
+        "welcomeSubheading": "Discover a world of quality products, curated just for you. Your blissful shopping journey starts here.",
+        "featuredProducts": "Featured Products",
+        "noFeaturedProducts": "No featured products available. Please check back later."
+    },
+    "NavigationBar": {
+        "home": "Home",
+        "categories": "Categories",
+        "about": "About",
+        "contact": "Contact Us",
+        "dashboard": "Dashboard",
+        "myAccount": "My Account",
+        "logOut": "Log Out",
+        "logIn": "Log In",
+        "signUp": "Sign Up"
+    }
+}

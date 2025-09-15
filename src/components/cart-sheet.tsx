@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Trash2, Minus, Plus, ShoppingBag } from 'lucide-react';
 import Image from 'next/image';
-import Link from 'next/link';
+import {Link} from '@/navigation';
 import { ScrollArea } from './ui/scroll-area';
 import { SheetFooter } from './ui/sheet';
 
@@ -26,14 +26,14 @@ export function CartSheetContent() {
         </div>
       ) : (
         <>
-            <ScrollArea className="flex-grow pr-4">
+            <ScrollArea className="flex-grow pe-4">
                 <div className="space-y-4">
                     {cart.map(({ product, quantity }) => {
                     const imageUrl = product.imageUrls?.[0];
                     const price = product.onSale && product.salePrice ? product.salePrice : product.price;
                     return (
                         <div key={product.id} className="flex items-start p-2 border-b">
-                            <div className="w-20 h-20 relative mr-4 flex-shrink-0">
+                            <div className="w-20 h-20 relative me-4 flex-shrink-0">
                                 {imageUrl && (
                                 <Image
                                     src={imageUrl}

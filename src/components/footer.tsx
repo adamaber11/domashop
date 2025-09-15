@@ -1,7 +1,7 @@
 'use server';
 
 import { ShoppingCart, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
-import Link from 'next/link';
+import {Link} from '@/navigation';
 import { getSiteSettings } from '@/lib/services/settings-service';
 
 export async function Footer() {
@@ -43,18 +43,18 @@ export async function Footer() {
           <div className="text-sm">
             <h3 className="font-headline font-semibold text-foreground mb-4">Follow Us</h3>
             <div className="flex space-x-4">
-              <Link href={settings.socials.facebook} target="_blank" aria-label="Facebook" className="text-muted-foreground hover:text-primary transition-colors">
+              <a href={settings.socials.facebook} target="_blank" aria-label="Facebook" className="text-muted-foreground hover:text-primary transition-colors">
                 <Facebook className="h-6 w-6" />
-              </Link>
-              <Link href={settings.socials.twitter} target="_blank" aria-label="Twitter" className="text-muted-foreground hover:text-primary transition-colors">
+              </a>
+              <a href={settings.socials.twitter} target="_blank" aria-label="Twitter" className="text-muted-foreground hover:text-primary transition-colors">
                 <Twitter className="h-6 w-6" />
-              </Link>
-              <Link href={settings.socials.instagram} target="_blank" aria-label="Instagram" className="text-muted-foreground hover:text-primary transition-colors">
+              </a>
+              <a href={settings.socials.instagram} target="_blank" aria-label="Instagram" className="text-muted-foreground hover:text-primary transition-colors">
                 <Instagram className="h-6 w-6" />
-              </Link>
-               <Link href={settings.socials.linkedin} target="_blank" aria-label="LinkedIn" className="text-muted-foreground hover:text-primary transition-colors">
+              </a>
+               <a href={settings.socials.linkedin} target="_blank" aria-label="LinkedIn" className="text-muted-foreground hover:text-primary transition-colors">
                 <Linkedin className="h-6 w-6" />
-              </Link>
+              </a>
             </div>
           </div>
         </div>
