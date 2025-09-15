@@ -74,7 +74,10 @@ export function NavigationBar() {
   const { user, loading, signOut: firebaseSignOut } = useAuth();
   const { clearCart } = useCart();
 
-  const navLinkClasses = "text-base transition-colors hover:text-primary relative after:content-[''] after:absolute after:bottom-[-4px] after:start-1/2 after:-translate-x-1/2 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:origin-center after:transition-transform after:duration-300 hover:after:scale-x-100";
+  const baseLinkClasses = "text-base transition-colors relative after:content-[''] after:absolute after:bottom-[-4px] after:start-1/2 after:-translate-x-1/2 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:origin-center after:transition-transform after:duration-300";
+  const hoverClasses = "hover:text-primary hover:after:scale-x-100";
+  const activeClasses = "text-primary after:scale-x-100";
+  const inactiveClasses = "text-foreground/80";
 
   const handleSignOut = async () => {
     await firebaseSignOut();
@@ -90,13 +93,13 @@ export function NavigationBar() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14">
           <div className="flex items-center gap-8">
-            <Link href="/" className={cn(navLinkClasses, pathname === '/' ? 'text-primary after:scale-x-100' : 'text-foreground/80')}>
+            <Link href="/" className={cn(baseLinkClasses, hoverClasses, pathname === '/' ? activeClasses : inactiveClasses)}>
               {t('home')}
             </Link>
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className={cn(navLinkClasses, 'p-0 data-[state=open]:text-primary data-[state=open]:after:scale-x-100', pathname.startsWith('/category') ? 'text-primary after:scale-x-100' : 'text-foreground/80' )}>
+                <Button variant="ghost" className={cn(baseLinkClasses, hoverClasses, 'p-0 data-[state=open]:text-primary', pathname.startsWith('/category') ? activeClasses : inactiveClasses)}>
                   {t('categories')}
                   <ChevronDown className="ms-1 h-4 w-4" />
                 </Button>
@@ -113,10 +116,10 @@ export function NavigationBar() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Link href="/about" className={cn(navLinkClasses, pathname === '/about' ? 'text-primary after:scale-x-100' : 'text-foreground/80')}>
+            <Link href="/about" className={cn(baseLinkClasses, hoverClasses, pathname === '/about' ? activeClasses : inactiveClasses)}>
               {t('about')}
             </Link>
-            <Link href="/contact" className={cn(navLinkClasses, pathname === '/contact' ? 'text-primary after:scale-x-100' : 'text-foreground/80')}>
+            <Link href="/contact" className={cn(baseLinkClasses, hoverClasses, pathname === '/contact' ? activeClasses : inactiveClasses)}>
               {t('contact')}
             </Link>
           </div>
