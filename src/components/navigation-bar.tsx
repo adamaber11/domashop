@@ -100,11 +100,15 @@ export function NavigationBar() {
             </Link>
             
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className={cn('p-0 text-base data-[state=open]:text-primary', inactiveClasses, pathname.startsWith('/category') ? activeClasses : '')}>
-                  Categories
-                  <ChevronDown className="ms-1 h-4 w-4" />
-                </Button>
+              <DropdownMenuTrigger
+                className={cn(
+                  navLinkClasses,
+                  'flex items-center gap-1 focus:outline-none',
+                  pathname.startsWith('/category') ? activeClasses : inactiveClasses
+                )}
+              >
+                Categories
+                <ChevronDown className="h-4 w-4" />
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 {categories.map((category) => {
