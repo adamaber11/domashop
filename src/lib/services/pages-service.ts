@@ -17,6 +17,8 @@ const defaultAboutContent: AboutPageContent = {
   vision: "To be the go-to online destination for shoppers seeking unique and inspiring products. We envision a world where shopping is not just a transaction, but an experience of discovery and joy.",
   founderName: "Eng. Adam Aber Desouky",
   founderTitle: "CEO & Founder",
+  bannerImageUrl: "https://picsum.photos/seed/about/1600/600",
+  founderImageUrl: "https://picsum.photos/seed/team1/200",
 };
 
 const defaultContactContent: ContactPageContent = {

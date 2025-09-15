@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -15,6 +16,7 @@ import { useToast } from '@/hooks/use-toast';
 import { getPagesContent, updatePagesContent } from '@/lib/services/pages-service';
 import type { PagesContent } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Separator } from '@/components/ui/separator';
 
 const pagesSchema = z.object({
     about: z.object({
@@ -24,6 +26,8 @@ const pagesSchema = z.object({
         vision: z.string().min(20, 'Vision statement is required.'),
         founderName: z.string().min(3, 'Founder name is required.'),
         founderTitle: z.string().min(3, 'Founder title is required.'),
+        bannerImageUrl: z.string().url('Please enter a valid URL.'),
+        founderImageUrl: z.string().url('Please enter a valid URL.'),
     }),
     contact: z.object({
         headline: z.string().min(5, 'Headline is required.'),
@@ -45,7 +49,8 @@ export default function PagesSettingsPage() {
         resolver: zodResolver(pagesSchema),
         defaultValues: {
             about: {
-                headline: '', subheading: '', mission: '', vision: '', founderName: '', founderTitle: ''
+                headline: '', subheading: '', mission: '', vision: '', founderName: '', founderTitle: '',
+                bannerImageUrl: '', founderImageUrl: '',
             },
             contact: {
                 headline: '', subheading: '', address: '', phone: '', email: ''
@@ -121,12 +126,18 @@ export default function PagesSettingsPage() {
                             <FormField control={form.control} name="about.subheading" render={({ field }) => (
                                 <FormItem><FormLabel>Subheading</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>
                             )} />
+                            <Separator />
+                             <FormField control={form.control} name="about.bannerImageUrl" render={({ field }) => (
+                                <FormItem><FormLabel>Banner Image URL</FormLabel><FormControl><Input placeholder="https://example.com/banner.jpg" {...field} /></FormControl><FormMessage /></FormItem>
+                            )} />
+                            <Separator />
                             <FormField control={form.control} name="about.mission" render={({ field }) => (
                                 <FormItem><FormLabel>Our Mission</FormLabel><FormControl><Textarea rows={4} {...field} /></FormControl><FormMessage /></FormItem>
                             )} />
                             <FormField control={form.control} name="about.vision" render={({ field }) => (
                                 <FormItem><FormLabel>Our Vision</FormLabel><FormControl><Textarea rows={3} {...field} /></FormControl><FormMessage /></FormItem>
                             )} />
+                             <Separator />
                              <div className="grid grid-cols-2 gap-4">
                                 <FormField control={form.control} name="about.founderName" render={({ field }) => (
                                     <FormItem><FormLabel>Founder Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
@@ -135,6 +146,9 @@ export default function PagesSettingsPage() {
                                     <FormItem><FormLabel>Founder Title</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                                 )} />
                             </div>
+                             <FormField control={form.control} name="about.founderImageUrl" render={({ field }) => (
+                                <FormItem><FormLabel>Founder Image URL</FormLabel><FormControl><Input placeholder="https://example.com/founder.jpg" {...field} /></FormControl><FormMessage /></FormItem>
+                            )} />
                         </CardContent>
                     </Card>
 
@@ -151,7 +165,7 @@ export default function PagesSettingsPage() {
                                 <FormItem><FormLabel>Subheading</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>
                             )} />
                              <FormField control={form.control} name="contact.address" render={({ field }) => (
-                                <FormItem><FormLabel>Office Address</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>
+                                <FormItem><FormLabel>Office Address</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormMessage>
                             )} />
                              <div className="grid grid-cols-2 gap-4">
                                 <FormField control={form.control} name="contact.phone" render={({ field }) => (

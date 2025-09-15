@@ -97,6 +97,8 @@ export interface AboutPageContent {
   vision: string;
   founderName: string;
   founderTitle: string;
+  bannerImageUrl: string;
+  founderImageUrl: string;
 }
 
 export interface ContactPageContent {

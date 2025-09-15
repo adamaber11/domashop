@@ -23,7 +23,7 @@ export default async function AboutPage() {
         <Card className="overflow-hidden">
           <div className="relative w-full h-64 md:h-96">
             <Image
-              src="https://picsum.photos/seed/about/1600/600"
+              src={about.bannerImageUrl}
               alt="Our Team"
               fill
               className="object-cover"
@@ -54,7 +54,7 @@ export default async function AboutPage() {
               <CardHeader>
                 <div className="relative w-32 h-32 rounded-full mx-auto overflow-hidden">
                   <Image
-                    src={`https://picsum.photos/seed/team1/200`}
+                    src={about.founderImageUrl}
                     alt={`Founder ${about.founderName}`}
                     fill
                     className="object-cover"
