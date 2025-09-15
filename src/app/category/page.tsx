@@ -21,9 +21,9 @@ export default function CategoriesPage() {
           const categorySlug = category.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-');
           return (
             <Link href={`/category/${categorySlug}`} key={category} className="group">
-              <Card className="h-full flex flex-col justify-center items-center text-center p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:bg-accent">
+              <Card className="h-full flex flex-col justify-center items-center text-center p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
                 <CardHeader>
-                  <CardTitle className="font-headline text-xl text-foreground group-hover:text-accent-foreground">
+                  <CardTitle className="font-headline text-xl text-foreground group-hover:text-primary">
                     {category}
                   </CardTitle>
                 </CardHeader>
