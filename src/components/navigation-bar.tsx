@@ -19,7 +19,7 @@ import { useAuth } from '@/context/auth-context';
 import { Skeleton } from './ui/skeleton';
 import { useCart } from '@/context/cart-context';
 import { useMemo } from 'react';
-import {useTranslations} from 'next-intl';
+import {useTranslations, useLocale} from 'next-intl';
 
 const BoyIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" {...props}>
@@ -73,10 +73,21 @@ export function NavigationBar() {
   const pathname = usePathname();
   const { user, loading, signOut: firebaseSignOut } = useAuth();
   const { clearCart } = useCart();
+  const locale = useLocale();
 
-  const baseLinkClasses = "text-base transition-colors relative after:content-[''] after:absolute after:bottom-0 after:start-1/2 after:-translate-x-1/2 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:origin-center after:transition-transform after:duration-300";
-  const hoverClasses = "hover:text-primary hover:after:scale-x-100";
-  const activeClasses = "text-primary after:scale-x-100";
+  const isArabic = locale === 'ar';
+
+  const baseLinkClasses = "text-base transition-colors relative";
+  const underlineClasses = "after:content-[''] after:absolute after:bottom-0 after:start-1/2 after:-translate-x-1/2 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:origin-center after:transition-transform after:duration-300";
+  
+  const hoverClasses = isArabic 
+    ? "hover:text-primary" 
+    : "hover:text-primary hover:after:scale-x-100";
+  
+  const activeClasses = isArabic 
+    ? "text-primary" 
+    : "text-primary after:scale-x-100";
+
   const inactiveClasses = "text-foreground/80";
 
   const handleSignOut = async () => {
@@ -93,13 +104,13 @@ export function NavigationBar() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14">
           <div className="flex items-center gap-8">
-            <Link href="/" className={cn(baseLinkClasses, hoverClasses, pathname === '/' ? activeClasses : inactiveClasses)}>
+            <Link href="/" className={cn(baseLinkClasses, !isArabic && underlineClasses, hoverClasses, pathname === '/' ? activeClasses : inactiveClasses)}>
               {t('home')}
             </Link>
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className={cn(baseLinkClasses, hoverClasses, 'p-0 data-[state=open]:text-primary', pathname.startsWith('/category') ? activeClasses : inactiveClasses)}>
+                <Button variant="ghost" className={cn(baseLinkClasses, 'p-0 data-[state=open]:text-primary', !isArabic && underlineClasses, hoverClasses, pathname.startsWith('/category') ? activeClasses : inactiveClasses)}>
                   {t('categories')}
                   <ChevronDown className="ms-1 h-4 w-4" />
                 </Button>
@@ -116,10 +127,10 @@ export function NavigationBar() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Link href="/about" className={cn(baseLinkClasses, hoverClasses, pathname === '/about' ? activeClasses : inactiveClasses)}>
+            <Link href="/about" className={cn(baseLinkClasses, !isArabic && underlineClasses, hoverClasses, pathname === '/about' ? activeClasses : inactiveClasses)}>
               {t('about')}
             </Link>
-            <Link href="/contact" className={cn(baseLinkClasses, hoverClasses, pathname === '/contact' ? activeClasses : inactiveClasses)}>
+            <Link href="/contact" className={cn(baseLinkClasses, !isArabic && underlineClasses, hoverClasses, pathname === '/contact' ? activeClasses : inactiveClasses)}>
               {t('contact')}
             </Link>
           </div>
