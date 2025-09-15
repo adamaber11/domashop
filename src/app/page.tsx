@@ -22,15 +22,15 @@ export default async function HomePage() {
         <p className="mt-4 text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
           {settings.welcomeSubheading}
         </p>
-        <div className="mt-8 flex justify-center gap-4">
-          <Button asChild size="lg">
-            <Link href="/category">Shop Now</Link>
-          </Button>
-        </div>
       </div>
 
       <div className="mb-16">
         <HeroCarousel heroImages={settings.heroImages} />
+        <div className="mt-8 flex justify-center">
+            <Button asChild size="lg">
+                <Link href="/category">Shop Now</Link>
+            </Button>
+        </div>
       </div>
 
       <div>
