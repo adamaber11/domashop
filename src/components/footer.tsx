@@ -1,7 +1,7 @@
 'use server';
 
 import { ShoppingCart, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
-import {Link} from '@/navigation';
+import Link from 'next/link';
 import { getSiteSettings } from '@/lib/services/settings-service';
 
 export async function Footer() {

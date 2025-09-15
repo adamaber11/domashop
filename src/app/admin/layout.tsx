@@ -1,4 +1,14 @@
-// This file is no longer used, as its logic is now in src/app/[locale]/admin/layout.tsx
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
-    return <>{children}</>;
+import { AdminNavbar } from "./_components/admin-navbar";
+
+export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <div>
+      <AdminNavbar />
+      {children}
+    </div>
+  );
 }

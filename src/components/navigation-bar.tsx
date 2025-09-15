@@ -2,7 +2,8 @@
 
 'use client';
 
-import {Link, usePathname} from '@/navigation';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,7 +20,6 @@ import { useAuth } from '@/context/auth-context';
 import { Skeleton } from './ui/skeleton';
 import { useCart } from '@/context/cart-context';
 import { useMemo } from 'react';
-import {useTranslations, useLocale} from 'next-intl';
 
 const BoyIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" {...props}>
@@ -69,26 +69,13 @@ const GirlIcon = (props: React.SVGProps<SVGSVGElement>) => (
 
 
 export function NavigationBar() {
-  const t = useTranslations('NavigationBar');
   const pathname = usePathname();
   const { user, loading, signOut: firebaseSignOut } = useAuth();
   const { clearCart } = useCart();
-  const locale = useLocale();
 
-  const isArabic = locale === 'ar';
-
-  const baseLinkClasses = "text-base transition-colors relative";
-  const underlineClasses = "after:content-[''] after:absolute after:bottom-0 after:start-1/2 after:-translate-x-1/2 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:origin-center after:transition-transform after:duration-300";
-  
-  const hoverClasses = isArabic 
-    ? "hover:text-primary" 
-    : "hover:text-primary hover:after:scale-x-100";
-  
-  const activeClasses = isArabic 
-    ? "text-primary" 
-    : "text-primary after:scale-x-100";
-
-  const inactiveClasses = "text-foreground/80";
+  const navLinkClasses = "text-base transition-colors relative after:content-[''] after:absolute after:bottom-0 after:start-1/2 after:-translate-x-1/2 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:origin-center after:transition-transform after:duration-300";
+  const activeClasses = "text-primary after:scale-x-100";
+  const inactiveClasses = "text-foreground/80 hover:text-primary hover:after:scale-x-100";
 
   const handleSignOut = async () => {
     await firebaseSignOut();
@@ -104,14 +91,14 @@ export function NavigationBar() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14">
           <div className="flex items-center gap-8">
-            <Link href="/" className={cn(baseLinkClasses, !isArabic && underlineClasses, hoverClasses, pathname === '/' ? activeClasses : inactiveClasses)}>
-              {t('home')}
+            <Link href="/" className={cn(navLinkClasses, pathname === '/' ? activeClasses : inactiveClasses)}>
+              Home
             </Link>
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className={cn(baseLinkClasses, 'p-0 data-[state=open]:text-primary', !isArabic && underlineClasses, hoverClasses, pathname.startsWith('/category') ? activeClasses : inactiveClasses)}>
-                  {t('categories')}
+                <Button variant="ghost" className={cn('text-base p-0 data-[state=open]:text-primary transition-colors', inactiveClasses.replace('text-foreground/80', ''), pathname.startsWith('/category') ? activeClasses : '')}>
+                  Categories
                   <ChevronDown className="ms-1 h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
@@ -127,11 +114,11 @@ export function NavigationBar() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Link href="/about" className={cn(baseLinkClasses, !isArabic && underlineClasses, hoverClasses, pathname === '/about' ? activeClasses : inactiveClasses)}>
-              {t('about')}
+            <Link href="/about" className={cn(navLinkClasses, pathname === '/about' ? activeClasses : inactiveClasses)}>
+              About
             </Link>
-            <Link href="/contact" className={cn(baseLinkClasses, !isArabic && underlineClasses, hoverClasses, pathname === '/contact' ? activeClasses : inactiveClasses)}>
-              {t('contact')}
+            <Link href="/contact" className={cn(navLinkClasses, pathname === '/contact' ? activeClasses : inactiveClasses)}>
+              Contact Us
             </Link>
           </div>
           
@@ -161,27 +148,27 @@ export function NavigationBar() {
                   {user.email === 'adamaber50@gmail.com' && (
                     <>
                       <DropdownMenuItem asChild>
-                        <Link href="/admin/dashboard"><LayoutDashboard className="me-2 h-4 w-4" /> {t('dashboard')}</Link>
+                        <Link href="/admin/dashboard"><LayoutDashboard className="me-2 h-4 w-4" /> Dashboard</Link>
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                     </>
                   )}
                   <DropdownMenuItem asChild>
-                    <Link href="/account"><UserIcon className="me-2 h-4 w-4" /> {t('myAccount')}</Link>
+                    <Link href="/account"><UserIcon className="me-2 h-4 w-4" /> My Account</Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut}>
-                    <LogOut className="me-2 h-4 w-4" /> {t('logOut')}
+                    <LogOut className="me-2 h-4 w-4" /> Log Out
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
               <>
                 <Button variant="ghost" asChild>
-                  <Link href="/login"><LogIn className="me-2 h-4 w-4" />{t('logIn')}</Link>
+                  <Link href="/login"><LogIn className="me-2 h-4 w-4" />Log In</Link>
                 </Button>
                 <Button asChild>
-                  <Link href="/signup"><UserPlus className="me-2 h-4 w-4" />{t('signUp')}</Link>
+                  <Link href="/signup"><UserPlus className="me-2 h-4 w-4" />Sign Up</Link>
                 </Button>
               </>
             )}

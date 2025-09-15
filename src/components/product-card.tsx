@@ -1,7 +1,7 @@
 "use client";
 
 import Image from 'next/image';
-import {Link} from '@/navigation';
+import Link from 'next/link';
 import type { Product } from '@/lib/types';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { StarRating } from './star-rating';
@@ -9,7 +9,7 @@ import { Button } from './ui/button';
 import { Eye, ShoppingBag } from 'lucide-react';
 import { useCart } from '@/context/cart-context';
 import { Badge } from './ui/badge';
-import { useRouter } from '@/navigation';
+import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/context/auth-context';
 

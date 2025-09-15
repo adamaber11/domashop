@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Trash2, Minus, Plus, ShoppingBag } from 'lucide-react';
 import Image from 'next/image';
-import {Link} from '@/navigation';
+import Link from 'next/link';
 import { ScrollArea } from './ui/scroll-area';
 import { SheetFooter } from './ui/sheet';
 

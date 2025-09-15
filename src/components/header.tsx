@@ -1,7 +1,7 @@
 'use client';
 
-import {Link, usePathname, useRouter} from '@/navigation';
-import { ShoppingCart, Search, ShoppingBag, Menu, Languages } from 'lucide-react';
+import Link from 'next/link';
+import { ShoppingCart, Search, ShoppingBag, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/cart-context';
 import { Input } from '@/components/ui/input';
@@ -14,7 +14,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import Image from 'next/image';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -26,7 +25,6 @@ import {
 import { MobileNav } from './mobile-nav';
 import { getSiteSettings } from '@/lib/services/settings-service';
 import type { SiteSettings } from '@/lib/types';
-import { locales } from '@/navigation';
 
 
 export function Header() {
@@ -37,10 +35,6 @@ export function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [settings, setSettings] = useState<SiteSettings | null>(null);
-
-  const pathname = usePathname();
-  const router = useRouter();
-
 
   useEffect(() => {
     getSiteSettings().then(setSettings);
@@ -138,22 +132,6 @@ export function Header() {
         </div>
         
         <div className="flex items-center justify-end space-x-1 sm:space-x-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Languages className="h-5 w-5" />
-                <span className="sr-only">Change language</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {locales.map((locale) => (
-                <DropdownMenuItem key={locale} onClick={() => router.push(pathname, {locale})}>
-                  {locale.toUpperCase()}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-
           <Dialog open={searchOpen} onOpenChange={setSearchOpen}>
             <DialogTrigger asChild>
                 <Button variant="ghost" size="icon" aria-label="Search" className="md:hidden">

@@ -1,6 +1,4 @@
 /** @type {import('next').NextConfig} */
-const withNextIntl = require('next-intl/plugin')();
-
 const nextConfig = {
   /* config options here */
   typescript: {
@@ -79,4 +77,4 @@ const nextConfig = {
   },
 };
 
-module.exports = withNextIntl(nextConfig);
+module.exports = nextConfig;
