@@ -115,7 +115,7 @@ export function NavigationBar() {
                   <ChevronDown className="ms-1 h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="start">
+              <DropdownMenuContent align="end">
                 {categories.map((category) => {
                   const categorySlug = category.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-');
                   return (
