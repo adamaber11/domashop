@@ -82,14 +82,13 @@ export async function getFeaturedProducts(count: number): Promise<Product[]> {
 export async function searchProducts(searchQuery: string, count: number): Promise<Product[]> {
   try {
     const lowerCaseQuery = searchQuery.toLowerCase();
-    const q = query(
-      productsCollection,
-      orderBy('name'),
-      limit(count)
-    );
-    const querySnapshot = await getDocs(q);
     
-    // Manual client-side filtering because Firestore doesn't support case-insensitive "contains" search
+    // Firestore doesn't support case-insensitive "contains" search natively.
+    // A common strategy for small-to-medium datasets is to fetch all products 
+    // and filter them on the server. For very large datasets, a third-party
+    // search service like Algolia or Typesense is recommended.
+    const querySnapshot = await getDocs(query(productsCollection, orderBy('name')));
+    
     const products = querySnapshot.docs
       .map(doc => ({ id: doc.id, ...doc.data() } as Product))
       .filter(product => product.name.toLowerCase().includes(lowerCaseQuery));

@@ -53,10 +53,11 @@ export function Header() {
 
   const SearchContent = () => (
     <div className="relative">
+      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
       <Input
         type="search"
         placeholder="Search for products..."
-        className="w-full"
+        className="w-full pl-10"
         aria-label="Search products"
         value={searchQuery}
         onChange={handleSearch}
