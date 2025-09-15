@@ -34,7 +34,7 @@ const nextConfig = {
         pathname: '/**',
       },
       {
-        protocol: 'https,',
+        protocol: 'https',
         hostname: 'www.google.com',
         port: '',
         pathname: '/**',
