@@ -25,6 +25,9 @@ export default async function HomePage() {
       </div>
 
       <div className="mb-16">
+        <h2 className="font-headline text-3xl md:text-4xl font-bold mb-8 text-center">
+          افضل العروض لدينا
+        </h2>
         <HeroCarousel heroImages={settings.heroImages} />
         <div className="mt-8 flex justify-center">
             <Button asChild size="lg">
