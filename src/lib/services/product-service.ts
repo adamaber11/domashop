@@ -1,3 +1,4 @@
+
 'use server';
 
 import { db } from '@/lib/firebase';
@@ -50,6 +51,17 @@ export async function getProductsByCategory(category: string): Promise<Product[]
   } catch (error) {
     console.error(`Error fetching products for category ${category}:`, error);
     throw new Error('Failed to fetch category products.');
+  }
+}
+
+export async function getOnSaleProducts(): Promise<Product[]> {
+  try {
+    const q = query(productsCollection, where('onSale', '==', true));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
+  } catch (error) {
+    console.error("Error fetching on-sale products:", error);
+    throw new Error('Failed to fetch on-sale products.');
   }
 }
 

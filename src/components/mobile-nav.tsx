@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -123,6 +124,10 @@ export function MobileNav({ onLinkClick }: MobileNavProps) {
                   Home
                 </Link>
                 
+                <Link href="/offers" onClick={() => { handleLinkClick('/offers'); onLinkClick?.(); }} className={cn(navLinkClasses, pathname === '/offers' && activeLinkClasses)}>
+                  Offers
+                </Link>
+
                 <Accordion type="single" collapsible className="w-full">
                   <AccordionItem value="categories" className="border-b-0">
                     <AccordionTrigger className={cn(navLinkClasses, "py-0 hover:no-underline", pathname.startsWith('/category') && activeLinkClasses)}>

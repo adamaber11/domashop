@@ -94,6 +94,10 @@ export function NavigationBar() {
             <Link href="/" className={cn(navLinkClasses, pathname === '/' ? activeClasses : inactiveClasses)}>
               Home
             </Link>
+
+            <Link href="/offers" className={cn(navLinkClasses, pathname === '/offers' ? activeClasses : inactiveClasses)}>
+              Offers
+            </Link>
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
