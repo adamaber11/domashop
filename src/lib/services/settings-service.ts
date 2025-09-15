@@ -25,6 +25,7 @@ const defaultSettings: Omit<SiteSettings, 'id'> = {
     { src: "https://picsum.photos/seed/102/1200/500", alt: "A modern city skyline at night with illuminated buildings.", hint: "city skyline" },
     { src: 'https://picsum.photos/seed/welcome-hero/1200/500', alt: 'Welcome banner', hint: 'store interior' }
   ],
+  heroCarouselDelay: 2000,
 };
 
 export async function getSiteSettings(): Promise<SiteSettings> {

@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { getSiteSettings, updateSiteSettings } from '@/lib/services/settings-service';
@@ -34,6 +34,7 @@ const settingsSchema = z.object({
         alt: z.string().min(1, 'Image alt text is required.'),
         hint: z.string().min(1, 'Image hint is required.'),
     })).min(1, 'At least one hero image is required.'),
+    heroCarouselDelay: z.coerce.number().min(500, 'Delay must be at least 500ms.'),
 });
 
 type SettingsFormValues = z.infer<typeof settingsSchema>;
@@ -59,6 +60,7 @@ export default function SettingsPage() {
                 linkedin: '#',
             },
             heroImages: [],
+            heroCarouselDelay: 2000,
         },
     });
 
@@ -183,9 +185,19 @@ export default function SettingsPage() {
                      <Card>
                         <CardHeader>
                             <CardTitle>Homepage Hero Carousel</CardTitle>
-                            <CardDescription>Manage the images displayed in the main banner.</CardDescription>
+                            <CardDescription>Manage the images and settings for the main banner.</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
+                            <FormField control={form.control} name="heroCarouselDelay" render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Autoplay Delay (in milliseconds)</FormLabel>
+                                    <FormControl><Input type="number" {...field} /></FormControl>
+                                    <FormDescription>Time each slide is shown before switching. e.g., 2000 for 2 seconds.</FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )} />
+                            <Separator />
+
                             {fields.map((field, index) => (
                                 <div key={field.id} className="p-4 border rounded-md space-y-3 relative">
                                     <h4 className="font-medium">Image {index + 1}</h4>

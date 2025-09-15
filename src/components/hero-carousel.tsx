@@ -15,11 +15,12 @@ import { Skeleton } from "./ui/skeleton";
 
 interface HeroCarouselProps {
   heroImages: HeroImage[];
+  delay: number;
 }
 
-export function HeroCarousel({ heroImages }: HeroCarouselProps) {
+export function HeroCarousel({ heroImages, delay = 4000 }: HeroCarouselProps) {
   const plugin = React.useRef(
-    Autoplay({ delay: 2000, stopOnInteraction: true })
+    Autoplay({ delay, stopOnInteraction: true })
   );
 
   if (!heroImages || heroImages.length === 0) {

@@ -87,6 +87,7 @@ export interface SiteSettings {
     linkedin: string;
   };
   heroImages: HeroImage[];
+  heroCarouselDelay: number;
 }
 
 
