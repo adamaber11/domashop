@@ -74,7 +74,7 @@ export function NavigationBar() {
   const { user, loading, signOut: firebaseSignOut } = useAuth();
   const { clearCart } = useCart();
 
-  const navLinkClasses = "text-sm font-medium transition-colors hover:text-primary relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:origin-right after:transition-transform after:duration-300 hover:after:scale-x-100";
+  const navLinkClasses = "text-base transition-colors hover:text-primary relative after:content-[''] after:absolute after:bottom-[-4px] after:start-1/2 after:-translate-x-1/2 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:origin-center after:transition-transform after:duration-300 hover:after:scale-x-100";
 
   const handleSignOut = async () => {
     await firebaseSignOut();
@@ -89,7 +89,7 @@ export function NavigationBar() {
     <nav className="bg-background border-b sticky top-16 z-40 hidden md:block">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14">
-          <div className="flex items-center space-x-6">
+          <div className="flex items-center gap-8">
             <Link href="/" className={cn(navLinkClasses, pathname === '/' ? 'text-primary after:scale-x-100' : 'text-foreground/80')}>
               {t('home')}
             </Link>
