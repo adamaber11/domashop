@@ -152,8 +152,8 @@ export function MobileNav({ onLinkClick }: MobileNavProps) {
                 </Link>
 
                 {user && user.email === 'adamaber50@gmail.com' && (
-                    <Link href="/admin/dashboard" onClick={() => { handleLinkClick('/admin/dashboard'); onLinkClick?.(); }} className={cn(navLinkClasses, pathname === '/admin/dashboard' && activeLinkClasses)}>
-                        <LayoutDashboard className="mr-2 h-5 w-5" /> Dashboard
+                    <Link href="/admin/dashboard" onClick={() => { handleLinkClick('/admin/dashboard'); onLinkClick?.(); }} className={cn(navLinkClasses, pathname.startsWith('/admin') && activeLinkClasses)}>
+                        <LayoutDashboard className="me-2 h-5 w-5" /> Dashboard
                     </Link>
                 )}
             </nav>
@@ -184,16 +184,16 @@ export function MobileNav({ onLinkClick }: MobileNavProps) {
                 </div>
               </Link>
               <Button variant="outline" className="w-full" onClick={handleSignOut}>
-                <LogOut className="mr-2 h-4 w-4" /> Log Out
+                <LogOut className="me-2 h-4 w-4" /> Log Out
               </Button>
             </div>
           ) : (
             <div className="space-y-3">
               <Button variant="outline" asChild className="w-full">
-                <Link href="/login" onClick={onLinkClick}><LogIn className="mr-2 h-4 w-4" />Log In</Link>
+                <Link href="/login" onClick={onLinkClick}><LogIn className="me-2 h-4 w-4" />Log In</Link>
               </Button>
               <Button asChild className="w-full">
-                <Link href="/signup" onClick={onLinkClick}><UserPlus className="mr-2 h-4 w-4" />Sign Up</Link>
+                <Link href="/signup" onClick={onLinkClick}><UserPlus className="me-2 h-4 w-4" />Sign Up</Link>
               </Button>
             </div>
           )}

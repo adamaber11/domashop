@@ -56,6 +56,7 @@ export default function CategoryChart({ data }: CategoryChartProps) {
             layout="vertical"
             verticalAlign="middle"
             align="right"
+            wrapperStyle={{ right: 'auto', left: 0 }}
             iconSize={10}
             iconType="circle"
             formatter={(value, entry) => (

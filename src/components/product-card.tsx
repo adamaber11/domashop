@@ -61,7 +61,7 @@ export function ProductCard({ product }: ProductCardProps) {
             )}
           </Link>
           {product.onSale && (
-            <Badge variant="destructive" className="absolute top-2 right-2">Sale</Badge>
+            <Badge variant="destructive" className="absolute top-2 end-2">Sale</Badge>
           )}
         </div>
       </CardHeader>

@@ -166,8 +166,8 @@ export default function AdminOrdersPage() {
                 <TableHead>Customer</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead className="text-right">Total</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead className="text-end">Total</TableHead>
+                <TableHead className="text-end">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -182,8 +182,8 @@ export default function AdminOrdersPage() {
                         {order.status}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-right">${order.total.toFixed(2)}</TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className="text-end">${order.total.toFixed(2)}</TableCell>
+                    <TableCell className="text-end">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant="ghost" className="h-8 w-8 p-0">
@@ -194,7 +194,7 @@ export default function AdminOrdersPage() {
                         <DropdownMenuContent align="end">
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
                           <DropdownMenuItem onSelect={() => setSelectedOrder(order)}>
-                            <Eye className="mr-2 h-4 w-4" /> View Details
+                            <Eye className="me-2 h-4 w-4" /> View Details
                           </DropdownMenuItem>
                           <DropdownMenuLabel>Change Status</DropdownMenuLabel>
                           {(['Processing', 'Shipped', 'Delivered', 'Cancelled'] as const).map(status => (

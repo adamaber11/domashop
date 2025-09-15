@@ -236,7 +236,7 @@ export default function AccountPage() {
                       <TableHead>Order ID</TableHead>
                       <TableHead>Date</TableHead>
                       <TableHead>Status</TableHead>
-                      <TableHead className="text-right">Total</TableHead>
+                      <TableHead className="text-end">Total</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -248,7 +248,7 @@ export default function AccountPage() {
                           <TableCell>
                             <Badge variant={order.status === "Delivered" ? "default" : "secondary"}>{order.status}</Badge>
                           </TableCell>
-                          <TableCell className="text-right">${order.total.toFixed(2)}</TableCell>
+                          <TableCell className="text-end">${order.total.toFixed(2)}</TableCell>
                         </TableRow>
                       ))
                     ) : (

@@ -132,7 +132,7 @@ export default function AdminProductsPage() {
         </div>
         <Button asChild>
           <Link href="/admin/products/new">
-            <PlusCircle className="mr-2 h-5 w-5" />
+            <PlusCircle className="me-2 h-5 w-5" />
             Add Product
           </Link>
         </Button>
@@ -147,7 +147,7 @@ export default function AdminProductsPage() {
               <TableHead>Status</TableHead>
               <TableHead>Price</TableHead>
               <TableHead>Reviews</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead className="text-end">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -176,7 +176,7 @@ export default function AdminProductsPage() {
                             </TableCell>
                             <TableCell>${product.price.toFixed(2)}</TableCell>
                             <TableCell>{product.reviewCount} ({product.averageRating.toFixed(1)} avg)</TableCell>
-                            <TableCell className="text-right">
+                            <TableCell className="text-end">
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
                                         <Button variant="ghost" className="h-8 w-8 p-0">
@@ -187,13 +187,13 @@ export default function AdminProductsPage() {
                                     <DropdownMenuContent align="end">
                                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                         <DropdownMenuItem asChild>
-                                            <Link href={`/admin/products/${product.id}/edit`}><Pencil className="mr-2 h-4 w-4" />Edit</Link>
+                                            <Link href={`/admin/products/${product.id}/edit`}><Pencil className="me-2 h-4 w-4" />Edit</Link>
                                         </DropdownMenuItem>
                                         <DropdownMenuItem 
                                             onSelect={() => setProductToDelete({ id: product.id, name: product.name })}
                                             className="text-destructive focus:text-destructive focus:bg-destructive/10"
                                         >
-                                                <Trash2 className="mr-2 h-4 w-4" />Delete
+                                                <Trash2 className="me-2 h-4 w-4" />Delete
                                         </DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>

@@ -137,7 +137,7 @@ export default async function DashboardPage() {
                           {order.status}
                         </Badge>
                       </TableCell>
-                      <TableCell className="text-right">
+                      <TableCell className="text-end">
                         ${order.total.toFixed(2)}
                       </TableCell>
                     </TableRow>

@@ -43,7 +43,7 @@ export function AddToCartButton({ product }: { product: Product }) {
   }
 
   return (
-    <div className="flex items-center space-x-4">
+    <div className="flex items-center space-x-4 rtl:space-x-reverse">
       <div className="flex items-center">
         <Button variant="outline" size="icon" onClick={decrementQuantity} aria-label="Decrease quantity">
           <Minus className="h-4 w-4" />
@@ -60,7 +60,7 @@ export function AddToCartButton({ product }: { product: Product }) {
         </Button>
       </div>
       <Button onClick={handleAddToCart} size="lg" disabled={loading}>
-        <ShoppingBag className="mr-2 h-5 w-5" />
+        <ShoppingBag className="me-2 h-5 w-5" />
         Add to Cart
       </Button>
     </div>

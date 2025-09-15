@@ -34,7 +34,7 @@ export default async function AdminUsersPage() {
               <TableHead>User</TableHead>
               <TableHead>Role</TableHead>
               <TableHead>Last Sign In</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead className="text-end">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -59,7 +59,7 @@ export default async function AdminUsersPage() {
                   <TableCell>
                     {user.metadata?.lastSignInTime ? new Date(user.metadata.lastSignInTime).toLocaleDateString() : 'N/A'}
                   </TableCell>
-                  <TableCell className="text-right">
+                  <TableCell className="text-end">
                     <Button variant="ghost" size="icon" className="h-8 w-8 p-0">
                       <span className="sr-only">Open menu</span>
                       <MoreHorizontal className="h-4 w-4" />

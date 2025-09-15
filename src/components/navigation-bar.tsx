@@ -147,27 +147,27 @@ export function NavigationBar() {
                   {user.email === 'adamaber50@gmail.com' && (
                     <>
                       <DropdownMenuItem asChild>
-                        <Link href="/admin/dashboard"><LayoutDashboard className="mr-2 h-4 w-4" /> {t('dashboard')}</Link>
+                        <Link href="/admin/dashboard"><LayoutDashboard className="me-2 h-4 w-4" /> {t('dashboard')}</Link>
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                     </>
                   )}
                   <DropdownMenuItem asChild>
-                    <Link href="/account"><UserIcon className="mr-2 h-4 w-4" /> {t('myAccount')}</Link>
+                    <Link href="/account"><UserIcon className="me-2 h-4 w-4" /> {t('myAccount')}</Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut}>
-                    <LogOut className="mr-2 h-4 w-4" /> {t('logOut')}
+                    <LogOut className="me-2 h-4 w-4" /> {t('logOut')}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
               <>
                 <Button variant="ghost" asChild>
-                  <Link href="/login"><LogIn className="mr-2 h-4 w-4" />{t('logIn')}</Link>
+                  <Link href="/login"><LogIn className="me-2 h-4 w-4" />{t('logIn')}</Link>
                 </Button>
                 <Button asChild>
-                  <Link href="/signup"><UserPlus className="mr-2 h-4 w-4" />{t('signUp')}</Link>
+                  <Link href="/signup"><UserPlus className="me-2 h-4 w-4" />{t('signUp')}</Link>
                 </Button>
               </>
             )}

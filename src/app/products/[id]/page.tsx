@@ -27,7 +27,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
         <div className="w-full relative">
           <ProductGallery imageUrls={product.imageUrls} imageHint={product.imageHint} />
           {product.onSale && (
-            <Badge variant="destructive" className="absolute top-4 left-4 text-sm md:text-base z-10">Sale</Badge>
+            <Badge variant="destructive" className="absolute top-4 start-4 text-sm md:text-base z-10">Sale</Badge>
           )}
         </div>
         
@@ -67,8 +67,8 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
                 <div key={review.id} className="border-b pb-4">
                 <div className="flex items-center mb-2">
                     <StarRating rating={review.rating} />
-                    <p className="ml-4 font-bold text-sm sm:text-base">{review.author}</p>
-                    <p className="ml-auto text-xs sm:text-sm text-muted-foreground">{new Date(review.date).toLocaleDateString()}</p>
+                    <p className="ms-4 font-bold text-sm sm:text-base">{review.author}</p>
+                    <p className="ms-auto text-xs sm:text-sm text-muted-foreground">{new Date(review.date).toLocaleDateString()}</p>
                 </div>
                 <p className="text-muted-foreground text-sm sm:text-base">{review.text}</p>
                 </div>

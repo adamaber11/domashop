@@ -59,7 +59,7 @@ export default async function AnalyticsPage() {
             <Card className="lg:col-span-3">
               <CardHeader>
                 <CardTitle className="flex items-center">
-                  <LineChart className="h-5 w-5 mr-2 text-muted-foreground" />
+                  <LineChart className="h-5 w-5 me-2 text-muted-foreground" />
                   Monthly Sales
                 </CardTitle>
                 <CardDescription>
@@ -73,7 +73,7 @@ export default async function AnalyticsPage() {
             <Card className="lg:col-span-2">
               <CardHeader>
                 <CardTitle className="flex items-center">
-                  <PieChart className="h-5 w-5 mr-2 text-muted-foreground" />
+                  <PieChart className="h-5 w-5 me-2 text-muted-foreground" />
                   Category Distribution
                 </CardTitle>
                 <CardDescription>
@@ -100,7 +100,7 @@ export default async function AnalyticsPage() {
                     <TableHead className="w-20">Image</TableHead>
                     <TableHead>Product</TableHead>
                     <TableHead>Category</TableHead>
-                    <TableHead className="text-right">Rating (Reviews)</TableHead>
+                    <TableHead className="text-end">Rating (Reviews)</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -123,7 +123,7 @@ export default async function AnalyticsPage() {
                         <TableCell>
                             <Badge variant="outline">{product.category}</Badge>
                         </TableCell>
-                        <TableCell className="text-right">
+                        <TableCell className="text-end">
                           {product.averageRating.toFixed(1)} ({product.reviewCount})
                         </TableCell>
                         </TableRow>
