@@ -34,7 +34,7 @@ const nextConfig = {
         pathname: '/**',
       },
       {
-        protocol: 'https',
+        protocol: 'https,',
         hostname: 'www.google.com',
         port: '',
         pathname: '/**',
@@ -54,6 +54,12 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'postimg.cc',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
         port: '',
         pathname: '/**',
       },
