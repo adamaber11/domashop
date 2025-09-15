@@ -88,3 +88,26 @@ export interface SiteSettings {
   };
   heroImages: HeroImage[];
 }
+
+
+export interface AboutPageContent {
+  headline: string;
+  subheading: string;
+  mission: string;
+  vision: string;
+  founderName: string;
+  founderTitle: string;
+}
+
+export interface ContactPageContent {
+  headline: string;
+  subheading: string;
+  address: string;
+  phone: string;
+  email: string;
+}
+
+export interface PagesContent {
+  about: AboutPageContent;
+  contact: ContactPageContent;
+}

@@ -1,16 +1,22 @@
+// src/app/about/page.tsx
+'use server';
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
+import { getPagesContent } from "@/lib/services/pages-service";
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const { about } = await getPagesContent();
+
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="space-y-12">
         <div className="text-center">
           <h1 className="font-headline text-4xl md:text-6xl font-bold tracking-tight">
-            About Doma Online Shop
+            {about.headline}
           </h1>
           <p className="mt-4 text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-            Your trusted partner in discovering quality, style, and innovation. We are more than just a store; we are a community of enthusiasts dedicated to bringing you the best.
+            {about.subheading}
           </p>
         </div>
 
@@ -30,16 +36,13 @@ export default function AboutPage() {
           <div>
             <h2 className="font-headline text-3xl font-bold mb-4">Our Mission</h2>
             <p className="text-muted-foreground text-lg mb-4">
-              To provide an unparalleled online shopping experience by offering a curated selection of high-quality products, exceptional customer service, and a seamless, user-friendly platform. We aim to inspire and delight our customers with every click.
-            </p>
-            <p className="text-muted-foreground text-lg">
-              We believe in the power of great products to enhance everyday life. That's why we meticulously source our items, ensuring they meet our high standards of quality, craftsmanship, and value.
+              {about.mission}
             </p>
           </div>
           <div>
             <h2 className="font-headline text-3xl font-bold mb-4">Our Vision</h2>
             <p className="text-muted-foreground text-lg">
-              To be the go-to online destination for shoppers seeking unique and inspiring products. We envision a world where shopping is not just a transaction, but an experience of discovery and joy.
+              {about.vision}
             </p>
           </div>
         </div>
@@ -52,15 +55,15 @@ export default function AboutPage() {
                 <div className="relative w-32 h-32 rounded-full mx-auto overflow-hidden">
                   <Image
                     src={`https://picsum.photos/seed/team1/200`}
-                    alt="Founder Adam Aber Desouky"
+                    alt={`Founder ${about.founderName}`}
                     fill
                     className="object-cover"
                   />
                 </div>
               </CardHeader>
               <CardContent>
-                <CardTitle className="font-headline text-xl">Eng. Adam Aber Desouky</CardTitle>
-                <p className="text-primary">CEO & Founder</p>
+                <CardTitle className="font-headline text-xl">{about.founderName}</CardTitle>
+                <p className="text-primary">{about.founderTitle}</p>
               </CardContent>
             </Card>
           </div>

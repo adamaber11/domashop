@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Package, Users, LineChart, SlidersHorizontal, ShoppingCart } from 'lucide-react';
+import { Home, Package, Users, LineChart, SlidersHorizontal, ShoppingCart, FileText } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
 
@@ -16,6 +16,7 @@ export function AdminNavbar() {
     { href: '/admin/users', icon: Users, label: 'Users' },
     { href: '/admin/analytics', icon: LineChart, label: 'Analytics' },
     { href: '/admin/settings', icon: SlidersHorizontal, label: 'Settings' },
+    { href: '/admin/pages', icon: FileText, label: 'Pages' },
   ];
 
   return (
