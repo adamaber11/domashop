@@ -1,3 +1,4 @@
+
 'use server';
 
 import { HeroCarousel } from "@/components/hero-carousel";
@@ -24,9 +25,6 @@ export default async function HomePage() {
         <div className="mt-8 flex justify-center gap-4">
           <Button asChild size="lg">
             <Link href="/category">Shop Now</Link>
-          </Button>
-          <Button asChild size="lg" variant="outline">
-            <Link href="/about">Learn More</Link>
           </Button>
         </div>
       </div>
