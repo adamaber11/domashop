@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -165,7 +163,7 @@ export default function PagesSettingsPage() {
                                 <FormItem><FormLabel>Subheading</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>
                             )} />
                              <FormField control={form.control} name="contact.address" render={({ field }) => (
-                                <FormItem><FormLabel>Office Address</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormMessage>
+                                <FormItem><FormLabel>Office Address</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>
                             )} />
                              <div className="grid grid-cols-2 gap-4">
                                 <FormField control={form.control} name="contact.phone" render={({ field }) => (
