@@ -74,7 +74,7 @@ export function NavigationBar() {
   const { user, loading, signOut: firebaseSignOut } = useAuth();
   const { clearCart } = useCart();
 
-  const baseLinkClasses = "text-base transition-colors relative after:content-[''] after:absolute after:bottom-[-4px] after:start-1/2 after:-translate-x-1/2 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:origin-center after:transition-transform after:duration-300";
+  const baseLinkClasses = "text-base transition-colors relative after:content-[''] after:absolute after:bottom-0 after:start-1/2 after:-translate-x-1/2 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:origin-center after:transition-transform after:duration-300";
   const hoverClasses = "hover:text-primary hover:after:scale-x-100";
   const activeClasses = "text-primary after:scale-x-100";
   const inactiveClasses = "text-foreground/80";
