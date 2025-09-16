@@ -41,6 +41,7 @@ export default function AccountPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [siteUser, setSiteUser] = useState<SiteUser | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
   const { toast } = useToast();
   const { selectedCurrency } = useCurrency();
 
@@ -113,10 +114,15 @@ export default function AccountPage() {
             shippingAddress: shippingAddress,
         });
 
+        // Refetch site user to display updated data
+        const updatedUser = await getUserById(user.uid);
+        setSiteUser(updatedUser);
+
         toast({
             title: "Profile Updated",
             description: "Your account details have been saved.",
         });
+        setIsEditing(false); // Exit edit mode
     } catch (error) {
         toast({
             title: "Update Failed",
@@ -146,7 +152,7 @@ export default function AccountPage() {
   if (authLoading || loading || !user) {
     return (
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <Skeleton className="h-12 w-1/4 mb-8" />
+        <h1 className="font-headline text-4xl font-bold mb-8">My Account</h1>
         <div className="grid gap-8 md:grid-cols-3">
           <div className="md:col-span-1">
             <Card>
@@ -173,20 +179,22 @@ export default function AccountPage() {
                 <Skeleton className="h-4 w-1/2" />
               </CardHeader>
               <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      {[...Array(3)].map((_, i) => <TableHead key={i}><Skeleton className="h-5 w-full" /></TableHead>)}
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {[...Array(3)].map((_, i) => (
-                      <TableRow key={i}>
-                        {[...Array(3)].map((_, j) => <TableCell key={j}><Skeleton className="h-5 w-full" /></TableCell>)}
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                 <div className="overflow-x-auto">
+                    <Table>
+                    <TableHeader>
+                        <TableRow>
+                        {[...Array(3)].map((_, i) => <TableHead key={i}><Skeleton className="h-5 w-full" /></TableHead>)}
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {[...Array(3)].map((_, i) => (
+                        <TableRow key={i}>
+                            {[...Array(3)].map((_, j) => <TableCell key={j}><Skeleton className="h-5 w-full" /></TableCell>)}
+                        </TableRow>
+                        ))}
+                    </TableBody>
+                    </Table>
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -200,48 +208,82 @@ export default function AccountPage() {
       <h1 className="font-headline text-4xl font-bold mb-8">My Account</h1>
       <div className="grid gap-8 md:grid-cols-3">
         <div className="md:col-span-1">
-            <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)}>
-                    <Card>
-                        <CardHeader>
+            {isEditing ? (
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)}>
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="font-headline">Edit Profile</CardTitle>
+                                <CardDescription>Update your personal information.</CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-4">
+                                <div className="grid grid-cols-2 gap-4">
+                                    <FormField control={form.control} name="firstName" render={({ field }) => (
+                                        <FormItem><FormLabel>First Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                                    )} />
+                                    <FormField control={form.control} name="lastName" render={({ field }) => (
+                                        <FormItem><FormLabel>Last Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                                    )} />
+                                </div>
+                                <FormField control={form.control} name="email" render={({ field }) => (
+                                    <FormItem><FormLabel>Email</FormLabel><FormControl><Input {...field} readOnly disabled /></FormControl><FormMessage /></FormItem>
+                                )} />
+                                <FormField control={form.control} name="shippingAddress" render={({ field }) => (
+                                    <FormItem><FormLabel>Address</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                                )} />
+                                <FormField control={form.control} name="shippingCity" render={({ field }) => (
+                                    <FormItem><FormLabel>City</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                                )} />
+                                <div className="grid grid-cols-2 gap-4">
+                                    <FormField control={form.control} name="shippingState" render={({ field }) => (
+                                        <FormItem><FormLabel>State</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                                    )} />
+                                    <FormField control={form.control} name="shippingZip" render={({ field }) => (
+                                        <FormItem><FormLabel>ZIP</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                                    )} />
+                                </div>
+                            </CardContent>
+                            <CardFooter className="justify-end gap-2">
+                                <Button type="button" variant="ghost" onClick={() => setIsEditing(false)}>Cancel</Button>
+                                <Button type="submit" disabled={form.formState.isSubmitting}>
+                                    {form.formState.isSubmitting ? "Saving..." : "Save Changes"}
+                                </Button>
+                            </CardFooter>
+                        </Card>
+                    </form>
+                </Form>
+            ) : (
+                 <Card>
+                    <CardHeader className="flex flex-row items-center justify-between">
+                        <div>
                             <CardTitle className="font-headline">Profile</CardTitle>
-                            <CardDescription>Manage your personal information.</CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                            <div className="grid grid-cols-2 gap-4">
-                                <FormField control={form.control} name="firstName" render={({ field }) => (
-                                    <FormItem><FormLabel>First Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                                )} />
-                                <FormField control={form.control} name="lastName" render={({ field }) => (
-                                    <FormItem><FormLabel>Last Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                                )} />
-                            </div>
-                             <FormField control={form.control} name="email" render={({ field }) => (
-                                <FormItem><FormLabel>Email</FormLabel><FormControl><Input {...field} readOnly disabled /></FormControl><FormMessage /></FormItem>
-                            )} />
-                             <FormField control={form.control} name="shippingAddress" render={({ field }) => (
-                                <FormItem><FormLabel>Address</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                            )} />
-                             <FormField control={form.control} name="shippingCity" render={({ field }) => (
-                                <FormItem><FormLabel>City</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                            )} />
-                             <div className="grid grid-cols-2 gap-4">
-                                <FormField control={form.control} name="shippingState" render={({ field }) => (
-                                    <FormItem><FormLabel>State</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                                )} />
-                                <FormField control={form.control} name="shippingZip" render={({ field }) => (
-                                    <FormItem><FormLabel>ZIP</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                                )} />
-                            </div>
-                        </CardContent>
-                        <CardFooter>
-                            <Button type="submit" disabled={form.formState.isSubmitting}>
-                                {form.formState.isSubmitting ? "Saving..." : "Save Changes"}
-                            </Button>
-                        </CardFooter>
-                    </Card>
-                </form>
-            </Form>
+                            <CardDescription>Your personal information.</CardDescription>
+                        </div>
+                        <Button variant="outline" onClick={() => setIsEditing(true)}>Edit Profile</Button>
+                    </CardHeader>
+                    <CardContent className="space-y-4 text-sm">
+                        <div>
+                            <p className="font-medium text-muted-foreground">Name</p>
+                            <p className="font-semibold">{siteUser?.firstName} {siteUser?.lastName}</p>
+                        </div>
+                        <div>
+                            <p className="font-medium text-muted-foreground">Email</p>
+                            <p className="font-semibold">{user.email}</p>
+                        </div>
+                         <div>
+                            <p className="font-medium text-muted-foreground">Shipping Address</p>
+                            {siteUser?.shippingAddress ? (
+                                <p className="font-semibold">
+                                    {siteUser.shippingAddress.address}, <br/>
+                                    {siteUser.shippingAddress.city}, {siteUser.shippingAddress.state} {siteUser.shippingAddress.zip}
+                                </p>
+                            ) : (
+                                <p className="text-muted-foreground">No address set.</p>
+                            )}
+                        </div>
+                    </CardContent>
+                </Card>
+            )}
         </div>
 
         <div className="md:col-span-2">
@@ -298,5 +340,3 @@ export default function AccountPage() {
     </div>
   )
 }
-
-    
