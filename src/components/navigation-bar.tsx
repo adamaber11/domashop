@@ -77,23 +77,19 @@ export function NavigationBar() {
   const [showCurrencyHint, setShowCurrencyHint] = useState(false);
 
   useEffect(() => {
-    const hintShown = localStorage.getItem('currencyHintShown');
-    if (!hintShown) {
-      const timer1 = setTimeout(() => {
-        setShowCurrencyHint(true);
-        localStorage.setItem('currencyHintShown', 'true');
-      }, 1500); // Show hint after 1.5 seconds
+    const timer1 = setTimeout(() => {
+      setShowCurrencyHint(true);
+    }, 1500); // Show hint after 1.5 seconds
 
-      const timer2 = setTimeout(() => {
-        setShowCurrencyHint(false);
-      }, 6500); // Hide hint after 5 more seconds
+    const timer2 = setTimeout(() => {
+      setShowCurrencyHint(false);
+    }, 6500); // Hide hint after 5 more seconds
 
-      return () => {
-        clearTimeout(timer1);
-        clearTimeout(timer2);
-      };
-    }
-  }, []);
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+    };
+  }, [pathname]); // Re-run effect on page navigation
 
   const navLinkClasses = "text-base transition-colors relative after:content-[''] after:absolute after:bottom-0 after:start-1/2 after:-translate-x-1/2 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:origin-center after:transition-transform after:duration-300";
   const activeClasses = "text-primary after:scale-x-100";
