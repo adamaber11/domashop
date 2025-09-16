@@ -25,8 +25,8 @@ const defaultContactContent: ContactPageContent = {
   headline: "Contact Us",
   subheading: "Have questions or feedback? We'd love to hear from you. Reach out to us, and we'll respond as soon as possible.",
   address: "123 Main Street\nAnytown, USA 12345",
-  phone: "(123) 456-7890",
-  email: "contact@doma.com",
+  phone: "01284648993",
+  email: "adamaber50@gmail.com",
 };
 
 async function getOrCreateDocument<T>(docRef: any, defaultData: T): Promise<T> {

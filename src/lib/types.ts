@@ -122,3 +122,14 @@ export interface PagesContent {
   about: AboutPageContent;
   contact: ContactPageContent;
 }
+
+
+export type ContactMessage = {
+  id: string;
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  date: Timestamp;
+  isRead: boolean;
+};

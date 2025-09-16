@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Package, Users, LineChart, SlidersHorizontal, ShoppingCart, FileText } from 'lucide-react';
+import { Home, Package, Users, LineChart, SlidersHorizontal, ShoppingCart, FileText, MessageSquare } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
 
@@ -15,8 +15,9 @@ export function AdminNavbar() {
     { href: '/admin/orders', icon: ShoppingCart, label: 'Orders' },
     { href: '/admin/users', icon: Users, label: 'Users' },
     { href: '/admin/analytics', icon: LineChart, label: 'Analytics' },
-    { href: '/admin/settings', icon: SlidersHorizontal, label: 'Settings' },
+    { href: '/admin/messages', icon: MessageSquare, label: 'Messages' },
     { href: '/admin/pages', icon: FileText, label: 'Pages' },
+    { href: '/admin/settings', icon: SlidersHorizontal, label: 'Settings' },
   ];
 
   const navLinkClasses = "transition-colors relative after:content-[''] after:absolute after:-bottom-1.5 after:start-0 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:origin-center after:transition-transform after:duration-300";

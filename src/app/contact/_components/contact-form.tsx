@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
+import { saveContactMessage } from '@/lib/services/contact-service';
 
 const formSchema = z.object({
   name: z.string().min(2, 'Name is too short'),
@@ -30,13 +31,21 @@ export function ContactForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log('Contact form submitted:', values);
-    toast({
-      title: 'Message Sent!',
-      description: 'Thank you for contacting us. We will get back to you shortly.',
-    });
-    form.reset();
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      await saveContactMessage(values);
+      toast({
+        title: 'Message Sent!',
+        description: 'Thank you for contacting us. We will get back to you shortly.',
+      });
+      form.reset();
+    } catch (error) {
+       toast({
+        title: 'Submission Failed',
+        description: 'Could not send your message. Please try again.',
+        variant: 'destructive',
+      });
+    }
   }
   return (
     <Form {...form}>

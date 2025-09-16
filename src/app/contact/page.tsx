@@ -4,7 +4,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getPagesContent } from '@/lib/services/pages-service';
 import { ContactForm } from './_components/contact-form';
-import { MapPin, Phone, Mail } from 'lucide-react';
+import { Phone, Mail } from 'lucide-react';
 
 export default async function ContactPage() {
   const { contact } = await getPagesContent();
@@ -22,15 +22,6 @@ export default async function ContactPage() {
 
       <div className="mt-16 grid lg:grid-cols-3 gap-12">
         <div className="lg:col-span-1 space-y-8">
-          <Card>
-            <CardHeader className="flex flex-row items-center gap-4">
-              <MapPin className="w-8 h-8 text-primary" />
-              <CardTitle className="font-headline">Our Office</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground whitespace-pre-line">{contact.address}</p>
-            </CardContent>
-          </Card>
           <Card>
             <CardHeader className="flex flex-row items-center gap-4">
               <Phone className="w-8 h-8 text-primary" />
