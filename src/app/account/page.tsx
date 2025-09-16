@@ -76,17 +76,18 @@ export default function AccountPage() {
           setOrders(userOrders);
           setSiteUser(userProfile);
 
-          if (userProfile) {
-            form.reset({
-              firstName: userProfile.firstName || '',
-              lastName: userProfile.lastName || '',
+           // Initialize form with whatever data is available
+           // This handles new users (userProfile is null) and existing users
+           form.reset({
+              firstName: userProfile?.firstName || user.firstName || '',
+              lastName: userProfile?.lastName || user.lastName || '',
               email: user.email || '',
-              shippingAddress: userProfile.shippingAddress?.address || '',
-              shippingCity: userProfile.shippingAddress?.city || '',
-              shippingState: userProfile.shippingAddress?.state || '',
-              shippingZip: userProfile.shippingAddress?.zip || '',
+              shippingAddress: userProfile?.shippingAddress?.address || '',
+              shippingCity: userProfile?.shippingAddress?.city || '',
+              shippingState: userProfile?.shippingAddress?.state || '',
+              shippingZip: userProfile?.shippingAddress?.zip || '',
             });
-          }
+
         } catch (error) {
           console.error("Failed to fetch user data:", error);
           toast({ title: 'Error', description: 'Could not load your account data.', variant: 'destructive' });
@@ -273,7 +274,7 @@ export default function AccountPage() {
                     <CardContent className="space-y-4 text-sm">
                         <div>
                             <p className="font-medium text-muted-foreground">Name</p>
-                            <p className="font-semibold">{siteUser?.firstName} {siteUser?.lastName}</p>
+                            <p className="font-semibold">{(siteUser?.firstName || user.firstName)} {(siteUser?.lastName || user.lastName)}</p>
                         </div>
                         <div>
                             <p className="font-medium text-muted-foreground">Email</p>
@@ -349,5 +350,3 @@ export default function AccountPage() {
     </div>
   )
 }
-
-    
