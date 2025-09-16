@@ -73,24 +73,6 @@ export function NavigationBar() {
   const pathname = usePathname();
   const { user, loading, signOut: firebaseSignOut } = useAuth();
   const { clearCart } = useCart();
-  const [showCurrencyHint, setShowCurrencyHint] = useState(false);
-
-  useEffect(() => {
-    // Show the hint immediately on page load
-    const timer1 = setTimeout(() => {
-      setShowCurrencyHint(true);
-    }, 100); // A small delay to ensure mounting
-
-    // Hide the hint after 3 seconds
-    const timer2 = setTimeout(() => {
-      setShowCurrencyHint(false);
-    }, 3000);
-
-    return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-    };
-  }, [pathname]); // Re-run effect on every page navigation
 
   const navLinkClasses = "text-base transition-colors relative after:content-[''] after:absolute after:bottom-0 after:start-1/2 after:-translate-x-1/2 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:origin-center after:transition-transform after:duration-300";
   const activeClasses = "text-primary after:scale-x-100";
@@ -150,23 +132,7 @@ export function NavigationBar() {
           </div>
           
           <div className="flex items-center space-x-4">
-             <TooltipProvider>
-                <Tooltip open={showCurrencyHint}>
-                    <TooltipTrigger asChild>
-                        <div>
-                            <CurrencySelector />
-                        </div>
-                    </TooltipTrigger>
-                    <TooltipContent 
-                      side="bottom" 
-                      align="end" 
-                      className={cn(showCurrencyHint && "animate-led-border p-2.5")}
-                      hideArrow={true}
-                    >
-                        <p className="font-semibold text-foreground">Select your currency here!</p>
-                    </TooltipContent>
-                </Tooltip>
-            </TooltipProvider>
+             <CurrencySelector />
 
             {loading ? (
               <div className="flex items-center space-x-2">
