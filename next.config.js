@@ -69,6 +69,12 @@ const nextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.externals.push('handlebars', 'require-in-the-middle');
+    }
+    return config;
+  },
 };
 
 module.exports = nextConfig;
