@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useCurrency } from '@/context/currency-context';
