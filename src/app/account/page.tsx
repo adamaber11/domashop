@@ -157,13 +157,13 @@ export default function AccountPage() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      {[...Array(4)].map((_, i) => <TableHead key={i}><Skeleton className="h-5 w-full" /></TableHead>)}
+                      {[...Array(3)].map((_, i) => <TableHead key={i}><Skeleton className="h-5 w-full" /></TableHead>)}
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {[...Array(3)].map((_, i) => (
                       <TableRow key={i}>
-                        {[...Array(4)].map((_, j) => <TableCell key={j}><Skeleton className="h-5 w-full" /></TableCell>)}
+                        {[...Array(3)].map((_, j) => <TableCell key={j}><Skeleton className="h-5 w-full" /></TableCell>)}
                       </TableRow>
                     ))}
                   </TableBody>
@@ -238,7 +238,6 @@ export default function AccountPage() {
                     <TableRow>
                       <TableHead>Order ID</TableHead>
                       <TableHead>Date</TableHead>
-                      <TableHead>Status</TableHead>
                       <TableHead className="text-end">Total</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -248,15 +247,12 @@ export default function AccountPage() {
                         <TableRow key={order.id}>
                           <TableCell className="font-medium">{order.id.substring(0, 7)}...</TableCell>
                           <TableCell>{format(order.date.toDate(), 'PPP')}</TableCell>
-                          <TableCell>
-                            <Badge variant={order.status === "Delivered" ? "default" : "secondary"}>{order.status}</Badge>
-                          </TableCell>
                           <TableCell className="text-end">{formatPrice(order.total, selectedCurrency)}</TableCell>
                         </TableRow>
                       ))
                     ) : (
                       <TableRow>
-                        <TableCell colSpan={4} className="h-24 text-center">
+                        <TableCell colSpan={3} className="h-24 text-center">
                           You haven't placed any orders yet.
                         </TableCell>
                       </TableRow>

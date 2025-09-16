@@ -197,8 +197,8 @@ export default function AdminOrdersPage() {
                             <Eye className="me-2 h-4 w-4" /> View Details
                           </DropdownMenuItem>
                           <DropdownMenuLabel>Change Status</DropdownMenuLabel>
-                          {(['Processing', 'Shipped', 'Delivered', 'Cancelled'] as const).map(status => (
-                            <DropdownMenuItem key={status} onSelect={() => handleStatusChange(order.id, status)} disabled={order.status === status}>
+                          {(['Confirmed', 'Out for Delivery', 'Delivered', 'Cancelled'] as const).map(status => (
+                            <DropdownMenuItem key={status} onSelect={() => handleStatusChange(order.id, status as Order['status'])} disabled={order.status === status}>
                                 {status}
                             </DropdownMenuItem>
                           ))}

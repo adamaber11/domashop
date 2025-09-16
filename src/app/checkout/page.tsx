@@ -25,10 +25,6 @@ const formSchema = z.object({
   shippingCity: z.string().min(2, 'City is too short'),
   shippingState: z.string().min(2, 'State is too short'),
   shippingZip: z.string().regex(/^\d{5}$/, 'Invalid ZIP code'),
-  cardName: z.string().min(2, 'Name is too short'),
-  cardNumber: z.string().regex(/^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/, 'Invalid card number'),
-  cardExpiry: z.string().regex(/^(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})$/, 'Invalid expiry date (MM/YY)'),
-  cardCvc: z.string().regex(/^[0-9]{3,4}$/, 'Invalid CVC'),
 });
 
 export default function CheckoutPage() {
@@ -48,10 +44,6 @@ export default function CheckoutPage() {
       shippingCity: '',
       shippingState: '',
       shippingZip: '',
-      cardName: '',
-      cardNumber: '',
-      cardExpiry: '',
-      cardCvc: '',
     },
   });
 
@@ -87,7 +79,7 @@ export default function CheckoutPage() {
 
       toast({
         title: 'Order Placed!',
-        description: 'Thank you for your purchase. A confirmation has been sent to your email.',
+        description: 'Thank you for your purchase. We will contact you shortly for confirmation.',
       });
       clearCart();
       router.push('/account');
@@ -159,28 +151,20 @@ export default function CheckoutPage() {
                 </CardContent>
               </Card>
 
-              <Card>
-                <CardHeader><CardTitle className="font-headline text-2xl">Payment Details</CardTitle></CardHeader>
-                <CardContent className="space-y-4">
-                    <FormField control={form.control} name="cardName" render={({ field }) => (
-                        <FormItem><FormLabel>Name on Card</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                    )} />
-                    <FormField control={form.control} name="cardNumber" render={({ field }) => (
-                        <FormItem><FormLabel>Card Number</FormLabel><FormControl><Input placeholder="•••• •••• •••• ••••" {...field} /></FormControl><FormMessage /></FormItem>
-                    )} />
-                    <div className="grid grid-cols-2 gap-4">
-                        <FormField control={form.control} name="cardExpiry" render={({ field }) => (
-                            <FormItem><FormLabel>Expiry (MM/YY)</FormLabel><FormControl><Input placeholder="MM/YY" {...field} /></FormControl><FormMessage /></FormItem>
-                        )} />
-                        <FormField control={form.control} name="cardCvc" render={({ field }) => (
-                            <FormItem><FormLabel>CVC</FormLabel><FormControl><Input placeholder="•••" {...field} /></FormControl><FormMessage /></FormItem>
-                        )} />
-                    </div>
+               <Card>
+                <CardHeader>
+                  <CardTitle className="font-headline text-2xl">Payment Method</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="p-4 border rounded-md bg-muted/50">
+                    <p className="font-semibold">Cash on Delivery</p>
+                    <p className="text-sm text-muted-foreground">You will pay for your order upon its arrival.</p>
+                  </div>
                 </CardContent>
               </Card>
 
               <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
-                {isSubmitting ? 'Placing Order...' : `Place Order (${selectedCurrency.code})`}
+                {isSubmitting ? 'Placing Order...' : `Confirm Order (Cash on Delivery)`}
               </Button>
             </form>
           </Form>
