@@ -15,9 +15,10 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { useToast } from '@/hooks/use-toast';
 import { Separator } from '@/components/ui/separator';
 import { addOrder } from '@/lib/services/order-service';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useCurrency } from '@/context/currency-context';
 import { formatPrice } from '@/lib/utils';
+import { getUserById } from '@/lib/services/user-service';
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -41,7 +42,7 @@ export default function CheckoutPage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: user?.email || '',
-      shippingName: user?.displayName || '',
+      shippingName: '',
       shippingPhone: '',
       shippingAddress: '',
       shippingCity: '',
@@ -49,6 +50,31 @@ export default function CheckoutPage() {
       shippingZip: '',
     },
   });
+
+   useEffect(() => {
+    if (user) {
+      // Set email from auth context
+      form.setValue('email', user.email || '');
+
+      // Fetch user profile to get name and address
+      const fetchUserProfile = async () => {
+        const userProfile = await getUserById(user.uid);
+        if (userProfile) {
+          form.setValue('shippingName', `${userProfile.firstName || ''} ${userProfile.lastName || ''}`.trim() || user.displayName || '');
+          if (userProfile.shippingAddress) {
+            form.setValue('shippingAddress', userProfile.shippingAddress.address || '');
+            form.setValue('shippingCity', userProfile.shippingAddress.city || '');
+            form.setValue('shippingState', userProfile.shippingAddress.state || '');
+            form.setValue('shippingZip', userProfile.shippingAddress.zip || '');
+          }
+        } else {
+            form.setValue('shippingName', user.displayName || '');
+        }
+      };
+      fetchUserProfile();
+    }
+  }, [user, form]);
+
 
   if (cart.length === 0) {
     // Redirect to home if cart is empty, but wait for client-side navigation
@@ -206,5 +232,3 @@ export default function CheckoutPage() {
     </div>
   );
 }
-
-    
