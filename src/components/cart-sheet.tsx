@@ -38,7 +38,7 @@ export function CartSheetContent({ onCheckout }: CartSheetContentProps) {
             <h2 className="text-2xl font-semibold mt-4 mb-2">Your cart is empty</h2>
             <p className="text-muted-foreground mb-6">Looks like you haven't added anything yet.</p>
              <Button asChild>
-                <Link href="/">Continue Shopping</Link>
+                <Link href="/category">Continue Shopping</Link>
             </Button>
         </div>
       ) : (
