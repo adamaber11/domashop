@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -26,25 +27,23 @@ export function AdminNavbar() {
   return (
     <div className="bg-muted/40 border-b">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="relative flex h-14 items-center">
-                <div className="overflow-x-auto">
-                    <nav className="flex items-center gap-6">
-                        {navItems.map((item) => (
-                            <Link
-                                key={item.href}
-                                href={item.href}
-                                className={cn(
-                                    'flex items-center gap-2 text-sm font-medium',
-                                    navLinkClasses,
-                                    pathname.startsWith(item.href) ? activeClasses : inactiveClasses
-                                )}
-                            >
-                                <item.icon className="h-5 w-5" />
-                                <span>{item.label}</span>
-                            </Link>
-                        ))}
-                    </nav>
-                </div>
+            <div className="relative flex h-14 items-center overflow-x-auto">
+                <nav className="flex items-center gap-6">
+                    {navItems.map((item) => (
+                        <Link
+                            key={item.href}
+                            href={item.href}
+                            className={cn(
+                                'flex items-center gap-2 text-sm font-medium',
+                                navLinkClasses,
+                                pathname.startsWith(item.href) ? activeClasses : inactiveClasses
+                            )}
+                        >
+                            <item.icon className="h-5 w-5" />
+                            <span>{item.label}</span>
+                        </Link>
+                    ))}
+                </nav>
             </div>
         </div>
     </div>
