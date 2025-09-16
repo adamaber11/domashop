@@ -30,6 +30,7 @@ import Image from 'next/image';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent } from '@/components/ui/card';
+import { Timestamp } from 'firebase/firestore';
 
 export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -88,6 +89,23 @@ export default function AdminOrdersPage() {
         return matchesStatus && matchesSearch;
     });
   }, [orders, searchTerm, statusFilter]);
+
+  const formatDate = (date: any) => {
+    if (!date) return '';
+    if (date instanceof Timestamp) {
+      return format(date.toDate(), 'PPP');
+    }
+    if (date instanceof Date) {
+      return format(date, 'PPP');
+    }
+    // Attempt to parse if it's a string or number
+    try {
+      const parsedDate = new Date(date);
+      return format(parsedDate, 'PPP');
+    } catch (e) {
+      return 'Invalid Date';
+    }
+  };
 
   if (loading) {
     return (
@@ -187,7 +205,7 @@ export default function AdminOrdersPage() {
                             </TableCell>
                             <TableCell className="font-medium">{order.id.substring(0, 7)}...</TableCell>
                             <TableCell>{order.customerName}</TableCell>
-                            <TableCell>{format(order.date.toDate(), 'PPP')}</TableCell>
+                            <TableCell>{formatDate(order.date)}</TableCell>
                             <TableCell>
                                 <Badge variant={
                                     order.status === 'Delivered' ? 'default' : 

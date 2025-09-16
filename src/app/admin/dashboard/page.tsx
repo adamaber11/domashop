@@ -21,9 +21,26 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { getDashboardStats } from '@/lib/services/dashboard-service';
 import { format } from 'date-fns';
+import { Timestamp } from 'firebase/firestore';
 
 export default async function DashboardPage() {
   const stats = await getDashboardStats();
+
+  const formatDate = (date: any) => {
+    if (!date) return '';
+    if (date instanceof Timestamp) {
+      return format(date.toDate(), 'PPP');
+    }
+    if (date instanceof Date) {
+      return format(date, 'PPP');
+    }
+    try {
+      const parsedDate = new Date(date);
+      return format(parsedDate, 'PPP');
+    } catch (e) {
+      return 'Invalid Date';
+    }
+  };
 
   return (
     <div className="bg-muted/40 min-h-screen">
@@ -126,7 +143,7 @@ export default async function DashboardPage() {
                               {order.customerEmail}
                           </div>
                       </TableCell>
-                       <TableCell>{format(order.date.toDate(), 'PPP')}</TableCell>
+                       <TableCell>{formatDate(order.date)}</TableCell>
                       <TableCell>
                         <Badge 
                           variant={

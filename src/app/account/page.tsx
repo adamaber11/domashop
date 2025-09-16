@@ -20,6 +20,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { useToast } from '@/hooks/use-toast';
 import { useCurrency } from '@/context/currency-context';
 import { formatPrice } from '@/lib/utils';
+import { Timestamp } from 'firebase/firestore';
 
 const profileSchema = z.object({
   firstName: z.string().min(2, "First name is required."),
@@ -123,6 +124,23 @@ export default function AccountPage() {
         });
     }
   }
+
+  const formatDate = (date: any) => {
+    if (!date) return '';
+    if (date instanceof Timestamp) {
+      return format(date.toDate(), 'PPP');
+    }
+    if (date instanceof Date) {
+      return format(date, 'PPP');
+    }
+    try {
+      const parsedDate = new Date(date);
+      return format(parsedDate, 'PPP');
+    } catch (e) {
+      return 'Invalid Date';
+    }
+  };
+
 
   if (authLoading || loading || !user) {
     return (
@@ -238,6 +256,7 @@ export default function AccountPage() {
                     <TableRow>
                       <TableHead>Order ID</TableHead>
                       <TableHead>Date</TableHead>
+                      <TableHead>Status</TableHead>
                       <TableHead className="text-end">Total</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -246,13 +265,24 @@ export default function AccountPage() {
                       orders.map((order) => (
                         <TableRow key={order.id}>
                           <TableCell className="font-medium">{order.id.substring(0, 7)}...</TableCell>
-                          <TableCell>{format(order.date.toDate(), 'PPP')}</TableCell>
+                          <TableCell>{formatDate(order.date)}</TableCell>
+                          <TableCell>
+                            <Badge 
+                              variant={
+                                  order.status === 'Delivered' ? 'default' : 
+                                  order.status === 'Processing' ? 'secondary' : 
+                                  order.status === 'Cancelled' ? 'destructive' : 'outline'
+                              }
+                            >
+                              {order.status}
+                            </Badge>
+                          </TableCell>
                           <TableCell className="text-end">{formatPrice(order.total, selectedCurrency)}</TableCell>
                         </TableRow>
                       ))
                     ) : (
                       <TableRow>
-                        <TableCell colSpan={3} className="h-24 text-center">
+                        <TableCell colSpan={4} className="h-24 text-center">
                           You haven't placed any orders yet.
                         </TableCell>
                       </TableRow>
