@@ -79,7 +79,7 @@ export function ProductCard({ product }: ProductCardProps) {
           <span className="text-xs text-muted-foreground ms-2">({product.reviewCount} reviews)</span>
         </div>
       </CardContent>
-      <CardFooter className="p-4 pt-0 flex justify-between items-center">
+      <CardFooter className="p-4 pt-0 flex flex-wrap justify-between items-center gap-y-2">
         <div className="flex items-baseline gap-2">
             {product.onSale && typeof product.salePrice === 'number' ? (
                 <>
