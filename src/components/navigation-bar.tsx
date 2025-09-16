@@ -1,4 +1,3 @@
-// src/components/navigation-bar.tsx
 
 'use client';
 
@@ -79,11 +78,11 @@ export function NavigationBar() {
   useEffect(() => {
     const timer1 = setTimeout(() => {
       setShowCurrencyHint(true);
-    }, 1500); // Show hint after 1.5 seconds
+    }, 3000); // Show hint after 3 seconds
 
     const timer2 = setTimeout(() => {
       setShowCurrencyHint(false);
-    }, 6500); // Hide hint after 5 more seconds
+    }, 8000); // Hide hint after 5 more seconds (3s + 5s)
 
     return () => {
       clearTimeout(timer1);
@@ -156,8 +155,13 @@ export function NavigationBar() {
                             <CurrencySelector />
                         </div>
                     </TooltipTrigger>
-                    <TooltipContent side="bottom" align="end" className={cn(showCurrencyHint && "animate-glowing-border")}>
-                        <p>Select your currency here! &rarr;</p>
+                    <TooltipContent 
+                      side="bottom" 
+                      align="end" 
+                      className={cn(showCurrencyHint && "animate-led-border p-2.5")}
+                      hideArrow={true}
+                    >
+                        <p className="font-semibold text-foreground">Select your currency here!</p>
                     </TooltipContent>
                 </Tooltip>
             </TooltipProvider>
@@ -217,3 +221,4 @@ export function NavigationBar() {
     </nav>
   );
 }
+
