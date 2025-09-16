@@ -17,9 +17,10 @@ import { useRouter } from 'next/navigation';
 
 interface CartSheetContentProps {
   onCheckout?: () => void;
+  onContinueShopping?: () => void;
 }
 
-export function CartSheetContent({ onCheckout }: CartSheetContentProps) {
+export function CartSheetContent({ onCheckout, onContinueShopping }: CartSheetContentProps) {
   const { cart, updateQuantity, removeFromCart, cartTotal, itemCount } = useCart();
   const { selectedCurrency } = useCurrency();
   const router = useRouter();
@@ -38,7 +39,7 @@ export function CartSheetContent({ onCheckout }: CartSheetContentProps) {
             <h2 className="text-2xl font-semibold mt-4 mb-2">Your cart is empty</h2>
             <p className="text-muted-foreground mb-6">Looks like you haven't added anything yet.</p>
              <Button asChild>
-                <Link href="/category">Continue Shopping</Link>
+                <Link href="/category" onClick={onContinueShopping}>Continue Shopping</Link>
             </Button>
         </div>
       ) : (

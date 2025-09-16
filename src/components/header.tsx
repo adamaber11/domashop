@@ -171,7 +171,7 @@ export function Header() {
               <SheetHeader>
                 <SheetTitle>Your Cart</SheetTitle>
               </SheetHeader>
-              <CartSheetContent onCheckout={() => setCartOpen(false)} />
+              <CartSheetContent onCheckout={() => setCartOpen(false)} onContinueShopping={() => setCartOpen(false)} />
             </SheetContent>
           </Sheet>
         </div>
