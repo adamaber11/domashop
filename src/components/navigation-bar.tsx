@@ -20,6 +20,7 @@ import { useAuth } from '@/context/auth-context';
 import { Skeleton } from './ui/skeleton';
 import { useCart } from '@/context/cart-context';
 import { useMemo } from 'react';
+import { CurrencySelector } from './currency-selector';
 
 const BoyIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" {...props}>
@@ -100,15 +101,15 @@ export function NavigationBar() {
             </Link>
             
             <DropdownMenu>
-              <DropdownMenuTrigger
-                className={cn(
+              <DropdownMenuTrigger asChild>
+                <div tabIndex={0} role="button" aria-haspopup="true" aria-expanded="false" className={cn(
                   navLinkClasses,
-                  'flex items-center gap-1 focus:outline-none',
-                  pathname.startsWith('/category') ? activeClasses : inactiveClasses
-                )}
-              >
-                Categories
-                <ChevronDown className="h-4 w-4" />
+                  'flex items-center gap-1 focus:outline-none cursor-pointer',
+                   pathname.startsWith('/category') ? activeClasses : inactiveClasses
+                )}>
+                  Categories
+                  <ChevronDown className="h-4 w-4" />
+                </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 {categories.map((category) => {
@@ -130,7 +131,9 @@ export function NavigationBar() {
             </Link>
           </div>
           
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-4">
+             <CurrencySelector />
+
             {loading ? (
               <div className="flex items-center space-x-2">
                 <Skeleton className="h-8 w-20" />

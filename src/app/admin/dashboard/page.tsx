@@ -49,7 +49,7 @@ export default async function DashboardPage() {
               <CardContent>
                 <div className="text-2xl font-bold">${stats.totalRevenue.toFixed(2)}</div>
                 <p className="text-xs text-muted-foreground">
-                  From all completed orders.
+                  From all completed orders (in USD).
                 </p>
               </CardContent>
             </Card>
@@ -113,7 +113,7 @@ export default async function DashboardPage() {
                     <TableHead>Customer</TableHead>
                     <TableHead>Date</TableHead>
                     <TableHead>Status</TableHead>
-                    <TableHead className="text-right">Amount</TableHead>
+                    <TableHead className="text-right">Amount (USD)</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>

@@ -12,6 +12,8 @@ import { Badge } from './ui/badge';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/context/auth-context';
+import { useCurrency } from '@/context/currency-context';
+import { formatPrice } from '@/lib/utils';
 
 
 interface ProductCardProps {
@@ -26,6 +28,7 @@ export function ProductCard({ product }: ProductCardProps) {
   const { user, loading } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
+  const { selectedCurrency } = useCurrency();
 
   const handleAddToCartClick = (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent navigating to product page
@@ -80,11 +83,11 @@ export function ProductCard({ product }: ProductCardProps) {
         <div className="flex items-baseline gap-2">
             {product.onSale && typeof product.salePrice === 'number' ? (
                 <>
-                    <p className="text-base md:text-lg font-semibold text-destructive">${product.salePrice.toFixed(2)}</p>
-                    <p className="text-sm font-medium text-muted-foreground line-through">${product.price.toFixed(2)}</p>
+                    <p className="text-base md:text-lg font-semibold text-destructive">{formatPrice(product.salePrice, selectedCurrency)}</p>
+                    <p className="text-sm font-medium text-muted-foreground line-through">{formatPrice(product.price, selectedCurrency)}</p>
                 </>
             ) : (
-                <p className="text-base md:text-lg font-semibold">${product.price.toFixed(2)}</p>
+                <p className="text-base md:text-lg font-semibold">{formatPrice(product.price, selectedCurrency)}</p>
             )}
         </div>
         <div className="flex items-center gap-1 sm:gap-2">

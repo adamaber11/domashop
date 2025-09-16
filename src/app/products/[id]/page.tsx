@@ -1,4 +1,4 @@
-'use server';
+'use client';
 
 import { notFound } from 'next/navigation';
 import { StarRating } from '@/components/star-rating';
@@ -11,15 +11,64 @@ import { AddReviewForm } from './_components/add-review-form';
 import { ProductGallery } from './_components/product-gallery';
 import { getProductById } from '@/lib/services/product-service';
 import { getReviewsByProductId } from '@/lib/services/review-service';
+import { useEffect, useState } from 'react';
+import type { Product, Review } from '@/lib/types';
+import { useCurrency } from '@/context/currency-context';
+import { formatPrice } from '@/lib/utils';
+import { Skeleton } from '@/components/ui/skeleton';
 
-export default async function ProductDetailPage({ params }: { params: { id: string } }) {
-  const product = await getProductById(params.id);
-  
-  if (!product) {
-    notFound();
+export default function ProductDetailPage({ params }: { params: { id: string } }) {
+  const [product, setProduct] = useState<Product | null>(null);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { selectedCurrency } = useCurrency();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const productData = await getProductById(params.id);
+        if (!productData) {
+          notFound();
+          return;
+        }
+        const reviewsData = await getReviewsByProductId(params.id);
+        setProduct(productData);
+        setReviews(reviewsData);
+      } catch (error) {
+        console.error("Failed to fetch product data", error);
+        notFound();
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [params.id]);
+
+  if (loading || !product) {
+    return (
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-start">
+            <div>
+              <Skeleton className="aspect-square w-full rounded-lg" />
+              <div className="grid grid-cols-4 gap-4 mt-4">
+                  <Skeleton className="aspect-square w-full rounded-lg" />
+                  <Skeleton className="aspect-square w-full rounded-lg" />
+                  <Skeleton className="aspect-square w-full rounded-lg" />
+                  <Skeleton className="aspect-square w-full rounded-lg" />
+              </div>
+            </div>
+            <div className="space-y-6">
+                <Skeleton className="h-12 w-3/4" />
+                <Skeleton className="h-6 w-1/2" />
+                <Skeleton className="h-8 w-1/4" />
+                <Skeleton className="h-20 w-full" />
+                <Skeleton className="h-12 w-1/2" />
+            </div>
+        </div>
+      </div>
+    );
   }
-  
-  const initialReviews = await getReviewsByProductId(params.id);
   
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
@@ -42,11 +91,11 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
           <div className="flex items-baseline gap-3">
             {product.onSale && typeof product.salePrice === 'number' ? (
                 <>
-                    <p className="text-3xl md:text-4xl font-bold text-destructive">${product.salePrice.toFixed(2)}</p>
-                    <p className="text-xl md:text-2xl font-semibold text-muted-foreground line-through">${product.price.toFixed(2)}</p>
+                    <p className="text-3xl md:text-4xl font-bold text-destructive">{formatPrice(product.salePrice, selectedCurrency)}</p>
+                    <p className="text-xl md:text-2xl font-semibold text-muted-foreground line-through">{formatPrice(product.price, selectedCurrency)}</p>
                 </>
             ) : (
-                <p className="text-2xl md:text-3xl font-semibold">${product.price.toFixed(2)}</p>
+                <p className="text-2xl md:text-3xl font-semibold">{formatPrice(product.price, selectedCurrency)}</p>
             )}
           </div>
 
@@ -60,10 +109,10 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
 
       <div className="grid lg:grid-cols-3 gap-12">
         <div className="lg:col-span-2 space-y-8">
-            <h2 className="font-headline text-2xl md:text-3xl font-bold">Reviews ({initialReviews.length})</h2>
-            <AIReviewSummary reviews={initialReviews} />
+            <h2 className="font-headline text-2xl md:text-3xl font-bold">Reviews ({reviews.length})</h2>
+            <AIReviewSummary reviews={reviews} />
             <div className="space-y-8">
-            {initialReviews.length > 0 ? initialReviews.map(review => (
+            {reviews.length > 0 ? reviews.map(review => (
                 <div key={review.id} className="border-b pb-4">
                 <div className="flex items-center mb-2">
                     <StarRating rating={review.rating} />

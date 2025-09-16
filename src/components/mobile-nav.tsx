@@ -21,6 +21,7 @@ import { useCart } from '@/context/cart-context';
 import { useMemo, useState, useEffect } from 'react';
 import { getSiteSettings } from '@/lib/services/settings-service';
 import type { SiteSettings } from '@/lib/types';
+import { CurrencySelector } from './currency-selector';
 
 
 const BoyIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -119,6 +120,9 @@ export function MobileNav({ onLinkClick }: MobileNavProps) {
 
       <div className="flex-grow flex flex-col overflow-hidden">
         <ScrollArea className="flex-grow">
+             <div className="p-4 border-b">
+                <CurrencySelector />
+            </div>
             <nav className="divide-y">
                 <Link href="/" onClick={() => { handleLinkClick('/'); onLinkClick?.(); }} className={cn(navLinkClasses, pathname === '/' && activeLinkClasses)}>
                   Home

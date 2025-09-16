@@ -25,7 +25,13 @@ const defaultSettings: Omit<SiteSettings, 'id'> = {
     { src: "https://picsum.photos/seed/102/1200/500", alt: "A modern city skyline at night with illuminated buildings.", hint: "city skyline" },
     { src: 'https://picsum.photos/seed/welcome-hero/1200/500', alt: 'Welcome banner', hint: 'store interior' }
   ],
-  heroCarouselDelay: 2000,
+  heroCarouselDelay: 4000,
+  currencies: [
+    { code: 'USD', name: 'US Dollar', rate: 1 },
+    { code: 'EUR', name: 'Euro', rate: 0.93 },
+    { code: 'EGP', name: 'Egyptian Pound', rate: 47.50 },
+    { code: 'SAR', name: 'Saudi Riyal', rate: 3.75 },
+  ]
 };
 
 export async function getSiteSettings(): Promise<SiteSettings> {
@@ -36,6 +42,9 @@ export async function getSiteSettings(): Promise<SiteSettings> {
       const data = docSnap.data();
       // Merge with defaults to ensure new fields exist
       const settings = { ...defaultSettings, ...data };
+      if (!settings.currencies || settings.currencies.length === 0) {
+        settings.currencies = defaultSettings.currencies;
+      }
       return { id: docSnap.id, ...settings } as SiteSettings;
     } else {
       // If settings don't exist, create them with default values
@@ -57,6 +66,7 @@ export async function updateSiteSettings(settingsData: Omit<SiteSettings, 'id'>)
     revalidatePath('/');
     revalidatePath('/about');
     revalidatePath('/contact');
+    revalidatePath('/admin/settings');
   } catch (error) {
     console.error("Error updating site settings:", error);
     throw new Error('Failed to update site settings.');

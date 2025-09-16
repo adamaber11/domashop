@@ -15,6 +15,8 @@ import { useToast } from '@/hooks/use-toast';
 import { Separator } from '@/components/ui/separator';
 import { addOrder } from '@/lib/services/order-service';
 import { useState } from 'react';
+import { useCurrency } from '@/context/currency-context';
+import { formatPrice } from '@/lib/utils';
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -35,6 +37,7 @@ export default function CheckoutPage() {
   const router = useRouter();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { selectedCurrency } = useCurrency();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -71,7 +74,7 @@ export default function CheckoutPage() {
         userId: user.uid,
         customerName: values.shippingName,
         customerEmail: values.email,
-        total: cartTotal,
+        total: cartTotal, // Store total in base currency (USD)
         status: 'Processing',
         items: cart,
         shippingAddress: {
@@ -177,7 +180,7 @@ export default function CheckoutPage() {
               </Card>
 
               <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
-                {isSubmitting ? 'Placing Order...' : 'Place Order'}
+                {isSubmitting ? 'Placing Order...' : `Place Order (${selectedCurrency.code})`}
               </Button>
             </form>
           </Form>
@@ -192,14 +195,14 @@ export default function CheckoutPage() {
                 return (
                   <div key={product.id} className="flex justify-between items-center text-sm">
                     <span className="font-medium">{product.name} <span className="text-muted-foreground">x {quantity}</span></span>
-                    <span>${(price * quantity).toFixed(2)}</span>
+                    <span>{formatPrice(price * quantity, selectedCurrency)}</span>
                   </div>
                 );
               })}
               <Separator />
               <div className="flex justify-between font-bold text-lg">
                 <span>Total</span>
-                <span>${cartTotal.toFixed(2)}</span>
+                <span>{formatPrice(cartTotal, selectedCurrency)}</span>
               </div>
             </CardContent>
           </Card>

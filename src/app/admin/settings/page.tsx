@@ -35,6 +35,11 @@ const settingsSchema = z.object({
         hint: z.string().min(1, 'Image hint is required.'),
     })).min(1, 'At least one hero image is required.'),
     heroCarouselDelay: z.coerce.number().min(500, 'Delay must be at least 500ms.'),
+    currencies: z.array(z.object({
+        code: z.string().min(3, 'Code must be 3 characters.').max(3, 'Code must be 3 characters.'),
+        name: z.string().min(3, 'Name is required.'),
+        rate: z.coerce.number().positive('Exchange rate must be positive.'),
+    })).min(1, 'At least one currency is required.'),
 });
 
 type SettingsFormValues = z.infer<typeof settingsSchema>;
@@ -61,12 +66,18 @@ export default function SettingsPage() {
             },
             heroImages: [],
             heroCarouselDelay: 2000,
+            currencies: [],
         },
     });
 
-    const { fields, append, remove } = useFieldArray({
+    const { fields: heroImageFields, append: appendHeroImage, remove: removeHeroImage } = useFieldArray({
         control: form.control,
         name: "heroImages"
+    });
+
+    const { fields: currencyFields, append: appendCurrency, remove: removeCurrency } = useFieldArray({
+        control: form.control,
+        name: "currencies"
     });
 
     useEffect(() => {
@@ -163,6 +174,38 @@ export default function SettingsPage() {
 
                     <Card>
                         <CardHeader>
+                            <CardTitle>Currency Management</CardTitle>
+                            <CardDescription>Manage currencies and their exchange rates against USD.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            {currencyFields.map((field, index) => (
+                                <div key={field.id} className="p-4 border rounded-md space-y-3 relative">
+                                    <h4 className="font-medium">Currency {index + 1}</h4>
+                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                        <FormField control={form.control} name={`currencies.${index}.code`} render={({ field }) => (
+                                            <FormItem><FormLabel>Code</FormLabel><FormControl><Input placeholder="e.g., EGP" {...field} /></FormControl><FormMessage /></FormItem>
+                                        )} />
+                                        <FormField control={form.control} name={`currencies.${index}.name`} render={({ field }) => (
+                                            <FormItem><FormLabel>Name</FormLabel><FormControl><Input placeholder="e.g., Egyptian Pound" {...field} /></FormControl><FormMessage /></FormItem>
+                                        )} />
+                                        <FormField control={form.control} name={`currencies.${index}.rate`} render={({ field }) => (
+                                            <FormItem><FormLabel>Rate (vs USD)</FormLabel><FormControl><Input type="number" step="0.01" {...field} /></FormControl><FormMessage /></FormItem>
+                                        )} />
+                                    </div>
+                                    <Button type="button" variant="destructive" size="icon" className="absolute top-2 right-2 h-7 w-7" onClick={() => removeCurrency(index)}>
+                                        <Trash2 className="h-4 w-4"/>
+                                        <span className="sr-only">Remove Currency</span>
+                                    </Button>
+                                </div>
+                            ))}
+                            <Button type="button" variant="outline" onClick={() => appendCurrency({ code: '', name: '', rate: 1 })}>
+                                Add Currency
+                            </Button>
+                        </CardContent>
+                    </Card>
+
+                    <Card>
+                        <CardHeader>
                             <CardTitle>Footer Social Links</CardTitle>
                             <CardDescription>Enter the full URLs for your social media profiles.</CardDescription>
                         </CardHeader>
@@ -192,13 +235,13 @@ export default function SettingsPage() {
                                 <FormItem>
                                     <FormLabel>Autoplay Delay (in milliseconds)</FormLabel>
                                     <FormControl><Input type="number" {...field} /></FormControl>
-                                    <FormDescription>Time each slide is shown before switching. e.g., 2000 for 2 seconds.</FormDescription>
+                                    <FormDescription>Time each slide is shown before switching. e.g., 4000 for 4 seconds.</FormDescription>
                                     <FormMessage />
                                 </FormItem>
                             )} />
                             <Separator />
 
-                            {fields.map((field, index) => (
+                            {heroImageFields.map((field, index) => (
                                 <div key={field.id} className="p-4 border rounded-md space-y-3 relative">
                                     <h4 className="font-medium">Image {index + 1}</h4>
                                      <FormField control={form.control} name={`heroImages.${index}.src`} render={({ field }) => (
@@ -210,13 +253,13 @@ export default function SettingsPage() {
                                      <FormField control={form.control} name={`heroImages.${index}.hint`} render={({ field }) => (
                                         <FormItem><FormLabel>AI Hint</FormLabel><FormControl><Input placeholder="e.g. 'city skyline'" {...field} /></FormControl><FormMessage /></FormItem>
                                     )} />
-                                    <Button type="button" variant="destructive" size="icon" className="absolute top-2 right-2 h-7 w-7" onClick={() => remove(index)}>
+                                    <Button type="button" variant="destructive" size="icon" className="absolute top-2 right-2 h-7 w-7" onClick={() => removeHeroImage(index)}>
                                         <Trash2 className="h-4 w-4"/>
                                         <span className="sr-only">Remove Image</span>
                                     </Button>
                                 </div>
                             ))}
-                            <Button type="button" variant="outline" onClick={() => append({ src: '', alt: '', hint: ''})}>
+                            <Button type="button" variant="outline" onClick={() => appendHeroImage({ src: '', alt: '', hint: ''})}>
                                 Add Image
                             </Button>
                         </CardContent>

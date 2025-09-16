@@ -26,6 +26,8 @@ import { MobileNav } from './mobile-nav';
 import { getSiteSettings } from '@/lib/services/settings-service';
 import type { SiteSettings } from '@/lib/types';
 import { cn } from '@/lib/utils';
+import { useCurrency } from '@/context/currency-context';
+import { formatPrice } from '@/lib/utils';
 
 
 export function Header() {
@@ -36,6 +38,7 @@ export function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [settings, setSettings] = useState<SiteSettings | null>(null);
+  const { selectedCurrency } = useCurrency();
 
   useEffect(() => {
     getSiteSettings().then(setSettings);
@@ -69,6 +72,7 @@ export function Header() {
           <DropdownMenuContent className="w-[var(--radix-dropdown-menu-trigger-width)] mt-2" align="start">
             {searchResults.map((product) => {
               const imageUrl = product.imageUrls?.[0];
+              const price = product.onSale && product.salePrice ? product.salePrice : product.price;
               return (
                 <DropdownMenuItem key={product.id} asChild onSelect={() => setSearchOpen(false)}>
                   <Link href={`/products/${product.id}`} className="flex items-center gap-4">
@@ -84,7 +88,7 @@ export function Header() {
                     </div>
                     <div className='flex-grow overflow-hidden'>
                       <p className="font-medium truncate">{product.name}</p>
-                      <p className="text-sm text-muted-foreground">${product.price.toFixed(2)}</p>
+                      <p className="text-sm text-muted-foreground">{formatPrice(price, selectedCurrency)}</p>
                     </div>
                   </Link>
                 </DropdownMenuItem>

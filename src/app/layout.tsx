@@ -10,6 +10,7 @@ import { CartProvider } from "@/context/cart-context";
 import { PageLoader } from "@/components/page-loader";
 import { AdminNavbar } from "./admin/_components/admin-navbar";
 import { usePathname } from "next/navigation";
+import { CurrencyProvider } from "@/context/currency-context";
 
 
 const ptSans = PT_Sans({
@@ -42,14 +43,16 @@ export default function RootLayout({
         className={`${ptSans.variable} ${playfairDisplay.variable} font-body`}
       >
         <AuthProvider>
-          <CartProvider>
-            <Toaster />
-            <PageLoader />
-            <Header />
-            <NavigationBar />
-            <main>{children}</main>
-            <Footer />
-          </CartProvider>
+          <CurrencyProvider>
+            <CartProvider>
+              <Toaster />
+              <PageLoader />
+              <Header />
+              <NavigationBar />
+              <main>{children}</main>
+              <Footer />
+            </CartProvider>
+          </CurrencyProvider>
         </AuthProvider>
       </body>
     </html>

@@ -93,7 +93,7 @@ export default function AdminOrdersPage() {
                        <div><strong>Customer:</strong> {selectedOrder.customerName}</div>
                        <div><strong>Email:</strong> {selectedOrder.customerEmail}</div>
                        <div><strong>Date:</strong> {format(selectedOrder.date.toDate(), 'PPP')}</div>
-                       <div><strong>Total:</strong> ${selectedOrder.total.toFixed(2)}</div>
+                       <div><strong>Total:</strong> ${selectedOrder.total.toFixed(2)} (USD)</div>
                        <div><strong>Status:</strong> <Badge variant={selectedOrder.status === "Delivered" ? "default" : "secondary"}>{selectedOrder.status}</Badge></div>
                     </div>
                     <Separator />
@@ -166,7 +166,7 @@ export default function AdminOrdersPage() {
                 <TableHead>Customer</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead className="text-end">Total</TableHead>
+                <TableHead className="text-end">Total (USD)</TableHead>
                 <TableHead className="text-end">Actions</TableHead>
               </TableRow>
             </TableHeader>

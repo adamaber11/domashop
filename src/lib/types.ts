@@ -73,6 +73,12 @@ export interface HeroImage {
   hint: string;
 }
 
+export interface Currency {
+  code: string; // e.g., USD, EGP
+  name: string; // e.g., US Dollar, Egyptian Pound
+  rate: number; // Exchange rate against a base currency (e.g., USD)
+}
+
 export interface SiteSettings {
   id: string;
   welcomeHeadline: string;
@@ -88,6 +94,7 @@ export interface SiteSettings {
   };
   heroImages: HeroImage[];
   heroCarouselDelay: number;
+  currencies: Currency[];
 }
 
 

@@ -18,6 +18,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
+import { useCurrency } from '@/context/currency-context';
+import { formatPrice } from '@/lib/utils';
 
 const profileSchema = z.object({
   firstName: z.string().min(2, "First name is required."),
@@ -38,6 +40,7 @@ export default function AccountPage() {
   const [siteUser, setSiteUser] = useState<SiteUser | null>(null);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+  const { selectedCurrency } = useCurrency();
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
@@ -248,7 +251,7 @@ export default function AccountPage() {
                           <TableCell>
                             <Badge variant={order.status === "Delivered" ? "default" : "secondary"}>{order.status}</Badge>
                           </TableCell>
-                          <TableCell className="text-end">${order.total.toFixed(2)}</TableCell>
+                          <TableCell className="text-end">{formatPrice(order.total, selectedCurrency)}</TableCell>
                         </TableRow>
                       ))
                     ) : (
