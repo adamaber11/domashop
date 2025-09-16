@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -37,6 +38,7 @@ export function Header() {
   const isMobile = useIsMobile();
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
   const [settings, setSettings] = useState<SiteSettings | null>(null);
   const { selectedCurrency } = useCurrency();
 
@@ -153,7 +155,7 @@ export function Header() {
             </DialogContent>
           </Dialog>
 
-          <Sheet>
+          <Sheet open={cartOpen} onOpenChange={setCartOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="relative">
                 <ShoppingBag className="h-5 w-5" />
@@ -169,7 +171,7 @@ export function Header() {
               <SheetHeader>
                 <SheetTitle>Your Cart</SheetTitle>
               </SheetHeader>
-              <CartSheetContent />
+              <CartSheetContent onCheckout={() => setCartOpen(false)} />
             </SheetContent>
           </Sheet>
         </div>

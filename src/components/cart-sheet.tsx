@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useCart } from '@/context/cart-context';
@@ -11,10 +12,23 @@ import { ScrollArea } from './ui/scroll-area';
 import { SheetFooter } from './ui/sheet';
 import { useCurrency } from '@/context/currency-context';
 import { formatPrice } from '@/lib/utils';
+import { useRouter } from 'next/navigation';
 
-export function CartSheetContent() {
+
+interface CartSheetContentProps {
+  onCheckout?: () => void;
+}
+
+export function CartSheetContent({ onCheckout }: CartSheetContentProps) {
   const { cart, updateQuantity, removeFromCart, cartTotal, itemCount } = useCart();
   const { selectedCurrency } = useCurrency();
+  const router = useRouter();
+
+  const handleCheckout = () => {
+    onCheckout?.();
+    router.push('/checkout');
+  };
+
 
   return (
     <div className="flex flex-col h-full">
@@ -84,8 +98,8 @@ export function CartSheetContent() {
                         <span>{formatPrice(cartTotal, selectedCurrency)}</span>
                     </div>
                 </div>
-                <Button asChild size="lg" className="w-full">
-                  <Link href="/checkout">Proceed to Checkout</Link>
+                <Button size="lg" className="w-full" onClick={handleCheckout}>
+                  Proceed to Checkout
                 </Button>
             </SheetFooter>
         </>
