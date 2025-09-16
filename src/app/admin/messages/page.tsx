@@ -65,8 +65,23 @@ export default function AdminMessagesPage() {
   };
   
   const formatDate = (date: any) => {
-    if (date instanceof Timestamp) return format(date.toDate(), 'PPP p');
-    return format(new Date(date), 'PPP p');
+    if (!date) return 'N/A';
+    if (date instanceof Timestamp) {
+      return format(date.toDate(), 'PPP p');
+    }
+    if (date instanceof Date) {
+      return format(date, 'PPP p');
+    }
+    // Attempt to parse if it's a string or number, handle potential errors
+    try {
+      const parsedDate = new Date(date);
+      if (!isNaN(parsedDate.getTime())) {
+        return format(parsedDate, 'PPP p');
+      }
+    } catch (e) {
+      return 'Invalid Date';
+    }
+    return String(date); // Fallback
   }
 
   if (loading) {
