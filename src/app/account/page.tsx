@@ -134,18 +134,27 @@ export default function AccountPage() {
 
   const formatDate = (date: any) => {
     if (!date) return '';
+    // If it's a Firestore Timestamp, convert it
     if (date instanceof Timestamp) {
       return format(date.toDate(), 'PPP');
     }
+    // If it's already a Date object
     if (date instanceof Date) {
       return format(date, 'PPP');
     }
+    // If it's a string or number, try to parse it
     try {
       const parsedDate = new Date(date);
-      return format(parsedDate, 'PPP');
+      // Check if the parsed date is valid
+      if (!isNaN(parsedDate.getTime())) {
+        return format(parsedDate, 'PPP');
+      }
     } catch (e) {
+      // Fallback for invalid date formats
       return 'Invalid Date';
     }
+    // If all else fails, return the original value as a string
+    return String(date);
   };
 
 
@@ -340,3 +349,5 @@ export default function AccountPage() {
     </div>
   )
 }
+
+    
