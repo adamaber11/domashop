@@ -1,3 +1,4 @@
+
 'use server';
 
 import { db } from '@/lib/firebase';
@@ -31,6 +32,11 @@ const defaultSettings: Omit<SiteSettings, 'id'> = {
     { code: 'EUR', name: 'Euro', rate: 0.93 },
     { code: 'EGP', name: 'Egyptian Pound', rate: 47.50 },
     { code: 'SAR', name: 'Saudi Riyal', rate: 3.75 },
+    { code: 'AED', name: 'UAE Dirham', rate: 3.67 },
+    { code: 'QAR', name: 'Qatari Riyal', rate: 3.64 },
+    { code: 'KWD', name: 'Kuwaiti Dinar', rate: 0.31 },
+    { code: 'BHD', name: 'Bahraini Dinar', rate: 0.38 },
+    { code: 'OMR', name: 'Omani Rial', rate: 0.38 },
   ]
 };
 
