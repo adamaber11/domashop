@@ -76,19 +76,21 @@ export function NavigationBar() {
   const [showCurrencyHint, setShowCurrencyHint] = useState(false);
 
   useEffect(() => {
+    // Show the hint immediately on page load
     const timer1 = setTimeout(() => {
       setShowCurrencyHint(true);
-    }, 3000); // Show hint after 3 seconds
+    }, 100); // A small delay to ensure mounting
 
+    // Hide the hint after 3 seconds
     const timer2 = setTimeout(() => {
       setShowCurrencyHint(false);
-    }, 8000); // Hide hint after 5 more seconds (3s + 5s)
+    }, 3000);
 
     return () => {
       clearTimeout(timer1);
       clearTimeout(timer2);
     };
-  }, [pathname]); // Re-run effect on page navigation
+  }, [pathname]); // Re-run effect on every page navigation
 
   const navLinkClasses = "text-base transition-colors relative after:content-[''] after:absolute after:bottom-0 after:start-1/2 after:-translate-x-1/2 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:origin-center after:transition-transform after:duration-300";
   const activeClasses = "text-primary after:scale-x-100";
@@ -221,4 +223,3 @@ export function NavigationBar() {
     </nav>
   );
 }
-
