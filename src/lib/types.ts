@@ -44,8 +44,9 @@ export type Order = {
     userId: string;
     customerName: string;
     customerEmail: string;
+    customerPhone: string;
     total: number;
-    status: 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled';
+    status: 'Processing' | 'Confirmed' | 'Out for Delivery' | 'Delivered' | 'Cancelled';
     date: Timestamp;
     items: CartItem[];
     shippingAddress: ShippingAddress;

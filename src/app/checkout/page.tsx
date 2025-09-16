@@ -21,6 +21,7 @@ import { formatPrice } from '@/lib/utils';
 const formSchema = z.object({
   email: z.string().email(),
   shippingName: z.string().min(2, 'Name is too short'),
+  shippingPhone: z.string().min(10, 'Phone number is required'),
   shippingAddress: z.string().min(5, 'Address is too short'),
   shippingCity: z.string().min(2, 'City is too short'),
   shippingState: z.string().min(2, 'State is too short'),
@@ -40,6 +41,7 @@ export default function CheckoutPage() {
     defaultValues: {
       email: user?.email || '',
       shippingName: user?.displayName || '',
+      shippingPhone: '',
       shippingAddress: '',
       shippingCity: '',
       shippingState: '',
@@ -66,6 +68,7 @@ export default function CheckoutPage() {
         userId: user.uid,
         customerName: values.shippingName,
         customerEmail: values.email,
+        customerPhone: values.shippingPhone,
         total: cartTotal, // Store total in base currency (USD)
         status: 'Processing',
         items: cart,
@@ -104,19 +107,26 @@ export default function CheckoutPage() {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <Card>
-                <CardHeader><CardTitle className="font-headline text-2xl">Shipping Information</CardTitle></CardHeader>
+                <CardHeader><CardTitle className="font-headline text-2xl">Shipping & Contact Information</CardTitle></CardHeader>
                 <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <FormField control={form.control} name="email" render={({ field }) => (
+                  <FormField control={form.control} name="shippingName" render={({ field }) => (
                     <FormItem className="sm:col-span-2">
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>Full Name</FormLabel>
+                      <FormControl><Input placeholder="John Doe" {...field} /></FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )} />
+                   <FormField control={form.control} name="email" render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email Address</FormLabel>
                       <FormControl><Input placeholder="you@example.com" {...field} /></FormControl>
                       <FormMessage />
                     </FormItem>
                   )} />
-                   <FormField control={form.control} name="shippingName" render={({ field }) => (
-                    <FormItem className="sm:col-span-2">
-                      <FormLabel>Full Name</FormLabel>
-                      <FormControl><Input placeholder="John Doe" {...field} /></FormControl>
+                   <FormField control={form.control} name="shippingPhone" render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Phone Number</FormLabel>
+                      <FormControl><Input placeholder="+1 234 567 890" {...field} /></FormControl>
                       <FormMessage />
                     </FormItem>
                   )} />
