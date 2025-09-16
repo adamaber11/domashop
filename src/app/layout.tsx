@@ -10,7 +10,6 @@ import { AuthProvider } from "@/context/auth-context";
 import { CartProvider } from "@/context/cart-context";
 import { PageLoader } from "@/components/page-loader";
 import { AdminNavbar } from "./admin/_components/admin-navbar";
-import { usePathname } from "next/navigation";
 import { CurrencyProvider } from "@/context/currency-context";
 
 
