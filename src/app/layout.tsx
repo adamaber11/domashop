@@ -1,3 +1,4 @@
+
 import type { Metadata } from "next";
 import { Playfair_Display, PT_Sans } from "next/font/google";
 import "./globals.css";
@@ -29,6 +30,15 @@ const playfairDisplay = Playfair_Display({
 export const metadata: Metadata = {
   title: "Doma Online Shop",
   description: "A modern e-commerce experience.",
+  keywords: [
+    "Online Shop", "Doma Store", "eCommerce Egypt", "Buy Online", "Handmade Products", 
+    "Electronics Online", "Fashion Online", "Home Decor", "Accessories", "Gifts Online", 
+    "Kitchen Tools", "Mobile Phones", "Laptops Online", "Beauty Products", "Health & Care", 
+    "Kids Toys", "Sports Equipment", "متجر إلكتروني", "دوما شوب", "تسوق أونلاين", 
+    "منتجات هاند ميد", "اكسسوارات", "ديكور المنزل", "أجهزة إلكترونية", "ملابس أونلاين", 
+    "مستحضرات تجميل", "منتجات العناية بالصحة", "أدوات المطبخ", "هواتف محمولة", "لاب توب", 
+    "ألعاب أطفال", "معدات رياضية", "هدايا"
+  ],
 };
 
 export default function RootLayout({
