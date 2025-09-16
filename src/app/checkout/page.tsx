@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -180,8 +181,8 @@ export default function CheckoutPage() {
           </Form>
         </div>
         
-        <div className="lg:col-span-1">
-          <Card className="sticky top-24">
+        <div className="lg:col-span-1 lg:sticky lg:top-24">
+          <Card>
             <CardHeader><CardTitle className="font-headline text-2xl">Your Order</CardTitle></CardHeader>
             <CardContent className="space-y-4">
               {cart.map(({ product, quantity }) => {
@@ -205,3 +206,5 @@ export default function CheckoutPage() {
     </div>
   );
 }
+
+    

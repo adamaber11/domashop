@@ -1,3 +1,4 @@
+
 'use server';
 
 import {
@@ -123,6 +124,7 @@ export default async function DashboardPage() {
               </Button>
             </CardHeader>
             <CardContent>
+                <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -165,6 +167,7 @@ export default async function DashboardPage() {
                   )}
                 </TableBody>
               </Table>
+              </div>
             </CardContent>
           </Card>
         </main>
@@ -172,3 +175,5 @@ export default async function DashboardPage() {
     </div>
   );
 }
+
+    
