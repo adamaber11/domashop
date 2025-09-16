@@ -106,6 +106,12 @@ export default {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
         },
+        'glowing-border': {
+            '0%, 100%': { borderColor: 'hsl(var(--primary))', boxShadow: '0 0 8px 1px hsl(var(--primary) / 0.7)' },
+            '25%': { borderColor: 'hsl(var(--chart-2))', boxShadow: '0 0 8px 1px hsl(var(--chart-2) / 0.7)' },
+            '50%': { borderColor: 'hsl(var(--chart-4))', boxShadow: '0 0 8px 1px hsl(var(--chart-4) / 0.7)' },
+            '75%': { borderColor: 'hsl(var(--chart-1))', boxShadow: '0 0 8px 1px hsl(var(--chart-1) / 0.7)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -114,6 +120,7 @@ export default {
         'female-glow': 'female-glow 2.5s ease-in-out infinite',
         'caret-blink': 'caret-blink 1.25s ease-out infinite',
         fadeIn: 'fadeIn 0.5s ease-in-out',
+        'glowing-border': 'glowing-border 3s ease-in-out infinite',
       },
     },
   },

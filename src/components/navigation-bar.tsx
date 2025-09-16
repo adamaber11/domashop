@@ -160,7 +160,7 @@ export function NavigationBar() {
                             <CurrencySelector />
                         </div>
                     </TooltipTrigger>
-                    <TooltipContent side="bottom" align="end">
+                    <TooltipContent side="bottom" align="end" className={cn(showCurrencyHint && "animate-glowing-border")}>
                         <p>Select your currency here! &rarr;</p>
                     </TooltipContent>
                 </Tooltip>
