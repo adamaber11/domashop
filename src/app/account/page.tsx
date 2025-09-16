@@ -5,13 +5,9 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
 import { Skeleton } from '@/components/ui/skeleton';
-import { getOrdersByUserId } from '@/lib/services/order-service';
 import { getUserById, updateUserProfile } from '@/lib/services/user-service';
-import type { Order, SiteUser, ShippingAddress } from '@/lib/types';
-import { format } from 'date-fns';
+import type { SiteUser, ShippingAddress } from '@/lib/types';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -19,9 +15,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
-import { useCurrency } from '@/context/currency-context';
-import { formatPrice } from '@/lib/utils';
-import { Timestamp } from 'firebase/firestore';
 
 const profileSchema = z.object({
   firstName: z.string().min(2, "First name is required."),
@@ -38,12 +31,10 @@ type ProfileFormValues = z.infer<typeof profileSchema>;
 export default function AccountPage() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
-  const [orders, setOrders] = useState<Order[]>([]);
   const [siteUser, setSiteUser] = useState<SiteUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const { toast } = useToast();
-  const { selectedCurrency } = useCurrency();
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
@@ -71,9 +62,6 @@ export default function AccountPage() {
         try {
           // user from useAuth() now contains the merged data from Auth and Firestore
           const userProfile = user;
-          const userOrders = await getOrdersByUserId(user.uid);
-          
-          setOrders(userOrders);
           setSiteUser(userProfile);
 
            // Initialize form with the complete user object from the auth context
@@ -132,39 +120,12 @@ export default function AccountPage() {
     }
   }
 
-  const formatDate = (date: any) => {
-    if (!date) return '';
-    // If it's a Firestore Timestamp, convert it
-    if (date instanceof Timestamp) {
-      return format(date.toDate(), 'PPP');
-    }
-    // If it's already a Date object
-    if (date instanceof Date) {
-      return format(date, 'PPP');
-    }
-    // If it's a string or number, try to parse it
-    try {
-      const parsedDate = new Date(date);
-      // Check if the parsed date is valid
-      if (!isNaN(parsedDate.getTime())) {
-        return format(parsedDate, 'PPP');
-      }
-    } catch (e) {
-      // Fallback for invalid date formats
-      return 'Invalid Date';
-    }
-    // If all else fails, return the original value as a string
-    return String(date);
-  };
-
-
   if (authLoading || loading || !user) {
     return (
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <h1 className="font-headline text-4xl font-bold mb-8">My Account</h1>
-        <div className="grid gap-8 md:grid-cols-3">
-          <div className="md:col-span-1">
-            <Card>
+        <div className="flex justify-center">
+            <Card className="w-full max-w-lg">
               <CardHeader>
                 <Skeleton className="h-8 w-1/2" />
                 <Skeleton className="h-4 w-3/4" />
@@ -180,33 +141,6 @@ export default function AccountPage() {
                 </div>
               </CardContent>
             </Card>
-          </div>
-          <div className="md:col-span-2">
-            <Card>
-              <CardHeader>
-                <Skeleton className="h-8 w-1/3" />
-                <Skeleton className="h-4 w-1/2" />
-              </CardHeader>
-              <CardContent>
-                 <div className="overflow-x-auto">
-                    <Table>
-                    <TableHeader>
-                        <TableRow>
-                        {[...Array(3)].map((_, i) => <TableHead key={i}><Skeleton className="h-5 w-full" /></TableHead>)}
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {[...Array(3)].map((_, i) => (
-                        <TableRow key={i}>
-                            {[...Array(3)].map((_, j) => <TableCell key={j}><Skeleton className="h-5 w-full" /></TableCell>)}
-                        </TableRow>
-                        ))}
-                    </TableBody>
-                    </Table>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
         </div>
       </div>
     );
@@ -214,9 +148,9 @@ export default function AccountPage() {
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h1 className="font-headline text-4xl font-bold mb-8">My Account</h1>
-      <div className="grid gap-8 md:grid-cols-3">
-        <div className="md:col-span-1">
+      <h1 className="font-headline text-4xl font-bold mb-8 text-center">My Account</h1>
+      <div className="flex justify-center">
+        <div className="w-full max-w-lg">
             {isEditing ? (
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -273,7 +207,7 @@ export default function AccountPage() {
                     <CardContent className="space-y-4 text-sm">
                         <div>
                             <p className="font-medium text-muted-foreground">Name</p>
-                            <p className="font-semibold">{(siteUser?.firstName || user.displayName)}</p>
+                            <p className="font-semibold">{siteUser?.firstName || user.displayName}</p>
                         </div>
                         <div>
                             <p className="font-medium text-muted-foreground">Email</p>
@@ -293,57 +227,6 @@ export default function AccountPage() {
                     </CardContent>
                 </Card>
             )}
-        </div>
-
-        <div className="md:col-span-2">
-           <Card>
-            <CardHeader>
-              <CardTitle className="font-headline">Order History</CardTitle>
-              <CardDescription>View your past orders.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Order ID</TableHead>
-                      <TableHead>Date</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead className="text-end">Total</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {orders.length > 0 ? (
-                      orders.map((order) => (
-                        <TableRow key={order.id}>
-                          <TableCell className="font-medium">{order.id.substring(0, 7)}...</TableCell>
-                          <TableCell>{formatDate(order.date)}</TableCell>
-                          <TableCell>
-                            <Badge 
-                              variant={
-                                  order.status === 'Delivered' ? 'default' : 
-                                  order.status === 'Processing' ? 'secondary' : 
-                                  order.status === 'Cancelled' ? 'destructive' : 'outline'
-                              }
-                            >
-                              {order.status}
-                            </Badge>
-                          </TableCell>
-                          <TableCell className="text-end">{formatPrice(order.total, selectedCurrency)}</TableCell>
-                        </TableRow>
-                      ))
-                    ) : (
-                      <TableRow>
-                        <TableCell colSpan={4} className="h-24 text-center">
-                          You haven't placed any orders yet.
-                        </TableCell>
-                      </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </div>
-            </CardContent>
-          </Card>
         </div>
       </div>
     </div>
