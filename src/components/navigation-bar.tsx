@@ -19,8 +19,9 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { useAuth } from '@/context/auth-context';
 import { Skeleton } from './ui/skeleton';
 import { useCart } from '@/context/cart-context';
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { CurrencySelector } from './currency-selector';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 const BoyIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" {...props}>
@@ -73,6 +74,26 @@ export function NavigationBar() {
   const pathname = usePathname();
   const { user, loading, signOut: firebaseSignOut } = useAuth();
   const { clearCart } = useCart();
+  const [showCurrencyHint, setShowCurrencyHint] = useState(false);
+
+  useEffect(() => {
+    const hintShown = localStorage.getItem('currencyHintShown');
+    if (!hintShown) {
+      const timer1 = setTimeout(() => {
+        setShowCurrencyHint(true);
+        localStorage.setItem('currencyHintShown', 'true');
+      }, 1500); // Show hint after 1.5 seconds
+
+      const timer2 = setTimeout(() => {
+        setShowCurrencyHint(false);
+      }, 6500); // Hide hint after 5 more seconds
+
+      return () => {
+        clearTimeout(timer1);
+        clearTimeout(timer2);
+      };
+    }
+  }, []);
 
   const navLinkClasses = "text-base transition-colors relative after:content-[''] after:absolute after:bottom-0 after:start-1/2 after:-translate-x-1/2 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:origin-center after:transition-transform after:duration-300";
   const activeClasses = "text-primary after:scale-x-100";
@@ -132,7 +153,18 @@ export function NavigationBar() {
           </div>
           
           <div className="flex items-center space-x-4">
-             <CurrencySelector />
+             <TooltipProvider>
+                <Tooltip open={showCurrencyHint}>
+                    <TooltipTrigger asChild>
+                        <div>
+                            <CurrencySelector />
+                        </div>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom" align="end">
+                        <p>Select your currency here! &rarr;</p>
+                    </TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
 
             {loading ? (
               <div className="flex items-center space-x-2">
