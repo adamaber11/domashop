@@ -69,19 +69,18 @@ export default function AccountPage() {
       const fetchUserData = async () => {
         setLoading(true);
         try {
-          const [userOrders, userProfile] = await Promise.all([
-            getOrdersByUserId(user.uid),
-            getUserById(user.uid)
-          ]);
+          // user from useAuth() now contains the merged data from Auth and Firestore
+          const userProfile = user;
+          const userOrders = await getOrdersByUserId(user.uid);
+          
           setOrders(userOrders);
           setSiteUser(userProfile);
 
-           // Initialize form with whatever data is available
-           // This handles new users (userProfile is null) and existing users
+           // Initialize form with the complete user object from the auth context
            form.reset({
-              firstName: userProfile?.firstName || user.firstName || '',
-              lastName: userProfile?.lastName || user.lastName || '',
-              email: user.email || '',
+              firstName: userProfile?.firstName || '',
+              lastName: userProfile?.lastName || '',
+              email: userProfile.email || '',
               shippingAddress: userProfile?.shippingAddress?.address || '',
               shippingCity: userProfile?.shippingAddress?.city || '',
               shippingState: userProfile?.shippingAddress?.state || '',
@@ -274,7 +273,7 @@ export default function AccountPage() {
                     <CardContent className="space-y-4 text-sm">
                         <div>
                             <p className="font-medium text-muted-foreground">Name</p>
-                            <p className="font-semibold">{(siteUser?.firstName || user.firstName)} {(siteUser?.lastName || user.lastName)}</p>
+                            <p className="font-semibold">{(siteUser?.firstName || user.displayName)}</p>
                         </div>
                         <div>
                             <p className="font-medium text-muted-foreground">Email</p>
@@ -282,7 +281,7 @@ export default function AccountPage() {
                         </div>
                          <div>
                             <p className="font-medium text-muted-foreground">Shipping Address</p>
-                            {siteUser?.shippingAddress ? (
+                            {siteUser?.shippingAddress?.address ? (
                                 <p className="font-semibold">
                                     {siteUser.shippingAddress.address}, <br/>
                                     {siteUser.shippingAddress.city}, {siteUser.shippingAddress.state} {siteUser.shippingAddress.zip}

@@ -29,15 +29,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const userDocRef = doc(db, "users", firebaseUser.uid);
         const userDoc = await getDoc(userDocRef);
         if (userDoc.exists()) {
-          setUser({ ...firebaseUser, ...userDoc.data() } as SiteUser);
+          setUser({ uid: firebaseUser.uid, ...firebaseUser, ...userDoc.data() } as SiteUser);
         } else {
-           // This handles users who were created before the Firestore document was standard
-          // or for Google sign-in on first login.
-          const newUser: SiteUser = { 
-            ...firebaseUser,
-            gender: 'not-specified'
-          };
-          setUser(newUser);
+          // This case handles users created via Google Sign-In for the very first time,
+          // or users from a previous auth system without a DB entry.
+          // We create a profile for them.
+           const [firstName, ...lastName] = firebaseUser.displayName?.split(' ') || ['', ''];
+           const newUserProfile = {
+              email: firebaseUser.email,
+              displayName: firebaseUser.displayName,
+              photoURL: firebaseUser.photoURL,
+              firstName: firstName,
+              lastName: lastName.join(' '),
+              gender: 'not-specified'
+            };
+          await setDoc(userDocRef, newUserProfile, { merge: true });
+          setUser({ uid: firebaseUser.uid, ...firebaseUser, ...newUserProfile } as SiteUser);
         }
       } else {
         setUser(null);
@@ -50,25 +57,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      const result = await signInWithPopup(auth, provider);
-      const firebaseUser = result.user;
-      const userDocRef = doc(db, "users", firebaseUser.uid);
-      const userDoc = await getDoc(userDocRef);
-
-      if (!userDoc.exists()) {
-        const [firstName, ...lastName] = firebaseUser.displayName?.split(' ') || ["", ""];
-        await setDoc(userDocRef, {
-          email: firebaseUser.email,
-          displayName: firebaseUser.displayName,
-          photoURL: firebaseUser.photoURL,
-          firstName: firstName,
-          lastName: lastName.join(' '),
-          gender: 'not-specified'
-        });
-      }
-
+      // The onAuthStateChanged listener will handle profile creation.
+      await signInWithPopup(auth, provider);
     } catch (error) {
       console.error("Error signing in with Google", error);
+      throw error; // Re-throw the error to be caught by the UI
     }
   };
 
