@@ -107,8 +107,8 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
       
       <Separator className="my-8 md:my-12" />
 
-      <div className="grid lg:grid-cols-3 gap-12">
-        <div className="lg:col-span-2 space-y-8">
+      <div className="grid md:grid-cols-3 gap-12">
+        <div className="md:col-span-2 space-y-8">
             <h2 className="font-headline text-2xl md:text-3xl font-bold">Reviews ({reviews.length})</h2>
             <AIReviewSummary reviews={reviews} />
             <div className="space-y-8">
