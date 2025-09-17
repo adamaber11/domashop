@@ -1,3 +1,4 @@
+
 'use server';
 
 import { ShoppingCart, Facebook, Instagram, Youtube } from 'lucide-react';
@@ -56,11 +57,11 @@ export async function Footer() {
               <a href={settings.socials.instagram} target="_blank" aria-label="Instagram" className="text-muted-foreground hover:text-primary transition-colors">
                 <Instagram className="h-6 w-6" />
               </a>
-               <a href={settings.socials.youtube} target="_blank" aria-label="YouTube" className="text-muted-foreground hover:text-primary transition-colors">
-                <Youtube className="h-6 w-6" />
-              </a>
               <a href={settings.socials.tiktok} target="_blank" aria-label="TikTok" className="text-muted-foreground hover:text-primary transition-colors">
                 <TikTokIcon className="h-5 w-5 fill-current" />
+              </a>
+               <a href={settings.socials.youtube} target="_blank" aria-label="YouTube" className="text-muted-foreground hover:text-primary transition-colors">
+                <Youtube className="h-6 w-6" />
               </a>
             </div>
           </div>
