@@ -11,18 +11,29 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { MoreHorizontal, Pencil, Eye, ChevronDown, ChevronRight, Search } from 'lucide-react';
+import { MoreHorizontal, Trash2, ChevronDown, ChevronRight, Search } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
-import { getAllOrders, updateOrderStatus } from '@/lib/services/order-service';
+import { getAllOrders, updateOrderStatus, deleteOrder } from '@/lib/services/order-service';
 import type { Order } from '@/lib/types';
 import { format } from 'date-fns';
 import { Separator } from '@/components/ui/separator';
@@ -39,6 +50,7 @@ export default function AdminOrdersPage() {
   const [openOrderId, setOpenOrderId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
+  const [orderToDelete, setOrderToDelete] = useState<Order | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -80,6 +92,26 @@ export default function AdminOrdersPage() {
     }
   }
 
+  const handleDeleteOrder = async () => {
+    if (!orderToDelete) return;
+    try {
+        await deleteOrder(orderToDelete.id);
+        setOrders(prev => prev.filter(order => order.id !== orderToDelete.id));
+        toast({
+            title: 'Order Deleted',
+            description: `Order ${orderToDelete.id.substring(0,7)}... has been deleted.`,
+        });
+    } catch (error) {
+         toast({
+            title: 'Deletion Failed',
+            description: 'Could not delete the order.',
+            variant: 'destructive',
+        });
+    } finally {
+        setOrderToDelete(null);
+    }
+  }
+
   const filteredOrders = useMemo(() => {
     return orders.filter(order => {
         const matchesStatus = statusFilter === 'All' || order.status === statusFilter;
@@ -93,26 +125,20 @@ export default function AdminOrdersPage() {
 
   const formatDate = (date: any) => {
     if (!date) return 'N/A';
-    // If it's a Firestore Timestamp, convert it
     if (date instanceof Timestamp) {
       return format(date.toDate(), 'PPP');
     }
-    // If it's already a Date object
     if (date instanceof Date) {
       return format(date, 'PPP');
     }
-    // If it's a string or number, try to parse it
     try {
       const parsedDate = new Date(date);
-      // Check if the parsed date is valid
       if (!isNaN(parsedDate.getTime())) {
         return format(parsedDate, 'PPP');
       }
     } catch (e) {
-      // Fallback for invalid date formats
       return 'Invalid Date';
     }
-    // If all else fails, return the original value as a string
     return String(date);
   };
 
@@ -242,6 +268,10 @@ export default function AdminOrdersPage() {
                                         {status}
                                     </DropdownMenuItem>
                                 ))}
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem onSelect={() => setOrderToDelete(order)} className="text-destructive focus:text-destructive focus:bg-destructive/10">
+                                    <Trash2 className="me-2 h-4 w-4" /> Delete Order
+                                </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
                             </TableCell>
@@ -306,8 +336,23 @@ export default function AdminOrdersPage() {
           </Table>
         </div>
       </div>
+
+       <AlertDialog open={!!orderToDelete} onOpenChange={(open) => !open && setOrderToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the order from customer {orderToDelete?.customerName}.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeleteOrder} className="bg-destructive hover:bg-destructive/90">
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }
-
-    

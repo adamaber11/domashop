@@ -1,7 +1,8 @@
+
 'use server';
 
 import { db } from '@/lib/firebase';
-import { collection, getDocs, doc, addDoc, updateDoc, query, where, orderBy, Timestamp } from 'firebase/firestore';
+import { collection, getDocs, doc, addDoc, updateDoc, query, where, orderBy, Timestamp, deleteDoc } from 'firebase/firestore';
 import type { Order } from '@/lib/types';
 import { revalidatePath } from 'next/cache';
 
@@ -66,4 +67,17 @@ export async function updateOrderStatus(id: string, status: Order['status']): Pr
     console.error(`Error updating order status for ${id}:`, error);
     throw new Error('Failed to update order status.');
   }
+}
+
+
+export async function deleteOrder(id: string): Promise<void> {
+    try {
+        const docRef = doc(db, 'orders', id);
+        await deleteDoc(docRef);
+        revalidatePath('/admin/orders');
+        revalidatePath('/admin/dashboard');
+    } catch (error) {
+        console.error(`Error deleting order ${id}:`, error);
+        throw new Error('Failed to delete order.');
+    }
 }
