@@ -5,8 +5,9 @@ import { collection, getDocs, query, orderBy, limit, getCountFromServer } from '
 import type { Order } from '@/lib/types';
 import { getAllOrders } from './order-service';
 import { getAllUsers } from './user-service';
+import { unstable_cache as cache } from 'next/cache';
 
-export async function getDashboardStats() {
+export const getDashboardStats = cache(async () => {
     try {
         const productsCollection = collection(db, 'products');
         const productsCountPromise = getCountFromServer(productsCollection);
@@ -42,4 +43,4 @@ export async function getDashboardStats() {
         console.error("Error fetching dashboard stats:", error);
         throw new Error('Failed to fetch dashboard statistics.');
     }
-}
+}, ['dashboard-stats'], { revalidate: 60 });

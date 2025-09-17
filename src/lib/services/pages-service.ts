@@ -5,6 +5,8 @@ import { db } from '@/lib/firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import type { PagesContent, AboutPageContent, ContactPageContent } from '@/lib/types';
 import { revalidatePath } from 'next/cache';
+import { unstable_cache as cache } from 'next/cache';
+
 
 const PAGES_COLLECTION = 'pages';
 const ABOUT_DOC_ID = 'about';
@@ -41,7 +43,7 @@ async function getOrCreateDocument<T>(docRef: any, defaultData: T): Promise<T> {
 }
 
 
-export async function getPagesContent(): Promise<PagesContent> {
+export const getPagesContent = cache(async (): Promise<PagesContent> => {
   try {
     const aboutDocRef = doc(db, PAGES_COLLECTION, ABOUT_DOC_ID);
     const contactDocRef = doc(db, PAGES_COLLECTION, CONTACT_DOC_ID);
@@ -60,7 +62,7 @@ export async function getPagesContent(): Promise<PagesContent> {
       contact: defaultContactContent,
     };
   }
-}
+}, ['pages-content'], { revalidate: 60 });
 
 export async function updatePagesContent(content: PagesContent): Promise<void> {
   try {

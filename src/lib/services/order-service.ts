@@ -5,10 +5,11 @@ import { db } from '@/lib/firebase';
 import { collection, getDocs, doc, addDoc, updateDoc, query, where, orderBy, Timestamp, deleteDoc } from 'firebase/firestore';
 import type { Order } from '@/lib/types';
 import { revalidatePath } from 'next/cache';
+import { unstable_cache as cache } from 'next/cache';
 
 const ordersCollection = collection(db, 'orders');
 
-export async function getAllOrders(): Promise<Order[]> {
+export const getAllOrders = cache(async (): Promise<Order[]> => {
   try {
     const q = query(ordersCollection, orderBy('date', 'desc'));
     const querySnapshot = await getDocs(q);
@@ -20,9 +21,9 @@ export async function getAllOrders(): Promise<Order[]> {
     console.error("Error fetching all orders:", error);
     throw new Error('Failed to fetch orders.');
   }
-}
+}, ['all-orders'], { revalidate: 60 });
 
-export async function getOrdersByUserId(userId: string): Promise<Order[]> {
+export const getOrdersByUserId = cache(async (userId: string): Promise<Order[]> => {
   try {
     const q = query(ordersCollection, where('userId', '==', userId), orderBy('date', 'desc'));
     const querySnapshot = await getDocs(q);
@@ -34,7 +35,7 @@ export async function getOrdersByUserId(userId: string): Promise<Order[]> {
     console.error(`Error fetching orders for user ${userId}:`, error);
     throw new Error('Failed to fetch user orders.');
   }
-}
+}, ['user-orders'], { revalidate: 60 });
 
 
 export async function addOrder(orderData: Omit<Order, 'id' | 'date'>): Promise<string> {

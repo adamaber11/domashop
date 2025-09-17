@@ -5,9 +5,10 @@ import { db } from '@/lib/firebase';
 import { collection, getDocs, doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import type { SiteUser, ShippingAddress } from '@/lib/types';
 import { revalidatePath } from 'next/cache';
+import { unstable_cache as cache } from 'next/cache';
 
 
-export async function getUserById(uid: string): Promise<SiteUser | null> {
+export const getUserById = cache(async (uid: string): Promise<SiteUser | null> => {
     try {
         const userDocRef = doc(db, 'users', uid);
         const userDoc = await getDoc(userDocRef);
@@ -19,7 +20,7 @@ export async function getUserById(uid: string): Promise<SiteUser | null> {
         console.error(`Error fetching user ${uid}:`, error);
         throw new Error('Failed to fetch user data.');
     }
-}
+}, ['user-by-id'], { revalidate: 60 });
 
 export async function updateUserProfile(uid: string, data: {
     firstName: string;
@@ -42,7 +43,7 @@ export async function updateUserProfile(uid: string, data: {
 }
 
 
-export async function getAllUsers(): Promise<SiteUser[]> {
+export const getAllUsers = cache(async (): Promise<SiteUser[]> => {
   try {
     const usersCollection = collection(db, 'users');
     const usersSnapshot = await getDocs(usersCollection);
@@ -71,7 +72,8 @@ export async function getAllUsers(): Promise<SiteUser[]> {
     console.error('Error fetching all users:', error);
     throw new Error('Failed to fetch users.');
   }
-}
+}, ['all-users'], { revalidate: 60 });
+
 
 export async function deleteUser(uid: string): Promise<void> {
     // Note: This function only deletes the Firestore user document.

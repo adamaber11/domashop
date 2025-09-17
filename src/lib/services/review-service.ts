@@ -4,10 +4,11 @@ import { db } from '@/lib/firebase';
 import { collection, getDocs, addDoc, doc, runTransaction, query, where, orderBy, Timestamp } from 'firebase/firestore';
 import type { Review } from '@/lib/types';
 import { revalidatePath } from 'next/cache';
+import { unstable_cache as cache } from 'next/cache';
 
 type NewReview = Omit<Review, 'id' | 'date' | 'productId'>;
 
-export async function getReviewsByProductId(productId: string): Promise<Review[]> {
+export const getReviewsByProductId = cache(async (productId: string): Promise<Review[]> => {
   try {
     const reviewsCollection = collection(db, 'reviews');
     // Removed orderBy('date', 'desc') to avoid composite index requirement.
@@ -31,7 +32,7 @@ export async function getReviewsByProductId(productId: string): Promise<Review[]
     console.error(`Error fetching reviews for product ${productId}:`, error);
     throw new Error('Failed to fetch reviews.');
   }
-}
+}, ['reviews-by-product-id'], { revalidate: 60 });
 
 export async function addReview(productId: string, reviewData: NewReview): Promise<string> {
     try {

@@ -5,10 +5,11 @@
 import { db } from '@/lib/firebase';
 import { collection, getDocs, doc, getDoc, query, where, limit, orderBy, addDoc, updateDoc, deleteDoc, writeBatch } from 'firebase/firestore';
 import type { Product } from '@/lib/types';
+import { unstable_cache as cache } from 'next/cache';
 
 const productsCollection = collection(db, 'products');
 
-export async function getProductById(id: string): Promise<Product | null> {
+export const getProductById = cache(async (id: string): Promise<Product | null> => {
   try {
     const docRef = doc(db, 'products', id);
     const docSnap = await getDoc(docRef);
@@ -32,9 +33,10 @@ export async function getProductById(id: string): Promise<Product | null> {
     console.error(`Error fetching product ${id}:`, error);
     throw new Error('Failed to fetch product data.');
   }
-}
+}, ['product-by-id'], { revalidate: 60 });
 
-export async function getAllProducts(): Promise<Product[]> {
+
+export const getAllProducts = cache(async (): Promise<Product[]> => {
   try {
     const querySnapshot = await getDocs(query(productsCollection, orderBy('name')));
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
@@ -42,9 +44,10 @@ export async function getAllProducts(): Promise<Product[]> {
     console.error("Error fetching all products:", error);
     throw new Error('Failed to fetch products.');
   }
-}
+}, ['all-products'], { revalidate: 60 });
 
-export async function getProductsByCategory(category: string): Promise<Product[]> {
+
+export const getProductsByCategory = cache(async (category: string): Promise<Product[]> => {
   try {
     const q = query(productsCollection, where('category', '==', category));
     const querySnapshot = await getDocs(q);
@@ -53,9 +56,10 @@ export async function getProductsByCategory(category: string): Promise<Product[]
     console.error(`Error fetching products for category ${category}:`, error);
     throw new Error('Failed to fetch category products.');
   }
-}
+}, ['products-by-category'], { revalidate: 60 });
 
-export async function getOnSaleProducts(): Promise<Product[]> {
+
+export const getOnSaleProducts = cache(async (): Promise<Product[]> => {
   try {
     const q = query(productsCollection, where('onSale', '==', true));
     const querySnapshot = await getDocs(q);
@@ -64,9 +68,10 @@ export async function getOnSaleProducts(): Promise<Product[]> {
     console.error("Error fetching on-sale products:", error);
     throw new Error('Failed to fetch on-sale products.');
   }
-}
+}, ['on-sale-products'], { revalidate: 60 });
 
-export async function getFeaturedProducts(count: number): Promise<Product[]> {
+
+export const getFeaturedProducts = cache(async (count: number): Promise<Product[]> => {
    try {
     const q = query(productsCollection, where('isFeatured', '==', true), limit(count));
     const querySnapshot = await getDocs(q);
@@ -78,7 +83,8 @@ export async function getFeaturedProducts(count: number): Promise<Product[]> {
     const fallbackSnapshot = await getDocs(fallbackQuery);
     return fallbackSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
   }
-}
+}, ['featured-products'], { revalidate: 60 });
+
 
 export async function searchProducts(searchQuery: string, count: number): Promise<Product[]> {
   try {

@@ -3,8 +3,9 @@
 import { db } from '@/lib/firebase';
 import { collection, getDocs, query, orderBy, limit, Timestamp } from 'firebase/firestore';
 import type { Product, Order } from '@/lib/types';
+import { unstable_cache as cache } from 'next/cache';
 
-export async function getSalesOverTime(): Promise<{ month: Date; totalSales: number }[]> {
+export const getSalesOverTime = cache(async (): Promise<{ month: Date; totalSales: number }[]> => {
   try {
     const ordersSnapshot = await getDocs(query(collection(db, 'orders'), orderBy('date', 'desc')));
     const orders = ordersSnapshot.docs.map(doc => doc.data() as Order);
@@ -44,9 +45,10 @@ export async function getSalesOverTime(): Promise<{ month: Date; totalSales: num
     const currentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
     return [{ month: currentMonth, totalSales: 0 }];
   }
-}
+}, ['sales-over-time'], { revalidate: 60 });
 
-export async function getCategoryDistribution(): Promise<{ category: string; count: number }[]> {
+
+export const getCategoryDistribution = cache(async (): Promise<{ category: string; count: number }[]> => {
   try {
     const productsSnapshot = await getDocs(collection(db, 'products'));
     const products = productsSnapshot.docs.map(doc => doc.data() as Product);
@@ -67,9 +69,10 @@ export async function getCategoryDistribution(): Promise<{ category: string; cou
     console.error("Error fetching category distribution:", error);
     throw new Error('Failed to fetch category distribution.');
   }
-}
+}, ['category-distribution'], { revalidate: 60 });
 
-export async function getTopPerformingProducts(count: number): Promise<Product[]> {
+
+export const getTopPerformingProducts = cache(async (count: number): Promise<Product[]> => {
     try {
         const q = query(collection(db, 'products'), orderBy('reviewCount', 'desc'), orderBy('averageRating', 'desc'), limit(count));
         const querySnapshot = await getDocs(q);
@@ -87,4 +90,4 @@ export async function getTopPerformingProducts(count: number): Promise<Product[]
              throw new Error('Failed to fetch top products.');
         }
     }
-}
+}, ['top-products'], { revalidate: 60 });

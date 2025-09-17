@@ -5,6 +5,8 @@ import { db } from '@/lib/firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import type { SiteSettings } from '@/lib/types';
 import { revalidatePath } from 'next/cache';
+import { unstable_cache as cache } from 'next/cache';
+
 
 const SETTINGS_DOC_ID = 'siteConfig';
 const settingsDocRef = doc(db, 'settings', SETTINGS_DOC_ID);
@@ -40,7 +42,7 @@ const defaultSettings: Omit<SiteSettings, 'id'> = {
   ]
 };
 
-export async function getSiteSettings(): Promise<SiteSettings> {
+export const getSiteSettings = cache(async (): Promise<SiteSettings> => {
   try {
     const docSnap = await getDoc(settingsDocRef);
 
@@ -63,7 +65,8 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     // Return default settings on error to prevent site crash
     return { id: SETTINGS_DOC_ID, ...defaultSettings };
   }
-}
+}, ['site-settings'], { revalidate: 60 });
+
 
 export async function updateSiteSettings(settingsData: Omit<SiteSettings, 'id'>): Promise<void> {
   try {
