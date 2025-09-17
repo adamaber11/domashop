@@ -1,0 +1,67 @@
+
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+  
+    // Helper function to check if a user is an admin
+    function isAdmin() {
+      return request.auth != null && request.auth.token.email == 'adamaber50@gmail.com';
+    }
+
+    // Helper function to check if the user is the owner of the document
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    // Products: Public can read, only admin can write/delete
+    match /products/{productId} {
+      allow read: if true;
+      allow write, delete: if isAdmin();
+    }
+
+    // Reviews: Logged-in users can create, but not update/delete. Admin can do anything.
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if isAdmin();
+    }
+
+    // Users: Users can read/update their own data. Admins can read all.
+    match /users/{userId} {
+      allow read, update: if isOwner(userId);
+      allow create: if request.auth != null && request.auth.uid == userId;
+      // Admin read access
+      allow get: if isAdmin();
+      allow list: if isAdmin();
+      // Deletion is handled by backend logic, so rules don't allow direct client deletion
+      allow delete: if false; 
+    }
+
+    // Orders: Users can create and read their own orders. Admins can read/update all.
+    match /orders/{orderId} {
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow read: if isOwner(request.resource.data.userId) || isAdmin();
+      allow update: if isAdmin(); // Only admin can change order status
+      allow delete: if isAdmin();
+    }
+    
+    // Settings: Public can read, only admin can write
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    // Pages: Public can read, only admin can write
+    match /pages/{pageId} {
+        allow read: if true;
+        allow write: if isAdmin();
+    }
+
+    // Contact Messages: Anyone can create (submit form), only admins can read/delete
+    match /contactMessages/{messageId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+  }
+}

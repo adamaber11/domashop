@@ -36,12 +36,24 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { generateColorFromString } from '@/lib/utils';
+import { useAuth } from '@/context/auth-context';
+import { useRouter } from 'next/navigation';
 
 export default function AdminUsersPage() {
+  const { user: adminUser, loading: adminLoading } = useAuth();
+  const router = useRouter();
   const [users, setUsers] = useState<SiteUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [userToDelete, setUserToDelete] = useState<SiteUser | null>(null);
   const { toast } = useToast();
+
+  useEffect(() => {
+     if (!adminLoading) {
+      if (!adminUser || adminUser.email !== 'adamaber50@gmail.com') {
+        router.replace('/');
+      }
+    }
+  }, [adminUser, adminLoading, router]);
 
   useEffect(() => {
     async function fetchUsers() {
@@ -64,7 +76,6 @@ export default function AdminUsersPage() {
   const handleDeleteUser = async () => {
     if (!userToDelete) return;
 
-    // Prevent admin from deleting themselves
     if (userToDelete.email === 'adamaber50@gmail.com') {
       toast({
         title: 'Action Forbidden',
@@ -93,7 +104,7 @@ export default function AdminUsersPage() {
     }
   };
 
-  if (loading) {
+  if (loading || adminLoading) {
     return (
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-between mb-8">
@@ -148,7 +159,7 @@ export default function AdminUsersPage() {
                       <Avatar>
                         <AvatarImage src={user.photoURL || undefined} />
                         <AvatarFallback style={{ backgroundColor: generateColorFromString(user.uid) }}>
-                          {user.displayName?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase()}
+                          {(user.displayName?.[0] || user.firstName?.[0] || user.email?.[0] || 'U').toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
                     </TableCell>
