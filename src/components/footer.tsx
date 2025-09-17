@@ -51,16 +51,16 @@ export async function Footer() {
           <div className="text-sm">
             <h3 className="font-headline font-semibold text-foreground mb-4">Follow Us</h3>
             <div className="flex space-x-4">
-              <a href={settings.socials.facebook} target="_blank" aria-label="Facebook" className="text-muted-foreground hover:text-primary transition-colors">
+              <a href={settings.socials.facebook} target="_blank" aria-label="Facebook" className="text-muted-foreground hover:text-primary transition-all duration-300 hover:scale-90">
                 <Facebook className="h-6 w-6" />
               </a>
-              <a href={settings.socials.instagram} target="_blank" aria-label="Instagram" className="text-muted-foreground hover:text-primary transition-colors">
+              <a href={settings.socials.instagram} target="_blank" aria-label="Instagram" className="text-muted-foreground hover:text-primary transition-all duration-300 hover:scale-90">
                 <Instagram className="h-6 w-6" />
               </a>
-              <a href={settings.socials.tiktok} target="_blank" aria-label="TikTok" className="text-muted-foreground hover:text-primary transition-colors">
+              <a href={settings.socials.tiktok} target="_blank" aria-label="TikTok" className="text-muted-foreground hover:text-primary transition-all duration-300 hover:scale-90">
                 <TikTokIcon className="h-5 w-5 fill-current" />
               </a>
-               <a href={settings.socials.youtube} target="_blank" aria-label="YouTube" className="text-muted-foreground hover:text-primary transition-colors">
+               <a href={settings.socials.youtube} target="_blank" aria-label="YouTube" className="text-muted-foreground hover:text-primary transition-all duration-300 hover:scale-90">
                 <Youtube className="h-6 w-6" />
               </a>
             </div>
