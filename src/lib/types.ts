@@ -89,9 +89,9 @@ export interface SiteSettings {
   logoTextPart3: string;
   socials: {
     facebook: string;
-    twitter: string;
     instagram: string;
-    linkedin: string;
+    youtube: string;
+    tiktok: string;
   };
   heroImages: HeroImage[];
   heroCarouselDelay: number;

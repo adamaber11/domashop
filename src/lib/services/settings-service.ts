@@ -17,9 +17,9 @@ const defaultSettings: Omit<SiteSettings, 'id'> = {
   logoTextPart3: 'a',
   socials: {
     facebook: '#',
-    twitter: '#',
     instagram: '#',
-    linkedin: '#',
+    youtube: '#',
+    tiktok: '#',
   },
   heroImages: [
     { src: "https://picsum.photos/seed/101/1200/500", alt: "A stunning landscape with mountains and a lake.", hint: "landscape mountains" },

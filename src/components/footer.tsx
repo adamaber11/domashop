@@ -1,8 +1,15 @@
 'use server';
 
-import { ShoppingCart, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import { ShoppingCart, Facebook, Instagram, Youtube } from 'lucide-react';
 import Link from 'next/link';
 import { getSiteSettings } from '@/lib/services/settings-service';
+
+const TikTokIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2859 3333" shapeRendering="geometricPrecision" textRendering="geometricPrecision" imageRendering="optimizeQuality" fillRule="evenodd" clipRule="evenodd" {...props}>
+        <path d="M2081 0c55 473 319 755 778 785v532c-266 26-499-61-770-225v995c0 1264-1378 1659-1932 753-356-583-138-1606 1004-1647v561c-87 14-180 36-265 65-254 86-398 247-358 531 77 544 1075 705 992-358V1h551z"/>
+    </svg>
+);
+
 
 export async function Footer() {
   const settings = await getSiteSettings();
@@ -46,14 +53,14 @@ export async function Footer() {
               <a href={settings.socials.facebook} target="_blank" aria-label="Facebook" className="text-muted-foreground hover:text-primary transition-colors">
                 <Facebook className="h-6 w-6" />
               </a>
-              <a href={settings.socials.twitter} target="_blank" aria-label="Twitter" className="text-muted-foreground hover:text-primary transition-colors">
-                <Twitter className="h-6 w-6" />
-              </a>
               <a href={settings.socials.instagram} target="_blank" aria-label="Instagram" className="text-muted-foreground hover:text-primary transition-colors">
                 <Instagram className="h-6 w-6" />
               </a>
-               <a href={settings.socials.linkedin} target="_blank" aria-label="LinkedIn" className="text-muted-foreground hover:text-primary transition-colors">
-                <Linkedin className="h-6 w-6" />
+               <a href={settings.socials.youtube} target="_blank" aria-label="YouTube" className="text-muted-foreground hover:text-primary transition-colors">
+                <Youtube className="h-6 w-6" />
+              </a>
+              <a href={settings.socials.tiktok} target="_blank" aria-label="TikTok" className="text-muted-foreground hover:text-primary transition-colors">
+                <TikTokIcon className="h-5 w-5 fill-current" />
               </a>
             </div>
           </div>

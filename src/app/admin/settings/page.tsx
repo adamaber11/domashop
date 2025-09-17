@@ -25,9 +25,9 @@ const settingsSchema = z.object({
     logoTextPart3: z.string().min(1, 'Logo Part 3 is required.'),
     socials: z.object({
         facebook: z.string().min(1, 'Facebook URL is required.'),
-        twitter: z.string().min(1, 'Twitter URL is required.'),
         instagram: z.string().min(1, 'Instagram URL is required.'),
-        linkedin: z.string().min(1, 'LinkedIn URL is required.'),
+        youtube: z.string().min(1, 'YouTube URL is required.'),
+        tiktok: z.string().min(1, 'TikTok URL is required.'),
     }),
     heroImages: z.array(z.object({
         src: z.string().min(1, 'Image URL is required.'),
@@ -60,9 +60,9 @@ export default function SettingsPage() {
             logoTextPart3: 'a',
             socials: {
                 facebook: '#',
-                twitter: '#',
                 instagram: '#',
-                linkedin: '#',
+                youtube: '#',
+                tiktok: '#',
             },
             heroImages: [],
             heroCarouselDelay: 2000,
@@ -213,14 +213,14 @@ export default function SettingsPage() {
                             <FormField control={form.control} name="socials.facebook" render={({ field }) => (
                                 <FormItem><FormLabel>Facebook URL</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                             )} />
-                            <FormField control={form.control} name="socials.twitter" render={({ field }) => (
-                                <FormItem><FormLabel>Twitter URL</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                            )} />
-                             <FormField control={form.control} name="socials.instagram" render={({ field }) => (
+                            <FormField control={form.control} name="socials.instagram" render={({ field }) => (
                                 <FormItem><FormLabel>Instagram URL</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                             )} />
-                            <FormField control={form.control} name="socials.linkedin" render={({ field }) => (
-                                <FormItem><FormLabel>LinkedIn URL</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                             <FormField control={form.control} name="socials.youtube" render={({ field }) => (
+                                <FormItem><FormLabel>YouTube URL</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                            )} />
+                            <FormField control={form.control} name="socials.tiktok" render={({ field }) => (
+                                <FormItem><FormLabel>TikTok URL</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                             )} />
                         </CardContent>
                     </Card>
@@ -276,5 +276,3 @@ export default function SettingsPage() {
         </div>
     );
 }
-
-    
