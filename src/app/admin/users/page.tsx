@@ -35,6 +35,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { generateColorFromString } from '@/lib/utils';
 
 export default function AdminUsersPage() {
   const [users, setUsers] = useState<SiteUser[]>([]);
@@ -146,7 +147,9 @@ export default function AdminUsersPage() {
                     <TableCell>
                       <Avatar>
                         <AvatarImage src={user.photoURL || undefined} />
-                        <AvatarFallback>{user.displayName?.[0] || user.email?.[0]}</AvatarFallback>
+                        <AvatarFallback style={{ backgroundColor: generateColorFromString(user.uid) }}>
+                          {user.displayName?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase()}
+                        </AvatarFallback>
                       </Avatar>
                     </TableCell>
                     <TableCell>
