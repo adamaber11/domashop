@@ -2,7 +2,7 @@
 'use server';
 
 import { db } from '@/lib/firebase';
-import { collection, addDoc, getDocs, query, orderBy, Timestamp, doc, updateDoc } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, orderBy, Timestamp, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import type { ContactMessage } from '@/lib/types';
 import { revalidatePath } from 'next/cache';
 
@@ -41,5 +41,16 @@ export async function markMessageAsRead(id: string): Promise<void> {
   } catch (error) {
     console.error(`Error updating message ${id}:`, error);
     throw new Error('Failed to update message status.');
+  }
+}
+
+export async function deleteMessage(id: string): Promise<void> {
+  try {
+    const docRef = doc(db, 'contactMessages', id);
+    await deleteDoc(docRef);
+    revalidatePath('/admin/messages');
+  } catch (error) {
+    console.error(`Error deleting message ${id}:`, error);
+    throw new Error('Failed to delete message.');
   }
 }
