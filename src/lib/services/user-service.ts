@@ -1,7 +1,8 @@
+
 'use server';
 
 import { db } from '@/lib/firebase';
-import { collection, getDocs, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { collection, getDocs, doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import type { SiteUser, ShippingAddress } from '@/lib/types';
 import { revalidatePath } from 'next/cache';
 
@@ -66,4 +67,18 @@ export async function getAllUsers(): Promise<SiteUser[]> {
     console.error('Error fetching all users:', error);
     throw new Error('Failed to fetch users.');
   }
+}
+
+export async function deleteUser(uid: string): Promise<void> {
+    // Note: This function only deletes the Firestore user document.
+    // Deleting a user from Firebase Authentication requires admin privileges
+    // and should be handled in a secure backend environment (e.g., Cloud Function).
+    try {
+        const userDocRef = doc(db, 'users', uid);
+        await deleteDoc(userDocRef);
+        revalidatePath('/admin/users');
+    } catch (error) {
+        console.error(`Error deleting user document for ${uid}:`, error);
+        throw new Error('Failed to delete user data.');
+    }
 }
