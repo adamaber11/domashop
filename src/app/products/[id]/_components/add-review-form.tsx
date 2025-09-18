@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState } from 'react';
@@ -12,13 +13,19 @@ import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/context/auth-context';
 import { addReview } from '@/lib/services/review-service';
+import type { Review } from '@/lib/types';
 
 const reviewSchema = z.object({
   rating: z.number().min(1, "Please select a rating"),
   text: z.string().min(10, "Review must be at least 10 characters long."),
 });
 
-export function AddReviewForm({ productId }: { productId: string }) {
+interface AddReviewFormProps {
+    productId: string;
+    onReviewAdded: (newReview: Review) => void;
+}
+
+export function AddReviewForm({ productId, onReviewAdded }: AddReviewFormProps) {
     const { user, loading } = useAuth();
     const { toast } = useToast();
     const [showForm, setShowForm] = useState(false);
@@ -39,13 +46,14 @@ export function AddReviewForm({ productId }: { productId: string }) {
         }
         setIsSubmitting(true);
         try {
-            await addReview(productId, {
+            const newReview = await addReview(productId, {
                 rating: values.rating,
                 text: values.text,
                 author: user.displayName || user.email || 'Anonymous',
                 userId: user.uid,
             });
 
+            onReviewAdded(newReview);
             toast({
                 title: "Review Submitted!",
                 description: "Thank you for your feedback. Your review has been added.",

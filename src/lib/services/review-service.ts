@@ -6,7 +6,7 @@ import type { Review } from '@/lib/types';
 import { revalidatePath } from 'next/cache';
 import { unstable_cache as cache } from 'next/cache';
 
-type NewReview = Omit<Review, 'id' | 'date' | 'productId'>;
+type NewReviewData = Omit<Review, 'id' | 'date' | 'productId'>;
 
 export const getReviewsByProductId = cache(async (productId: string): Promise<Review[]> => {
   try {
@@ -34,10 +34,12 @@ export const getReviewsByProductId = cache(async (productId: string): Promise<Re
   }
 }, ['reviews-by-product-id'], { revalidate: 60 });
 
-export async function addReview(productId: string, reviewData: NewReview): Promise<string> {
+export async function addReview(productId: string, reviewData: NewReviewData): Promise<Review> {
     try {
         const productRef = doc(db, 'products', productId);
         const newReviewRef = doc(collection(db, 'reviews')); // Create a ref with a new ID
+
+        let newReview: Review | null = null;
 
         await runTransaction(db, async (transaction) => {
             const productDoc = await transaction.get(productRef);
@@ -45,13 +47,21 @@ export async function addReview(productId: string, reviewData: NewReview): Promi
                 throw new Error("Product not found!");
             }
 
+            const now = Timestamp.now();
             // Create the new review
-            const newReview = {
+            const reviewToSave = {
                 ...reviewData,
                 productId: productId,
-                date: Timestamp.now(),
+                date: now,
             };
-            transaction.set(newReviewRef, newReview);
+            transaction.set(newReviewRef, reviewToSave);
+
+             newReview = {
+                ...reviewToSave,
+                id: newReviewRef.id,
+                date: now.toDate().toISOString()
+             } as Review;
+
 
             // Update the product's aggregate review data
             const productData = productDoc.data();
@@ -65,10 +75,14 @@ export async function addReview(productId: string, reviewData: NewReview): Promi
             });
         });
 
+        if (!newReview) {
+            throw new Error("Review could not be created.");
+        }
+
         // Revalidate the product page path to show the new review
         revalidatePath(`/products/${productId}`);
 
-        return newReviewRef.id;
+        return newReview;
 
     } catch (error) {
         console.error(`Error adding review to product ${productId}:`, error);
