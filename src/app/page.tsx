@@ -21,17 +21,19 @@ export default async function HomePage() {
   return (
     <div className="space-y-16 md:space-y-24">
       {/* Hero Section */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-        <HeroCarousel heroImages={settings.heroImages} delay={settings.heroCarouselDelay} />
-        <div className="mt-8 flex justify-center">
-            <Link href="/offers" className="group text-lg font-semibold text-foreground/80 hover:text-primary transition-colors relative pb-2 border-b border-foreground/20 after:content-[''] after:absolute after:bottom-[-1px] after:start-1/2 after:-translate-x-1/2 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:origin-center after:transition-transform after:duration-300">
-                <span className="flex items-center gap-2">
-                    Shop All Offers
-                    <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
-                </span>
-            </Link>
+      <section className="w-full pt-8">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <HeroCarousel heroImages={settings.heroImages} delay={settings.heroCarouselDelay} />
+          <div className="mt-8 flex justify-center">
+              <Link href="/offers" className="group text-lg font-semibold text-foreground/80 hover:text-primary transition-colors relative pb-2 border-b border-foreground/20 after:content-[''] after:absolute after:bottom-[-1px] after:start-1/2 after:-translate-x-1/2 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:origin-center after:transition-transform after:duration-300">
+                  <span className="flex items-center gap-2">
+                      Shop All Offers
+                      <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+                  </span>
+              </Link>
+          </div>
         </div>
-      </div>
+      </section>
 
       {/* Featured Products Section */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
