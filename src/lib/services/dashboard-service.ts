@@ -1,10 +1,11 @@
+
 'use server';
 
 import { db } from '@/lib/firebase';
 import { collection, getDocs, query, orderBy, limit, getCountFromServer } from 'firebase/firestore';
 import type { Order } from '@/lib/types';
 import { getAllOrders } from './order-service';
-import { getAllUsers } from './user-service';
+import { getTotalUsersCount } from './user-service';
 import { unstable_cache as cache } from 'next/cache';
 
 export const getDashboardStats = cache(async () => {
@@ -12,15 +13,14 @@ export const getDashboardStats = cache(async () => {
         const productsCollection = collection(db, 'products');
         const productsCountPromise = getCountFromServer(productsCollection);
         const ordersPromise = getAllOrders();
-        const usersPromise = getAllUsers();
+        const usersCountPromise = getTotalUsersCount();
 
-        const [productsCountSnapshot, orders, users] = await Promise.all([
+        const [productsCountSnapshot, orders, totalUsers] = await Promise.all([
             productsCountPromise,
             ordersPromise,
-            usersPromise,
+            usersCountPromise,
         ]);
-
-        const totalUsers = users.length;
+        
         const totalProducts = productsCountSnapshot.data().count;
 
         const totalRevenue = orders

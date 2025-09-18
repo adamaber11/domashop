@@ -2,7 +2,7 @@
 'use server';
 
 import { db } from '@/lib/firebase';
-import { collection, getDocs, doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { collection, getDocs, doc, getDoc, updateDoc, deleteDoc, getCountFromServer } from 'firebase/firestore';
 import type { SiteUser, ShippingAddress } from '@/lib/types';
 import { revalidatePath } from 'next/cache';
 import { unstable_cache as cache } from 'next/cache';
@@ -72,7 +72,18 @@ export const getAllUsers = cache(async (): Promise<SiteUser[]> => {
     console.error('Error fetching all users:', error);
     throw new Error('Failed to fetch users.');
   }
-}, ['all-users'], { revalidate: 60 });
+}, ['all-users-for-admin-display'], { revalidate: 60 });
+
+export const getTotalUsersCount = cache(async (): Promise<number> => {
+    try {
+        const usersCollection = collection(db, 'users');
+        const snapshot = await getCountFromServer(usersCollection);
+        return snapshot.data().count;
+    } catch (error) {
+        console.error('Error fetching total users count:', error);
+        throw new Error('Failed to fetch user count.');
+    }
+}, ['total-users-count'], { revalidate: 60 });
 
 
 export async function deleteUser(uid: string): Promise<void> {
