@@ -25,7 +25,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
            <ProductReviews productId={product.id} />
         </div>
 
-        <div>
+        <div className="mt-8 md:mt-0">
             <h2 className="font-headline text-2xl md:text-3xl font-bold mb-8">You Might Also Like</h2>
             <PersonalizedRecommendations currentProductId={product.id} />
         </div>

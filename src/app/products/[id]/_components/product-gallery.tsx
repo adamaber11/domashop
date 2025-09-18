@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { Card } from '@/components/ui/card';
+import ReactImageMagnify from 'react-image-magnify';
 
 interface ProductGalleryProps {
   imageUrls: string[];
@@ -19,21 +20,28 @@ export function ProductGallery({ imageUrls, imageHint }: ProductGalleryProps) {
 
   return (
     <div className="space-y-4">
-      <Card className="overflow-hidden">
-        <div className="relative aspect-square w-full">
-            {selectedImage && (
-                <Image
-                    src={selectedImage}
-                    alt={imageHint}
-                    fill
-                    className="object-cover"
-                    data-ai-hint={imageHint}
-                    sizes="(max-width: 768px) 90vw, 45vw"
-                    priority
-                />
-            )}
-        </div>
+       <Card className="overflow-hidden w-full aspect-square relative">
+         <ReactImageMagnify {...{
+            smallImage: {
+                alt: imageHint,
+                isFluidWidth: true,
+                src: selectedImage
+            },
+            largeImage: {
+                src: selectedImage,
+                width: 1200,
+                height: 1200
+            },
+            enlargedImageContainerDimensions: {
+                width: '120%',
+                height: '100%'
+            },
+            enlargedImageContainerClassName: 'z-20',
+            enlargedImageClassName: 'object-cover',
+            imageClassName: 'object-cover w-full h-full',
+        }} />
       </Card>
+      
       {imageUrls.length > 1 && (
         <div className="grid grid-cols-4 gap-4">
           {imageUrls.map((url, index) => (
