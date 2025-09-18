@@ -3,7 +3,7 @@
 
 import { HeroCarousel } from "@/components/hero-carousel";
 import { ProductCard } from "@/components/product-card";
-import { getFeaturedProducts, getAllProducts } from "@/lib/services/product-service";
+import { getFeaturedProducts } from "@/lib/services/product-service";
 import { getSiteSettings } from "@/lib/services/settings-service";
 import { ArrowRight, ShoppingBag } from "lucide-react";
 import Link from "next/link";
@@ -12,11 +12,10 @@ import { Button } from "@/components/ui/button";
 
 export default async function HomePage() {
   const featuredProducts = await getFeaturedProducts(8);
-  const allProducts = await getAllProducts();
   const settings = await getSiteSettings();
 
-  // Get 3 random products for the new section
-  const randomProducts = allProducts.sort(() => 0.5 - Math.random()).slice(0, 3);
+  // Get 3 random products from the featured list for efficiency
+  const randomProducts = [...featuredProducts].sort(() => 0.5 - Math.random()).slice(0, 3);
 
   return (
     <div className="space-y-16 md:space-y-24">
