@@ -22,8 +22,10 @@ export default async function HomePage() {
     <div className="space-y-16 md:space-y-24">
       {/* Hero Section */}
       <section className="w-full pt-8">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-[98%] mx-auto">
           <HeroCarousel heroImages={settings.heroImages} delay={settings.heroCarouselDelay} />
+        </div>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mt-8 flex justify-center">
               <Link href="/offers" className="group text-lg font-semibold text-foreground/80 hover:text-primary transition-colors relative pb-2 border-b border-foreground/20 after:content-[''] after:absolute after:bottom-[-1px] after:start-1/2 after:-translate-x-1/2 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:origin-center after:transition-transform after:duration-300">
                   <span className="flex items-center gap-2">
