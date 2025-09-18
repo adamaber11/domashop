@@ -8,8 +8,8 @@ import { Footer } from "@/components/footer";
 import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from "@/context/auth-context";
 import { CartProvider } from "@/context/cart-context";
-import { AdminNavbar } from "./admin/_components/admin-navbar";
 import { CurrencyProvider } from "@/context/currency-context";
+import { getSiteSettings } from "@/lib/services/settings-service";
 
 
 const ptSans = PT_Sans({
@@ -25,10 +25,15 @@ const playfairDisplay = Playfair_Display({
 });
 
 
-export const metadata: Metadata = {
-  title: "Doma Online Shop",
-  description: "A modern e-commerce experience.",
-  keywords: [
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+  const title = `${settings.logoTextPart1}${settings.logoTextPart2}${settings.logoTextPart3} Online Shop`;
+  const description = settings.welcomeSubheading;
+
+  return {
+    title: title,
+    description: description,
+    keywords: [
     "Online Shop", "Doma Store", "eCommerce Egypt", "Buy Online", "Handmade Products", 
     "Electronics Online", "Fashion Online", "Home Decor", "Accessories", "Gifts Online", 
     "Kitchen Tools", "Mobile Phones", "Laptops Online", "Beauty Products", "Health & Care", 
@@ -36,8 +41,9 @@ export const metadata: Metadata = {
     "منتجات هاند ميد", "اكسسوارات", "ديكور المنزل", "أجهزة إلكترونية", "ملابس أونلاين", 
     "مستحضرات تجميل", "منتجات العناية بالصحة", "أدوات المطبخ", "هواتف محمولة", "لاب توب", 
     "ألعاب أطفال", "معدات رياضية", "هدايا"
-  ],
-};
+    ]
+  }
+}
 
 export default function RootLayout({
   children,
@@ -56,7 +62,7 @@ export default function RootLayout({
               <Toaster />
               <Header />
               <NavigationBar />
-              <main>{children}</main>
+              <main className="flex-grow">{children}</main>
               <Footer />
             </CartProvider>
           </CurrencyProvider>

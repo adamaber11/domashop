@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -9,14 +10,13 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/co
 import { CartSheetContent } from './cart-sheet';
 import { useEffect, useState } from 'react';
 import { searchProducts } from '@/lib/services/product-service';
-import type { Product } from '@/lib/types';
+import type { Product, SiteSettings } from '@/lib/types';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
 import Image from 'next/image';
-import { useIsMobile } from '@/hooks/use-mobile';
 import {
   Dialog,
   DialogContent,
@@ -24,25 +24,27 @@ import {
 } from "@/components/ui/dialog";
 import { MobileNav } from './mobile-nav';
 import { getSiteSettings } from '@/lib/services/settings-service';
-import type { SiteSettings } from '@/lib/types';
-import { cn } from '@/lib/utils';
 import { useCurrency } from '@/context/currency-context';
 import { formatPrice } from '@/lib/utils';
+import { Skeleton } from './ui/skeleton';
 
 
 export function Header() {
   const { itemCount } = useCart();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Product[]>([]);
-  const isMobile = useIsMobile();
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const [settings, setSettings] = useState<SiteSettings | null>(null);
+  const [loadingSettings, setLoadingSettings] = useState(true);
   const { selectedCurrency } = useCurrency();
 
   useEffect(() => {
-    getSiteSettings().then(setSettings);
+    getSiteSettings().then(data => {
+      setSettings(data);
+      setLoadingSettings(false);
+    });
   }, []);
 
   const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -115,20 +117,20 @@ export function Header() {
                     </Button>
                     </SheetTrigger>
                     <SheetContent side="left" className="w-full max-w-xs p-0">
-                        <MobileNav onLinkClick={() => setMobileNavOpen(false)} />
+                        <MobileNav settings={settings} onLinkClick={() => setMobileNavOpen(false)} />
                     </SheetContent>
                 </Sheet>
             </div>
             
             <Link href="/" className="flex items-center space-x-2 group transition-transform duration-300 hover:scale-105">
                 <ShoppingCart className="h-8 w-8 text-primary" />
-                <span className="font-extrabold font-headline sm:inline-block text-3xl">
-                    {settings ? (
-                      <>{settings.logoTextPart1}<span className="text-primary">{settings.logoTextPart2}</span>{settings.logoTextPart3}</>
-                    ) : (
-                      <>Do<span className="text-primary">m</span>a</>
-                    )}
-                </span>
+                {loadingSettings ? (
+                  <Skeleton className="h-8 w-32" />
+                ) : (
+                  <span className="font-extrabold font-headline sm:inline-block text-3xl">
+                      {settings?.logoTextPart1}<span className="text-primary">{settings?.logoTextPart2}</span>{settings?.logoTextPart3}
+                  </span>
+                )}
             </Link>
         </div>
 

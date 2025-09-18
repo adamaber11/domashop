@@ -28,6 +28,7 @@ export function ProductGallery({ imageUrls, imageHint }: ProductGalleryProps) {
                     fill
                     className="object-cover"
                     data-ai-hint={imageHint}
+                    sizes="(max-width: 768px) 90vw, 45vw"
                     priority
                 />
             )}

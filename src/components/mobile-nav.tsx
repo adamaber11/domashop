@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -17,25 +18,19 @@ import { ScrollArea } from './ui/scroll-area';
 import { useAuth } from '@/context/auth-context';
 import { Skeleton } from './ui/skeleton';
 import { useCart } from '@/context/cart-context';
-import { useState, useEffect } from 'react';
-import { getSiteSettings } from '@/lib/services/settings-service';
 import type { SiteSettings } from '@/lib/types';
 import { CurrencySelector } from './currency-selector';
 import { generateColorFromString } from '@/lib/utils';
 
 
 interface MobileNavProps {
+    settings: SiteSettings | null;
     onLinkClick?: () => void;
 }
-export function MobileNav({ onLinkClick }: MobileNavProps) {
+export function MobileNav({ settings, onLinkClick }: MobileNavProps) {
   const pathname = usePathname();
   const { user, loading, signOut: firebaseSignOut } = useAuth();
   const { clearCart } = useCart();
-  const [settings, setSettings] = useState<SiteSettings | null>(null);
-
-  useEffect(() => {
-    getSiteSettings().then(setSettings);
-  }, []);
 
   const handleLinkClick = (href: string) => {
     if (pathname === href) {
@@ -61,7 +56,7 @@ export function MobileNav({ onLinkClick }: MobileNavProps) {
                 {settings ? (
                   <>{settings.logoTextPart1}<span className="text-primary">{settings.logoTextPart2}</span>{settings.logoTextPart3}</>
                 ) : (
-                  <>Do<span className="text-primary">m</span>a</>
+                  <Skeleton className="h-8 w-32" />
                 )}
             </span>
         </Link>
