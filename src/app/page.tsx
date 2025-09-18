@@ -3,43 +3,38 @@
 
 import { HeroCarousel } from "@/components/hero-carousel";
 import { ProductCard } from "@/components/product-card";
-import { getFeaturedProducts } from "@/lib/services/product-service";
+import { getFeaturedProducts, getAllProducts } from "@/lib/services/product-service";
 import { getSiteSettings } from "@/lib/services/settings-service";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ShoppingBag } from "lucide-react";
 import Link from "next/link";
-
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
 
 export default async function HomePage() {
   const featuredProducts = await getFeaturedProducts(8);
+  const allProducts = await getAllProducts();
   const settings = await getSiteSettings();
 
-  return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="py-12 md:py-20 text-center">
-        <h1 className="font-headline text-4xl md:text-6xl font-extrabold tracking-tighter">
-          {settings.welcomeHeadline}
-        </h1>
-        <p className="mt-4 text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
-          {settings.welcomeSubheading}
-        </p>
-      </div>
+  // Get 3 random products for the new section
+  const randomProducts = allProducts.sort(() => 0.5 - Math.random()).slice(0, 3);
 
-      <div className="mb-16">
-        <h2 className="font-headline text-3xl md:text-4xl font-bold mb-8 text-center">
-          Our Best Offers
-        </h2>
+  return (
+    <div className="space-y-16 md:space-y-24">
+      {/* Hero Section */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         <HeroCarousel heroImages={settings.heroImages} delay={settings.heroCarouselDelay} />
         <div className="mt-8 flex justify-center">
             <Link href="/offers" className="group text-lg font-semibold text-foreground/80 hover:text-primary transition-colors relative pb-2 border-b border-foreground/20 after:content-[''] after:absolute after:bottom-[-1px] after:start-1/2 after:-translate-x-1/2 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:origin-center after:transition-transform after:duration-300">
                 <span className="flex items-center gap-2">
-                    Shop Now
+                    Shop All Offers
                     <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
                 </span>
             </Link>
         </div>
       </div>
 
-      <div>
+      {/* Featured Products Section */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="font-headline text-3xl md:text-4xl font-bold mb-8 text-center">
           Featured Products
         </h2>
@@ -55,6 +50,50 @@ export default async function HomePage() {
           </p>
         )}
       </div>
+
+      {/* New Orange Promotion Section */}
+      {randomProducts.length >= 3 && (
+        <div className="w-full bg-primary/10 py-16">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                 <h2 className="font-headline text-3xl md:text-4xl font-bold mb-4 text-primary">
+                    Discover Something New
+                </h2>
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-10">
+                    Handpicked just for you. Click on any product to see more details.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+                    {randomProducts.map(product => {
+                        const imageUrl = product.imageUrls?.[0];
+                        return (
+                            <Link href={`/products/${product.id}`} key={product.id} className="group block">
+                                <div className="relative aspect-square w-full overflow-hidden rounded-lg shadow-lg transition-transform duration-300 group-hover:scale-105">
+                                    {imageUrl && (
+                                        <Image
+                                            src={imageUrl}
+                                            alt={product.name}
+                                            fill
+                                            className="object-cover"
+                                            sizes="(max-width: 768px) 100vw, 33vw"
+                                            data-ai-hint={product.imageHint}
+                                        />
+                                    )}
+                                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center">
+                                       <h3 className="text-white text-xl font-bold font-headline text-center p-4 drop-shadow-md">{product.name}</h3>
+                                    </div>
+                                </div>
+                            </Link>
+                        )
+                    })}
+                </div>
+                 <Button asChild size="lg">
+                    <Link href="/category">
+                        <ShoppingBag className="me-2 h-5 w-5" />
+                        Shop All Categories
+                    </Link>
+                </Button>
+            </div>
+        </div>
+      )}
     </div>
   );
 }
