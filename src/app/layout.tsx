@@ -8,7 +8,6 @@ import { Footer } from "@/components/footer";
 import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from "@/context/auth-context";
 import { CartProvider } from "@/context/cart-context";
-import { PageLoader } from "@/components/page-loader";
 import { AdminNavbar } from "./admin/_components/admin-navbar";
 import { CurrencyProvider } from "@/context/currency-context";
 
@@ -55,7 +54,6 @@ export default function RootLayout({
           <CurrencyProvider>
             <CartProvider>
               <Toaster />
-              <PageLoader />
               <Header />
               <NavigationBar />
               <main>{children}</main>
