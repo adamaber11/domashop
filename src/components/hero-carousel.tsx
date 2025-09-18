@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from "react";
@@ -25,7 +26,7 @@ export function HeroCarousel({ heroImages, delay = 4000 }: HeroCarouselProps) {
 
   if (!heroImages || heroImages.length === 0) {
     return (
-      <Card className="overflow-hidden">
+      <Card className="overflow-hidden rounded-none">
         <CardContent className="p-0">
           <Skeleton className="w-full aspect-[2.4/1]" />
         </CardContent>
@@ -43,7 +44,7 @@ export function HeroCarousel({ heroImages, delay = 4000 }: HeroCarouselProps) {
       <CarouselContent>
         {heroImages.map((item, index) => (
           <CarouselItem key={index}>
-            <Card className="overflow-hidden">
+            <Card className="overflow-hidden rounded-none">
               <CardContent className="p-0 relative aspect-[2.4/1]">
                 <Image
                   src={item.src}
