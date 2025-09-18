@@ -27,6 +27,7 @@ async function seedDatabase() {
       ...productData,
       reviewCount,
       averageRating,
+      stock: productData.stock ?? 15, // Add default stock
     };
     
     batch.set(productRef, finalProductData);

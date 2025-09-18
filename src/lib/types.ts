@@ -25,6 +25,7 @@ export type Product = {
   reviewCount: number;
   averageRating: number;
   isFeatured?: boolean;
+  stock: number;
 };
 
 export type CartItem = {

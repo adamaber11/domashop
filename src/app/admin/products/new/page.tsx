@@ -19,6 +19,7 @@ const productSchema = z.object({
   name: z.string().min(3, 'Product name must be at least 3 characters.'),
   description: z.string().min(10, 'Description must be at least 10 characters.'),
   price: z.coerce.number().positive('Price must be a positive number.'),
+  stock: z.coerce.number().int().min(0, 'Stock cannot be a negative number.'),
   category: z.string().min(1, 'Please select a category.'),
   onSale: z.boolean().default(false),
   salePrice: z.coerce.number().optional(),
@@ -49,6 +50,7 @@ export default function NewProductPage() {
             name: '',
             description: '',
             price: 0,
+            stock: 0,
             category: '',
             onSale: false,
             salePrice: undefined,
@@ -66,6 +68,7 @@ export default function NewProductPage() {
                 name: values.name,
                 description: values.description,
                 price: values.price,
+                stock: values.stock,
                 category: values.category,
                 onSale: values.onSale,
                 salePrice: values.salePrice,
@@ -110,19 +113,24 @@ export default function NewProductPage() {
                         <FormField control={form.control} name="price" render={({ field }) => (
                             <FormItem><FormLabel>Price</FormLabel><FormControl><Input type="number" step="0.01" {...field} /></FormControl><FormMessage /></FormItem>
                         )} />
-                        <FormField control={form.control} name="category" render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Category</FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                    <FormControl><SelectTrigger><SelectValue placeholder="Select a category" /></SelectTrigger></FormControl>
-                                    <SelectContent>
-                                        {categories.filter(c => c !== "All").map(cat => <SelectItem key={cat} value={cat}>{cat}</SelectItem>)}
-                                    </SelectContent>
-                                </Select>
-                                <FormMessage />
-                            </FormItem>
+                        <FormField control={form.control} name="stock" render={({ field }) => (
+                            <FormItem><FormLabel>Stock Quantity</FormLabel><FormControl><Input type="number" step="1" {...field} /></FormControl><FormMessage /></FormItem>
                         )} />
                     </div>
+
+                     <FormField control={form.control} name="category" render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Category</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl><SelectTrigger><SelectValue placeholder="Select a category" /></SelectTrigger></FormControl>
+                                <SelectContent>
+                                    {categories.filter(c => c !== "All").map(cat => <SelectItem key={cat} value={cat}>{cat}</SelectItem>)}
+                                </SelectContent>
+                            </Select>
+                            <FormMessage />
+                        </FormItem>
+                    )} />
+
 
                     <div className="space-y-4">
                         <FormField control={form.control} name="onSale" render={({ field }) => (

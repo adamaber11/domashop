@@ -23,6 +23,7 @@ export const getProductById = cache(async (id: string): Promise<Product | null> 
       productData.salePrice = productData.salePrice ?? undefined;
       productData.reviewCount = productData.reviewCount ?? 0;
       productData.averageRating = productData.averageRating ?? 0;
+      productData.stock = productData.stock ?? 0;
       
       return productData;
     } else {
@@ -119,6 +120,7 @@ export async function addProduct(productData: Omit<Product, 'id' | 'reviewCount'
       ...productData,
       reviewCount: 0,
       averageRating: 0,
+      stock: productData.stock ?? 0,
       isFeatured: productData.isFeatured || false,
     });
     return docRef.id;

@@ -12,6 +12,16 @@ interface ProductDetailsProps {
   product: Product;
 }
 
+const StockBadge = ({ stock }: { stock: number}) => {
+  if (stock === 0) {
+    return <Badge variant="destructive">Out of Stock</Badge>
+  }
+  if (stock <= 5) {
+     return <Badge variant="secondary">Low Stock ({stock} left)</Badge>
+  }
+  return <Badge>In Stock</Badge>
+}
+
 export function ProductDetails({ product }: ProductDetailsProps) {
   const { selectedCurrency } = useCurrency();
 
@@ -25,7 +35,10 @@ export function ProductDetails({ product }: ProductDetailsProps) {
       </div>
 
       <div className="space-y-6">
-        <h1 className="font-headline text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight">{product.name}</h1>
+        <div className="space-y-2">
+          <StockBadge stock={product.stock} />
+          <h1 className="font-headline text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight">{product.name}</h1>
+        </div>
 
         <div className="flex items-center gap-2">
           <StarRating rating={product.averageRating} />

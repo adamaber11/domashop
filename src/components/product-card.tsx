@@ -29,6 +29,7 @@ export function ProductCard({ product }: ProductCardProps) {
   const router = useRouter();
   const { toast } = useToast();
   const { selectedCurrency } = useCurrency();
+  const isOutOfStock = product.stock <= 0;
 
   const handleAddToCartClick = (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent navigating to product page
@@ -62,8 +63,13 @@ export function ProductCard({ product }: ProductCardProps) {
                 data-ai-hint={product.imageHint}
               />
             )}
+            {isOutOfStock && (
+              <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                  <Badge variant="destructive">Out of Stock</Badge>
+              </div>
+            )}
           </Link>
-          {product.onSale && (
+          {product.onSale && !isOutOfStock && (
             <Badge variant="destructive" className="absolute top-2 end-2">Sale</Badge>
           )}
         </div>
@@ -97,7 +103,7 @@ export function ProductCard({ product }: ProductCardProps) {
                 <span className="sr-only">View Product</span>
               </Link>
             </Button>
-            <Button variant="outline" size="icon" onClick={handleAddToCartClick} disabled={loading}>
+            <Button variant="outline" size="icon" onClick={handleAddToCartClick} disabled={loading || isOutOfStock}>
               <ShoppingBag className="h-5 w-5" />
               <span className="sr-only">Add to Cart</span>
             </Button>
