@@ -11,7 +11,7 @@ export default async function OffersPage() {
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="text-center mb-12">
         <h1 className="font-headline text-4xl md:text-5xl font-bold tracking-tight">
-          Special Offers (العروض)
+          Offers (العروض)
         </h1>
         <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
           Don't miss out! Explore our exclusive deals and save on your favorite products.

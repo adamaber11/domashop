@@ -40,6 +40,9 @@ export function NavigationBar() {
     await firebaseSignOut();
     clearCart();
   };
+
+  const hierarchicalCategories = categories.filter(c => c.subcategories.length > 0);
+  const specialCategories = categories.filter(c => c.subcategories.length === 0 && c.parentId === null);
   
   return (
     <nav className="bg-background border-b sticky top-20 z-40 hidden md:block">
@@ -66,11 +69,13 @@ export function NavigationBar() {
                    <Link href="/category">All Categories</Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                      <Link href="/offers">Offers (العروض)</Link>
+                {specialCategories.map((cat) => (
+                  <DropdownMenuItem key={cat.id} asChild>
+                    <Link href={`/${cat.slug}`}>{cat.name}</Link>
                   </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                {categories.map((mainCategory) => (
+                ))}
+                {specialCategories.length > 0 && <DropdownMenuSeparator />}
+                {hierarchicalCategories.map((mainCategory) => (
                   <DropdownMenuSub key={mainCategory.id}>
                     <DropdownMenuSubTrigger>
                       <span>{mainCategory.name}</span>

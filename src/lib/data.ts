@@ -6,7 +6,7 @@ export const specialCategories = [
     { name: "Offers (العروض)", slug: "offers" },
 ];
 export const topLevelCategories: string[] = [];
-export const categories: string[] = ["All"];
+export const categories: string[] = ["All", "Offers (العروض)", "New Arrivals (المنتجات الجديدة)", "Sale (الخصومات)"];
 
 
 // This is mock data for seeding the database.
@@ -235,6 +235,10 @@ export const initialCategories = [
       { name: "Yoga & Wellness (منتجات يوغا واسترخاء)", slug: "yoga-wellness" },
     ],
   },
+  // Special categories that don't have sub-menus
+  { name: "Offers (العروض)", slug: "offers", subcategories: [] },
+  { name: "New Arrivals (المنتجات الجديدة)", slug: "new-arrivals", subcategories: [] },
+  { name: "Sale (الخصومات)", slug: "sale", subcategories: [] },
 ];
 
     

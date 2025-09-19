@@ -50,6 +50,9 @@ export function MobileNav({ settings, onLinkClick }: MobileNavProps) {
   const navLinkClasses = "flex items-center w-full p-4 text-lg font-semibold";
   const activeLinkClasses = "bg-accent text-accent-foreground";
 
+  const hierarchicalCategories = categories.filter(c => c.subcategories.length > 0);
+  const specialCategories = categories.filter(c => c.subcategories.length === 0 && c.parentId === null);
+
   return (
     <div className="flex flex-col h-full">
       <div className="p-4 border-b">
@@ -84,15 +87,19 @@ export function MobileNav({ settings, onLinkClick }: MobileNavProps) {
                         <Link href="/category" onClick={() => { handleLinkClick('/category'); onLinkClick?.(); }} className={cn("block py-3 ps-8 text-base", pathname === '/category' && "font-bold text-primary")}>
                             All Categories
                         </Link>
-                         <Separator className="bg-border" />
-                         <Link href="/offers" onClick={() => { handleLinkClick('/offers'); onLinkClick?.(); }} className={cn("block py-3 ps-8 text-base", pathname === '/offers' && "font-bold text-primary")}>
-                           Offers (العروض)
-                         </Link>
+                        {specialCategories.map(cat => (
+                            <div key={cat.id}>
+                                <Separator className="bg-border" />
+                                <Link href={`/${cat.slug}`} onClick={() => { handleLinkClick(`/${cat.slug}`); onLinkClick?.(); }} className={cn("block py-3 ps-8 text-base", pathname === `/${cat.slug}` && "font-bold text-primary")}>
+                                {cat.name}
+                                </Link>
+                            </div>
+                        ))}
                         <Separator className="bg-border" />
                         {categoriesLoading ? (
                           <div className="p-4 space-y-2"><Skeleton className="h-6 w-3/4" /><Skeleton className="h-6 w-3/4" /></div>
                         ) : (
-                          categories.map((mainCat) => (
+                          hierarchicalCategories.map((mainCat) => (
                              <Accordion key={mainCat.id} type="single" collapsible className="w-full">
                                 <AccordionItem value={mainCat.slug} className="border-b-0">
                                      <AccordionTrigger className="ps-8 pe-4 py-3 text-base hover:no-underline">
