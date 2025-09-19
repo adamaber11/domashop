@@ -2,19 +2,14 @@ import type { Product } from './types';
 
 export const categories = [
   "All",
-  "Fashion & Clothing",
-  "Electronics",
-  "Home & Kitchen",
-  "Furniture",
-  "Beauty & Personal Care",
-  "Toys & Kids",
-  "Food & Beverages",
-  "Sports & Fitness",
-  "Books & Stationery",
-  "Pet Supplies",
-  "Accessories & Watches",
-  "Digital Products",
-  "Handmade"
+  "Fashion (الأزياء)",
+  "Beauty (الجمال)",
+  "Accessories (إكسسوارات)",
+  "Lifestyle (ستايل حياتي)",
+  "Health & Fitness (الصحة والرشاقة)",
+  "Offers (العروض)",
+  "New Arrivals (المنتجات الجديدة)",
+  "Sale (الخصومات)"
 ];
 
 export const products: Omit<Product, 'reviewCount' | 'averageRating'>[] = [
