@@ -12,7 +12,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { LogIn, UserPlus, ShoppingCart, LogOut, LayoutDashboard } from 'lucide-react';
-import { categories } from '@/lib/data';
+import { categoriesHierarchy, topLevelCategories } from '@/lib/data';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from './ui/scroll-area';
 import { useAuth } from '@/context/auth-context';
@@ -43,6 +43,9 @@ export function MobileNav({ settings, onLinkClick }: MobileNavProps) {
     clearCart();
     onLinkClick?.();
   };
+  
+  const getCategorySlug = (name: string) => name.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-').replace(/\(|\)/g, '');
+
 
   const navLinkClasses = "flex items-center w-full p-4 text-lg font-semibold";
   const activeLinkClasses = "bg-accent text-accent-foreground";
@@ -72,30 +75,47 @@ export function MobileNav({ settings, onLinkClick }: MobileNavProps) {
                   Home
                 </Link>
                 
-                <Link href="/offers" onClick={() => { handleLinkClick('/offers'); onLinkClick?.(); }} className={cn(navLinkClasses, pathname === '/offers' && activeLinkClasses)}>
-                  Offers
-                </Link>
-
                 <Accordion type="single" collapsible className="w-full">
-                  <AccordionItem value="categories" className="border-b-0">
+                  <AccordionItem value="categories" className="border-b">
                     <AccordionTrigger className={cn(navLinkClasses, "py-0 hover:no-underline", pathname.startsWith('/category') && activeLinkClasses)}>
                       Categories
                     </AccordionTrigger>
                     <AccordionContent className="bg-muted/50">
-                      <div className="ps-8 divide-y">
-                        {categories.map((category) => {
-                          const categorySlug = category.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-');
-                          const href = category === 'All' ? '/category' : `/category/${categorySlug}`;
-                          return (
-                            <Link key={category} href={href} onClick={() => { handleLinkClick(href); onLinkClick?.(); }} className={cn("block py-3 text-base", pathname === href && "font-bold text-primary")}>
-                              {category}
-                            </Link>
-                          );
-                        })}
-                      </div>
+                        <Link href="/category" onClick={() => { handleLinkClick('/category'); onLinkClick?.(); }} className={cn("block py-3 ps-8 text-base", pathname === '/category' && "font-bold text-primary")}>
+                            All Categories
+                        </Link>
+                        {categoriesHierarchy.map((mainCat) => (
+                             <Accordion key={mainCat.slug} type="single" collapsible className="w-full">
+                                <AccordionItem value={mainCat.slug} className="border-b-0">
+                                     <AccordionTrigger className="ps-8 pe-4 py-3 text-base hover:no-underline">
+                                        {mainCat.name}
+                                    </AccordionTrigger>
+                                    <AccordionContent className="bg-background">
+                                        <div className="ps-12 divide-y">
+                                            {mainCat.subcategories.map((subCat) => (
+                                                <Link key={subCat.slug} href={`/category/${subCat.slug}`} onClick={() => { handleLinkClick(`/category/${subCat.slug}`); onLinkClick?.(); }} className={cn("block py-3 text-base", pathname === `/category/${subCat.slug}` && "font-bold text-primary")}>
+                                                    {subCat.name}
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    </AccordionContent>
+                                </AccordionItem>
+                            </Accordion>
+                        ))}
                     </AccordionContent>
                   </AccordionItem>
                 </Accordion>
+
+                {topLevelCategories.map(catName => (
+                     <Link 
+                        key={catName} 
+                        href={`/category/${getCategorySlug(catName)}`} 
+                        onClick={() => { handleLinkClick(`/category/${getCategorySlug(catName)}`); onLinkClick?.(); }} 
+                        className={cn(navLinkClasses, pathname === `/category/${getCategorySlug(catName)}` && activeLinkClasses)}>
+                        {catName}
+                    </Link>
+                ))}
+
                 
                 <Link href="/about" onClick={() => { handleLinkClick('/about'); onLinkClick?.(); }} className={cn(navLinkClasses, pathname === '/about' && activeLinkClasses)}>
                   About

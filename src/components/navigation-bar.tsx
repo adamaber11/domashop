@@ -9,11 +9,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuPortal,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { ChevronDown, LogIn, UserPlus, LogOut, User as UserIcon, LayoutDashboard } from 'lucide-react';
+import { ChevronDown, LogIn, UserPlus, LogOut, User as UserIcon, LayoutDashboard, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { categories } from '@/lib/data';
+import { categoriesHierarchy, topLevelCategories } from '@/lib/data';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { useAuth } from '@/context/auth-context';
 import { Skeleton } from './ui/skeleton';
@@ -35,6 +39,9 @@ export function NavigationBar() {
     await firebaseSignOut();
     clearCart();
   };
+  
+  const getCategorySlug = (name: string) => name.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-').replace(/\(|\)/g, '');
+
 
   return (
     <nav className="bg-background border-b sticky top-20 z-40 hidden md:block">
@@ -45,11 +52,7 @@ export function NavigationBar() {
               Home
             </Link>
 
-            <Link href="/offers" className={cn(navLinkClasses, pathname === '/offers' ? activeClasses : inactiveClasses)}>
-              Offers
-            </Link>
-            
-            <DropdownMenu>
+             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <div tabIndex={0} role="button" aria-haspopup="true" aria-expanded="false" className={cn(
                   navLinkClasses,
@@ -60,17 +63,44 @@ export function NavigationBar() {
                   <ChevronDown className="h-4 w-4" />
                 </div>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {categories.map((category) => {
-                  const categorySlug = category.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-');
-                  return (
-                    <DropdownMenuItem key={category} asChild>
-                      <Link href={category === 'All' ? '/category' : `/category/${categorySlug}`}>{category}</Link>
-                    </DropdownMenuItem>
-                  );
-                })}
+              <DropdownMenuContent align="start" className="w-56">
+                <DropdownMenuItem asChild>
+                   <Link href="/category">All Categories</Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                {categoriesHierarchy.map((mainCategory) => (
+                  <DropdownMenuSub key={mainCategory.slug}>
+                    <DropdownMenuSubTrigger>
+                      <span>{mainCategory.name}</span>
+                      <ChevronRight className="h-4 w-4 ml-auto" />
+                    </DropdownMenuSubTrigger>
+                    <DropdownMenuPortal>
+                        <DropdownMenuSubContent>
+                             <DropdownMenuItem asChild>
+                                <Link href={`/category/${mainCategory.slug}`}>All {mainCategory.name}</Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            {mainCategory.subcategories.map((subCategory) => (
+                                <DropdownMenuItem key={subCategory.slug} asChild>
+                                    <Link href={`/category/${subCategory.slug}`}>{subCategory.name}</Link>
+                                </DropdownMenuItem>
+                            ))}
+                        </DropdownMenuSubContent>
+                    </DropdownMenuPortal>
+                  </DropdownMenuSub>
+                ))}
               </DropdownMenuContent>
             </DropdownMenu>
+
+            {topLevelCategories.map(catName => (
+                 <Link 
+                    key={catName} 
+                    href={`/category/${getCategorySlug(catName)}`} 
+                    className={cn(navLinkClasses, pathname === `/category/${getCategorySlug(catName)}` ? activeClasses : inactiveClasses)}>
+                  {catName}
+                </Link>
+            ))}
+
 
             <Link href="/about" className={cn(navLinkClasses, pathname === '/about' ? activeClasses : inactiveClasses)}>
               About
