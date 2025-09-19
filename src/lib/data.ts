@@ -1,74 +1,15 @@
 import type { Product } from './types';
 
-export const categoriesHierarchy = [
-  {
-    name: "Fashion (الأزياء)",
-    slug: "fashion",
-    subcategories: [
-      { name: "Dresses (فساتين)", slug: "dresses" },
-      { name: "Tops & T-Shirts (تيشرتات وبلايز)", slug: "tops-t-shirts" },
-      { name: "Pants & Skirts (بناطيل وجيبات)", slug: "pants-skirts" },
-      { name: "Hijab & Modest Wear (ملابس محجبات)", slug: "hijab-modest-wear" },
-      { name: "Shoes (أحذية)", slug: "shoes" },
-    ],
-  },
-  {
-    name: "Beauty (الجمال)",
-    slug: "beauty",
-    subcategories: [
-      { name: "Makeup (مكياج)", slug: "makeup" },
-      { name: "Skincare (عناية بالبشرة)", slug: "skincare" },
-      { name: "Haircare (العناية بالشعر)", slug: "haircare" },
-      { name: "Perfumes (عطور)", slug: "perfumes" },
-    ],
-  },
-  {
-    name: "Accessories (إكسسوارات)",
-    slug: "accessories",
-    subcategories: [
-      { name: "Bags (شنط)", slug: "bags" },
-      { name: "Jewelry (إكسسوارات وحُلي)", slug: "jewelry" },
-      { name: "Sunglasses (نظارات شمسية)", slug: "sunglasses" },
-      { name: "Watches (ساعات)", slug: "watches" },
-    ],
-  },
-  {
-    name: "Lifestyle (ستايل حياتي)",
-    slug: "lifestyle",
-    subcategories: [
-      { name: "Home Decor (ديكور بسيط للبنات)", slug: "home-decor" },
-      { name: "Stationery (مستلزمات مكتبية للبنات)", slug: "stationery" },
-      { name: "Tech Gadgets (إكسسوارات موبايل ولابتوب ستايل بناتي)", slug: "tech-gadgets" },
-    ],
-  },
-  {
-    name: "Health & Fitness (الصحة والرشاقة)",
-    slug: "health-fitness",
-    subcategories: [
-      { name: "Sportswear (ملابس رياضية للبنات)", slug: "sportswear" },
-      { name: "Supplements (مكملات غذائية/فيتامينات مخصصة للبنات)", slug: "supplements" },
-      { name: "Yoga & Wellness (منتجات يوغا واسترخاء)", slug: "yoga-wellness" },
-    ],
-  },
-];
-
-
+// DEPRECATED: This will be replaced by data from Firestore fetched via category-service.
+export const categoriesHierarchy = [];
 export const specialCategories = [
     { name: "Offers (العروض)", slug: "offers" },
-    { name: "New Arrivals (المنتجات الجديدة)", slug: "new-arrivals" },
-    { name: "Sale (الخصومات)", slug: "sale" },
 ];
-
-
 export const topLevelCategories: string[] = [];
-
-// This is a flattened list for use in places like the admin product form
-export const categories = [
-  "All",
-  ...categoriesHierarchy.flatMap(c => c.subcategories.map(s => s.name))
-];
+export const categories: string[] = ["All"];
 
 
+// This is mock data for seeding the database.
 export const products: Omit<Product, 'reviewCount' | 'averageRating'>[] = [
   {
     id: 'prod_001',
@@ -243,3 +184,55 @@ export const products: Omit<Product, 'reviewCount' | 'averageRating'>[] = [
     ]
   }
 ].map(p => ({ ...p, reviews: p.reviews || [] }));
+
+export const initialCategories = [
+  {
+    name: "Fashion (الأزياء)",
+    slug: "fashion",
+    subcategories: [
+      { name: "Dresses (فساتين)", slug: "dresses" },
+      { name: "Tops & T-Shirts (تيشرتات وبلايز)", slug: "tops-t-shirts" },
+      { name: "Pants & Skirts (بناطيل وجيبات)", slug: "pants-skirts" },
+      { name: "Hijab & Modest Wear (ملابس محجبات)", slug: "hijab-modest-wear" },
+      { name: "Shoes (أحذية)", slug: "shoes" },
+    ],
+  },
+  {
+    name: "Beauty (الجمال)",
+    slug: "beauty",
+    subcategories: [
+      { name: "Makeup (مكياج)", slug: "makeup" },
+      { name: "Skincare (عناية بالبشرة)", slug: "skincare" },
+      { name: "Haircare (العناية بالشعر)", slug: "haircare" },
+      { name: "Perfumes (عطور)", slug: "perfumes" },
+    ],
+  },
+  {
+    name: "Accessories (إكسسوارات)",
+    slug: "accessories",
+    subcategories: [
+      { name: "Bags (شنط)", slug: "bags" },
+      { name: "Jewelry (إكسسوارات وحُلي)", slug: "jewelry" },
+      { name: "Sunglasses (نظارات شمسية)", slug: "sunglasses" },
+      { name: "Watches (ساعات)", slug: "watches" },
+    ],
+  },
+  {
+    name: "Lifestyle (ستايل حياتي)",
+    slug: "lifestyle",
+    subcategories: [
+      { name: "Home Decor (ديكور بسيط للبنات)", slug: "home-decor" },
+      { name: "Stationery (مستلزمات مكتبية للبنات)", slug: "stationery" },
+      { name: "Tech Gadgets (إكسسوارات موبايل ولابتوب ستايل بناتي)", slug: "tech-gadgets" },
+    ],
+  },
+  {
+    name: "Health & Fitness (الصحة والرشاقة)",
+    slug: "health-fitness",
+    subcategories: [
+      { name: "Sportswear (ملابس رياضية للبنات)", slug: "sportswear" },
+      { name: "Supplements (مكملات غذائية/فيتامينات مخصصة للبنات)", slug: "supplements" },
+      { name: "Yoga & Wellness (منتجات يوغا واسترخاء)", slug: "yoga-wellness" },
+    ],
+  },
+];

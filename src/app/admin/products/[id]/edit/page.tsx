@@ -13,10 +13,10 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
-import { categories } from '@/lib/data';
 import { getProductById, updateProduct } from '@/lib/services/product-service';
 import type { Product } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useCategories } from '@/hooks/use-categories';
 
 const productSchema = z.object({
   name: z.string().min(3, 'Product name must be at least 3 characters.'),
@@ -48,6 +48,8 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
     const { toast } = useToast();
     const [product, setProduct] = useState<Product | null>(null);
     const [loading, setLoading] = useState(true);
+    const { flatCategories, loading: categoriesLoading } = useCategories();
+
 
     const form = useForm<ProductFormValues>({
         resolver: zodResolver(productSchema),
@@ -182,10 +184,14 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
                     <FormField control={form.control} name="category" render={({ field }) => (
                         <FormItem>
                             <FormLabel>Category</FormLabel>
-                            <Select onValueChange={field.onChange} value={field.value}>
-                                <FormControl><SelectTrigger><SelectValue placeholder="Select a category" /></SelectTrigger></FormControl>
+                            <Select onValueChange={field.onChange} value={field.value} disabled={categoriesLoading}>
+                                <FormControl>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder={categoriesLoading ? "Loading..." : "Select a category"} />
+                                    </SelectTrigger>
+                                </FormControl>
                                 <SelectContent>
-                                    {categories.filter(c => c !== "All").map(cat => <SelectItem key={cat} value={cat}>{cat}</SelectItem>)}
+                                    {flatCategories.map(cat => <SelectItem key={cat.id} value={cat.name}>{cat.name}</SelectItem>)}
                                 </SelectContent>
                             </Select>
                             <FormMessage />

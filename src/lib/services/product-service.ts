@@ -48,13 +48,20 @@ export const getAllProducts = cache(async (): Promise<Product[]> => {
 }, ['all-products'], { revalidate: 60 });
 
 
-export const getProductsByCategory = cache(async (category: string): Promise<Product[]> => {
+export const getProductsByCategory = cache(async (categoryNames: string | string[]): Promise<Product[]> => {
   try {
-    const q = query(productsCollection, where('category', '==', category));
+    // Ensure categoryNames is always an array
+    const names = Array.isArray(categoryNames) ? categoryNames : [categoryNames];
+    
+    if (names.length === 0) return [];
+    
+    // Firestore 'in' query supports up to 30 elements.
+    // If more are needed, multiple queries would be required.
+    const q = query(productsCollection, where('category', 'in', names));
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
   } catch (error) {
-    console.error(`Error fetching products for category ${category}:`, error);
+    console.error(`Error fetching products for categories ${categoryNames}:`, error);
     throw new Error('Failed to fetch category products.');
   }
 }, ['products-by-category'], { revalidate: 60 });

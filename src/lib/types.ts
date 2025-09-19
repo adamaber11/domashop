@@ -19,7 +19,7 @@ export type Product = {
   price: number;
   onSale?: boolean;
   salePrice?: number;
-  category: string;
+  category: string; // This will now be the category NAME, not a slug or complex string.
   imageUrls: string[];
   imageHint: string;
   reviewCount: number;
@@ -134,3 +134,12 @@ export type ContactMessage = {
   date: Timestamp;
   isRead: boolean;
 };
+
+
+export interface Category {
+    id: string;
+    name: string;
+    slug: string;
+    parentId: string | null;
+    subcategories: Category[];
+}

@@ -13,7 +13,6 @@ import {
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { LogIn, UserPlus, ShoppingCart, LogOut, LayoutDashboard } from 'lucide-react';
-import { categoriesHierarchy, topLevelCategories, specialCategories } from '@/lib/data';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from './ui/scroll-area';
 import { useAuth } from '@/context/auth-context';
@@ -23,6 +22,7 @@ import type { SiteSettings } from '@/lib/types';
 import { CurrencySelector } from './currency-selector';
 import { generateColorFromString } from '@/lib/utils';
 import { Separator } from './ui/separator';
+import { useCategories } from '@/hooks/use-categories';
 
 
 interface MobileNavProps {
@@ -31,7 +31,8 @@ interface MobileNavProps {
 }
 export function MobileNav({ settings, onLinkClick }: MobileNavProps) {
   const pathname = usePathname();
-  const { user, loading, signOut: firebaseSignOut } = useAuth();
+  const { user, loading: authLoading, signOut: firebaseSignOut } = useAuth();
+  const { categories, loading: categoriesLoading } = useCategories();
   const { clearCart } = useCart();
 
   const handleLinkClick = (href: string) => {
@@ -45,9 +46,6 @@ export function MobileNav({ settings, onLinkClick }: MobileNavProps) {
     clearCart();
     onLinkClick?.();
   };
-  
-  const getCategorySlug = (name: string) => name.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-').replace(/\(|\)/g, '');
-
 
   const navLinkClasses = "flex items-center w-full p-4 text-lg font-semibold";
   const activeLinkClasses = "bg-accent text-accent-foreground";
@@ -87,14 +85,15 @@ export function MobileNav({ settings, onLinkClick }: MobileNavProps) {
                             All Categories
                         </Link>
                          <Separator className="bg-border" />
-                         {specialCategories.map((category) => (
-                            <Link key={category.slug} href={`/${category.slug}`} onClick={() => { handleLinkClick(`/${category.slug}`); onLinkClick?.(); }} className={cn("block py-3 ps-8 text-base", pathname === `/${category.slug}` && "font-bold text-primary")}>
-                                {category.name}
-                            </Link>
-                        ))}
+                         <Link href="/offers" onClick={() => { handleLinkClick('/offers'); onLinkClick?.(); }} className={cn("block py-3 ps-8 text-base", pathname === '/offers' && "font-bold text-primary")}>
+                           Offers (العروض)
+                         </Link>
                         <Separator className="bg-border" />
-                        {categoriesHierarchy.map((mainCat) => (
-                             <Accordion key={mainCat.slug} type="single" collapsible className="w-full">
+                        {categoriesLoading ? (
+                          <div className="p-4 space-y-2"><Skeleton className="h-6 w-3/4" /><Skeleton className="h-6 w-3/4" /></div>
+                        ) : (
+                          categories.map((mainCat) => (
+                             <Accordion key={mainCat.id} type="single" collapsible className="w-full">
                                 <AccordionItem value={mainCat.slug} className="border-b-0">
                                      <AccordionTrigger className="ps-8 pe-4 py-3 text-base hover:no-underline">
                                         {mainCat.name}
@@ -102,7 +101,7 @@ export function MobileNav({ settings, onLinkClick }: MobileNavProps) {
                                     <AccordionContent className="bg-background">
                                         <div className="ps-12 divide-y">
                                             {mainCat.subcategories.map((subCat) => (
-                                                <Link key={subCat.slug} href={`/category/${subCat.slug}`} onClick={() => { handleLinkClick(`/category/${subCat.slug}`); onLinkClick?.(); }} className={cn("block py-3 text-base", pathname === `/category/${subCat.slug}` && "font-bold text-primary")}>
+                                                <Link key={subCat.id} href={`/category/${subCat.slug}`} onClick={() => { handleLinkClick(`/category/${subCat.slug}`); onLinkClick?.(); }} className={cn("block py-3 text-base", pathname === `/category/${subCat.slug}` && "font-bold text-primary")}>
                                                     {subCat.name}
                                                 </Link>
                                             ))}
@@ -110,21 +109,11 @@ export function MobileNav({ settings, onLinkClick }: MobileNavProps) {
                                     </AccordionContent>
                                 </AccordionItem>
                             </Accordion>
-                        ))}
+                          ))
+                        )}
                     </AccordionContent>
                   </AccordionItem>
                 </Accordion>
-
-                {topLevelCategories.map(catName => (
-                     <Link 
-                        key={catName} 
-                        href={`/category/${getCategorySlug(catName)}`} 
-                        onClick={() => { handleLinkClick(`/category/${getCategorySlug(catName)}`); onLinkClick?.(); }} 
-                        className={cn(navLinkClasses, pathname === `/category/${getCategorySlug(catName)}` && activeLinkClasses)}>
-                        {catName}
-                    </Link>
-                ))}
-
                 
                 <Link href="/about" onClick={() => { handleLinkClick('/about'); onLinkClick?.(); }} className={cn(navLinkClasses, pathname === '/about' && activeLinkClasses)}>
                   About
@@ -143,7 +132,7 @@ export function MobileNav({ settings, onLinkClick }: MobileNavProps) {
         </ScrollArea>
 
         <div className="p-4 border-t mt-auto">
-          {loading ? (
+          {authLoading ? (
              <div className="space-y-3">
                 <Skeleton className="h-10 w-full" />
                 <Skeleton className="h-10 w-full" />

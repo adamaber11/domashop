@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Package, Users, LineChart, SlidersHorizontal, ShoppingCart, FileText, MessageSquare } from 'lucide-react';
+import { Home, Package, Users, LineChart, SlidersHorizontal, ShoppingCart, FileText, MessageSquare, FolderTree } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function AdminNavbar() {
@@ -12,6 +12,7 @@ export function AdminNavbar() {
   const navItems = [
     { href: '/admin/dashboard', icon: Home, label: 'Dashboard' },
     { href: '/admin/products', icon: Package, label: 'Products' },
+    { href: '/admin/categories', icon: FolderTree, label: 'Categories' },
     { href: '/admin/orders', icon: ShoppingCart, label: 'Orders' },
     { href: '/admin/users', icon: Users, label: 'Users' },
     { href: '/admin/analytics', icon: LineChart, label: 'Analytics' },

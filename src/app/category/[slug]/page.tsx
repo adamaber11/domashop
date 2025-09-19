@@ -1,31 +1,29 @@
+
 'use server';
-import { categories } from '@/lib/data';
 import { ProductCard } from '@/components/product-card';
 import { notFound } from 'next/navigation';
 import { getProductsByCategory } from '@/lib/services/product-service';
-
-function getCategoryNameFromSlug(slug: string) {
-    const category = categories.find(c => c.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-') === slug);
-    return category || null;
-}
+import { getCategoryBySlug } from '@/lib/services/category-service';
 
 export default async function CategoryPage({ params }: { params: { slug: string } }) {
-  const categoryName = getCategoryNameFromSlug(params.slug);
+  const category = await getCategoryBySlug(params.slug);
   
-  if (!categoryName) {
+  if (!category) {
     notFound();
   }
 
-  const products = await getProductsByCategory(categoryName);
+  // Fetch products that are in this category OR any of its subcategories
+  const categoryNames = [category.name, ...category.subcategories.map(s => s.name)];
+  const products = await getProductsByCategory(categoryNames);
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="text-center mb-12">
         <h1 className="font-headline text-4xl md:text-5xl font-bold tracking-tight">
-          {categoryName}
+          {category.name}
         </h1>
         <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-          Explore our collection of products in the {categoryName} category.
+          Explore our collection of products in the {category.name} category.
         </p>
       </div>
 
