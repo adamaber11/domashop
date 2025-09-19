@@ -16,7 +16,7 @@ import {
   DropdownMenuPortal,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { ChevronDown, LogIn, UserPlus, LogOut, User as UserIcon, LayoutDashboard, ChevronRight } from 'lucide-react';
+import { ChevronDown, LogIn, UserPlus, LogOut, User as UserIcon, LayoutDashboard } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { categoriesHierarchy, topLevelCategories, specialCategories } from '@/lib/data';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
@@ -79,7 +79,6 @@ export function NavigationBar() {
                   <DropdownMenuSub key={mainCategory.slug}>
                     <DropdownMenuSubTrigger>
                       <span>{mainCategory.name}</span>
-                      <ChevronRight className="h-4 w-4 ml-auto" />
                     </DropdownMenuSubTrigger>
                     <DropdownMenuPortal>
                         <DropdownMenuSubContent>
