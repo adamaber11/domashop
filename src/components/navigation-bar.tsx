@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import Link from 'next/link';
@@ -17,7 +18,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { ChevronDown, LogIn, UserPlus, LogOut, User as UserIcon, LayoutDashboard, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { categoriesHierarchy, topLevelCategories } from '@/lib/data';
+import { categoriesHierarchy, topLevelCategories, specialCategories } from '@/lib/data';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { useAuth } from '@/context/auth-context';
 import { Skeleton } from './ui/skeleton';
@@ -57,7 +58,7 @@ export function NavigationBar() {
                 <div tabIndex={0} role="button" aria-haspopup="true" aria-expanded="false" className={cn(
                   navLinkClasses,
                   'flex items-center gap-1 focus:outline-none cursor-pointer',
-                   pathname.startsWith('/category') ? activeClasses : inactiveClasses
+                   pathname.startsWith('/category') || specialCategories.some(sc => pathname.endsWith(sc.slug)) ? activeClasses : inactiveClasses
                 )}>
                   Categories
                   <ChevronDown className="h-4 w-4" />
@@ -67,6 +68,12 @@ export function NavigationBar() {
                 <DropdownMenuItem asChild>
                    <Link href="/category">All Categories</Link>
                 </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                {specialCategories.map((category) => (
+                    <DropdownMenuItem key={category.slug} asChild>
+                        <Link href={`/${category.slug}`}>{category.name}</Link>
+                    </DropdownMenuItem>
+                ))}
                 <DropdownMenuSeparator />
                 {categoriesHierarchy.map((mainCategory) => (
                   <DropdownMenuSub key={mainCategory.slug}>

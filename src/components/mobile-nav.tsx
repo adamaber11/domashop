@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import Link from 'next/link';
@@ -12,7 +13,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { LogIn, UserPlus, ShoppingCart, LogOut, LayoutDashboard } from 'lucide-react';
-import { categoriesHierarchy, topLevelCategories } from '@/lib/data';
+import { categoriesHierarchy, topLevelCategories, specialCategories } from '@/lib/data';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from './ui/scroll-area';
 import { useAuth } from '@/context/auth-context';
@@ -21,6 +22,7 @@ import { useCart } from '@/context/cart-context';
 import type { SiteSettings } from '@/lib/types';
 import { CurrencySelector } from './currency-selector';
 import { generateColorFromString } from '@/lib/utils';
+import { Separator } from './ui/separator';
 
 
 interface MobileNavProps {
@@ -84,6 +86,13 @@ export function MobileNav({ settings, onLinkClick }: MobileNavProps) {
                         <Link href="/category" onClick={() => { handleLinkClick('/category'); onLinkClick?.(); }} className={cn("block py-3 ps-8 text-base", pathname === '/category' && "font-bold text-primary")}>
                             All Categories
                         </Link>
+                         <Separator className="bg-border" />
+                         {specialCategories.map((category) => (
+                            <Link key={category.slug} href={`/${category.slug}`} onClick={() => { handleLinkClick(`/${category.slug}`); onLinkClick?.(); }} className={cn("block py-3 ps-8 text-base", pathname === `/${category.slug}` && "font-bold text-primary")}>
+                                {category.name}
+                            </Link>
+                        ))}
+                        <Separator className="bg-border" />
                         {categoriesHierarchy.map((mainCat) => (
                              <Accordion key={mainCat.slug} type="single" collapsible className="w-full">
                                 <AccordionItem value={mainCat.slug} className="border-b-0">

@@ -52,7 +52,15 @@ export const categoriesHierarchy = [
   },
 ];
 
-export const topLevelCategories = ["Offers (العروض)", "New Arrivals (المنتجات الجديدة)", "Sale (الخصومات)"];
+
+export const specialCategories = [
+    { name: "Offers (العروض)", slug: "offers" },
+    { name: "New Arrivals (المنتجات الجديدة)", slug: "new-arrivals" },
+    { name: "Sale (الخصومات)", slug: "sale" },
+];
+
+
+export const topLevelCategories: string[] = [];
 
 // This is a flattened list for use in places like the admin product form
 export const categories = [
