@@ -28,7 +28,7 @@ export function HeroCarousel({ heroImages, delay = 4000 }: HeroCarouselProps) {
     return (
       <Card className="overflow-hidden rounded-none">
         <CardContent className="p-0">
-          <Skeleton className="w-full aspect-[2.4/1]" />
+          <Skeleton className="w-full aspect-[3/1]" />
         </CardContent>
       </Card>
     )
@@ -45,7 +45,7 @@ export function HeroCarousel({ heroImages, delay = 4000 }: HeroCarouselProps) {
         {heroImages.map((item, index) => (
           <CarouselItem key={index}>
             <Card className="overflow-hidden rounded-none">
-              <CardContent className="p-0 relative aspect-[2.4/1]">
+              <CardContent className="p-0 relative aspect-[3/1]">
                 <Image
                   src={item.src}
                   alt={item.alt}
