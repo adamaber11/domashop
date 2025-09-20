@@ -32,14 +32,9 @@ export function ProductGallery({ imageUrls, imageHint }: ProductGalleryProps) {
                 width: 1200,
                 height: 1200
             },
-            enlargedImageContainerDimensions: {
-                width: '120%',
-                height: '100%'
-            },
-            enlargedImageContainerClassName: 'z-20',
-            enlargedImageClassName: 'object-cover',
-            imageClassName: 'object-cover w-full h-full',
-        }} />
+            lensStyle: { backgroundColor: 'rgba(0,0,0,.6)' },
+            shouldUsePositiveSpaceLens: true,
+         }} />
       </Card>
       
       {imageUrls.length > 1 && (
