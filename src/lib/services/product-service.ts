@@ -5,7 +5,7 @@
 import { db } from '@/lib/firebase';
 import { collection, getDocs, doc, getDoc, query, where, limit, orderBy, addDoc, updateDoc, deleteDoc, writeBatch } from 'firebase/firestore';
 import type { Product } from '@/lib/types';
-import { unstable_cache as cache } from 'next/cache';
+import { unstable_cache as cache, revalidatePath } from 'next/cache';
 
 const productsCollection = collection(db, 'products');
 
@@ -34,7 +34,7 @@ export const getProductById = cache(async (id: string): Promise<Product | null> 
     console.error(`Error fetching product ${id}:`, error);
     throw new Error('Failed to fetch product data.');
   }
-}, ['product-by-id'], { revalidate: 60 });
+}, ['product-by-id', (id: string) => id], { revalidate: 60 });
 
 
 export const getAllProducts = cache(async (): Promise<Product[]> => {
@@ -64,7 +64,7 @@ export const getProductsByCategoryName = cache(async (categoryNames: string | st
     console.error(`Error fetching products for categories ${categoryNames}:`, error);
     throw new Error('Failed to fetch category products.');
   }
-}, ['products-by-category-name'], { revalidate: 60 });
+}, ['products-by-category-name', (names: string | string[]) => JSON.stringify(names)], { revalidate: 60 });
 
 
 export const getOnSaleProducts = cache(async (): Promise<Product[]> => {
@@ -91,7 +91,7 @@ export const getFeaturedProducts = cache(async (count: number): Promise<Product[
     const fallbackSnapshot = await getDocs(fallbackQuery);
     return fallbackSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
   }
-}, ['featured-products'], { revalidate: 60 });
+}, ['featured-products', (count: number) => count.toString()], { revalidate: 60 });
 
 
 export async function searchProducts(searchQuery: string, count: number): Promise<Product[]> {
@@ -99,20 +99,16 @@ export async function searchProducts(searchQuery: string, count: number): Promis
     // Split the search query into individual words and convert to lower case
     const searchWords = searchQuery.toLowerCase().split(' ').filter(word => word);
 
-    // Firestore doesn't support case-insensitive "contains" search natively.
-    // We fetch all products and filter them on the server.
-    // For large datasets, a third-party search service (e.g., Algolia) is recommended.
-    const querySnapshot = await getDocs(query(productsCollection, orderBy('name')));
+    // This is not cached as it's a dynamic user-driven search
+    const products = await getAllProducts();
     
-    const products = querySnapshot.docs
-      .map(doc => ({ id: doc.id, ...doc.data() } as Product))
-      .filter(product => {
+    const filteredProducts = products.filter(product => {
         const productNameLower = product.name.toLowerCase();
         // Check if all search words are present in the product name
         return searchWords.every(word => productNameLower.includes(word));
       });
 
-    return products.slice(0, count);
+    return filteredProducts.slice(0, count);
 
   } catch (error) {
     console.error(`Error searching products with query "${searchQuery}":`, error);
@@ -130,6 +126,9 @@ export async function addProduct(productData: Omit<Product, 'id' | 'reviewCount'
       stock: productData.stock ?? 0,
       isFeatured: productData.isFeatured || false,
     });
+    revalidatePath('/admin/products');
+    revalidatePath('/admin/analytics');
+    revalidatePath('/');
     return docRef.id;
   } catch (error) {
     console.error("Error adding product:", error);
@@ -141,6 +140,10 @@ export async function updateProduct(id: string, productData: Partial<Omit<Produc
   try {
     const docRef = doc(db, 'products', id);
     await updateDoc(docRef, productData);
+    revalidatePath('/admin/products');
+    revalidatePath(`/products/${id}`);
+    revalidatePath('/admin/analytics');
+    revalidatePath('/');
   } catch (error) {
     console.error(`Error updating product ${id}:`, error);
     throw new Error('Failed to update product.');
@@ -163,6 +166,11 @@ export async function deleteProduct(id: string): Promise<void> {
         });
 
         await batch.commit();
+
+        revalidatePath('/admin/products');
+        revalidatePath(`/products/${id}`);
+        revalidatePath('/admin/analytics');
+        revalidatePath('/');
     } catch (error) {
         console.error(`Error deleting product ${id} and its reviews:`, error);
         throw new Error('Failed to delete product.');

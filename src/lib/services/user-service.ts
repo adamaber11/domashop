@@ -20,7 +20,7 @@ export const getUserById = cache(async (uid: string): Promise<SiteUser | null> =
         console.error(`Error fetching user ${uid}:`, error);
         throw new Error('Failed to fetch user data.');
     }
-}, ['user-by-id'], { revalidate: 60 });
+}, ['user-by-id', (uid: string) => uid], { revalidate: 60 });
 
 export async function updateUserProfile(uid: string, data: {
     firstName: string;

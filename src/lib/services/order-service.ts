@@ -35,7 +35,7 @@ export const getOrdersByUserId = cache(async (userId: string): Promise<Order[]> 
     console.error(`Error fetching orders for user ${userId}:`, error);
     throw new Error('Failed to fetch user orders.');
   }
-}, ['user-orders'], { revalidate: 60 });
+}, ['user-orders', (userId: string) => userId], { revalidate: 60 });
 
 
 export async function addOrder(orderData: Omit<Order, 'id' | 'date'>): Promise<string> {

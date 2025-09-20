@@ -32,7 +32,7 @@ export const getReviewsByProductId = cache(async (productId: string): Promise<Re
     console.error(`Error fetching reviews for product ${productId}:`, error);
     throw new Error('Failed to fetch reviews.');
   }
-}, ['reviews-by-product-id'], { revalidate: 60 });
+}, ['reviews-by-product-id', (id: string) => id], { revalidate: 60 });
 
 export async function addReview(productId: string, reviewData: NewReviewData): Promise<Review> {
     try {
