@@ -22,7 +22,8 @@ interface ProductCardProps {
 
 
 export function ProductCard({ product }: ProductCardProps) {
-  const imageUrl = product.imageUrls?.[0];
+  const imageUrl = product.imageUrls && product.imageUrls.length > 0 ? product.imageUrls[0] : "https://placehold.co/800x600/E2D6C5/443027";
+  const imageHint = product.imageHint || "product image";
   
   const { addToCart } = useCart();
   const { user, loading } = useAuth();
@@ -53,16 +54,14 @@ export function ProductCard({ product }: ProductCardProps) {
       <CardHeader className="p-0">
         <div className="relative aspect-[4/3] w-full overflow-hidden">
           <Link href={`/products/${product.id}`} aria-label={`View ${product.name}`}>
-            {imageUrl && (
-              <Image
-                src={imageUrl}
-                alt={product.name}
-                fill
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
-                sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, (max-width: 1280px) 30vw, 23vw"
-                data-ai-hint={product.imageHint}
-              />
-            )}
+            <Image
+              src={imageUrl}
+              alt={product.name}
+              fill
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, (max-width: 1280px) 30vw, 23vw"
+              data-ai-hint={imageHint}
+            />
             {isOutOfStock && (
               <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
                   <Badge variant="destructive">Out of Stock</Badge>

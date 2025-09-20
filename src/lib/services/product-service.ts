@@ -3,11 +3,33 @@
 'use server';
 
 import { db } from '@/lib/firebase';
-import { collection, getDocs, doc, getDoc, query, where, limit, orderBy, addDoc, updateDoc, deleteDoc, writeBatch } from 'firebase/firestore';
+import { collection, getDocs, doc, getDoc, query, where, limit, orderBy, addDoc, updateDoc, deleteDoc, writeBatch, setDoc } from 'firebase/firestore';
 import type { Product } from '@/lib/types';
 import { unstable_cache as cache, revalidatePath } from 'next/cache';
+import placeholderImages from '@/app/lib/placeholder-images.json';
 
-const productsCollection = collection(db, 'products');
+
+// Helper to ensure product has valid image URLs
+function ensureProductImages(product: any): Product {
+    const defaultPlaceholder = placeholderImages['prod_001'] || { src: "https://placehold.co/800x600/E2D6C5/443027", hint: "default product" };
+    
+    // If imageUrls doesn't exist or is not an array, create it from the placeholder.
+    if (!product.imageUrls || !Array.isArray(product.imageUrls) || product.imageUrls.length === 0) {
+        product.imageUrls = [defaultPlaceholder.src, defaultPlaceholder.src, defaultPlaceholder.src];
+    }
+    if (!product.imageHint) {
+        product.imageHint = defaultPlaceholder.hint;
+    }
+     // Ensure numeric fields are numbers, providing defaults if they don't exist.
+    product.price = product.price ?? 0;
+    product.salePrice = product.salePrice ?? undefined;
+    product.reviewCount = product.reviewCount ?? 0;
+    product.averageRating = product.averageRating ?? 0;
+    product.stock = product.stock ?? 0;
+
+    return product as Product;
+}
+
 
 export const getProductById = cache(async (id: string): Promise<Product | null> => {
   try {
@@ -15,17 +37,8 @@ export const getProductById = cache(async (id: string): Promise<Product | null> 
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      // The document data is cast to a Product type, but we also add the id
-      const productData = { id: docSnap.id, ...docSnap.data() } as Product;
-      
-      // Ensure numeric fields are numbers, providing defaults if they don't exist.
-      productData.price = productData.price ?? 0;
-      productData.salePrice = productData.salePrice ?? undefined;
-      productData.reviewCount = productData.reviewCount ?? 0;
-      productData.averageRating = productData.averageRating ?? 0;
-      productData.stock = productData.stock ?? 0;
-      
-      return productData;
+      const productData = { id: docSnap.id, ...docSnap.data() };
+      return ensureProductImages(productData);
     } else {
       console.warn(`No product found with id: ${id}`);
       return null;
@@ -40,7 +53,10 @@ export const getProductById = cache(async (id: string): Promise<Product | null> 
 export const getAllProducts = cache(async (): Promise<Product[]> => {
   try {
     const querySnapshot = await getDocs(query(productsCollection, orderBy('name')));
-    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
+    return querySnapshot.docs.map(doc => {
+        const productData = { id: doc.id, ...doc.data() };
+        return ensureProductImages(productData);
+    });
   } catch (error) {
     console.error("Error fetching all products:", error);
     throw new Error('Failed to fetch products.');
@@ -48,30 +64,29 @@ export const getAllProducts = cache(async (): Promise<Product[]> => {
 }, ['all-products'], { revalidate: 60 });
 
 
-export const getProductsByCategoryName = cache(async (categoryNames: string | string[]): Promise<Product[]> => {
+export const getProductsByCategoryName = cache(async (categoryName: string): Promise<Product[]> => {
   try {
-    // Ensure categoryNames is always an array
-    const names = Array.isArray(categoryNames) ? categoryNames : [categoryNames];
-    
-    if (names.length === 0) return [];
-    
-    // Firestore 'in' query supports up to 30 elements.
-    // If more are needed, multiple queries would be required.
-    const q = query(productsCollection, where('category', 'in', names));
+    const q = query(productsCollection, where('category', '==', categoryName));
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
+    return querySnapshot.docs.map(doc => {
+      const productData = { id: doc.id, ...doc.data() };
+      return ensureProductImages(productData);
+    });
   } catch (error) {
-    console.error(`Error fetching products for categories ${categoryNames}:`, error);
+    console.error(`Error fetching products for category ${categoryName}:`, error);
     throw new Error('Failed to fetch category products.');
   }
-}, ['products-by-category-name', (names: string | string[]) => JSON.stringify(names)], { revalidate: 60 });
+}, ['products-by-category-name', (name: string) => name], { revalidate: 60 });
 
 
 export const getOnSaleProducts = cache(async (): Promise<Product[]> => {
   try {
     const q = query(productsCollection, where('onSale', '==', true));
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
+    return querySnapshot.docs.map(doc => {
+        const productData = { id: doc.id, ...doc.data() };
+        return ensureProductImages(productData);
+    });
   } catch (error) {
     console.error("Error fetching on-sale products:", error);
     throw new Error('Failed to fetch on-sale products.');
@@ -83,13 +98,19 @@ export const getFeaturedProducts = cache(async (count: number): Promise<Product[
    try {
     const q = query(productsCollection, where('isFeatured', '==', true), limit(count));
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
+    return querySnapshot.docs.map(doc => {
+        const productData = { id: doc.id, ...doc.data() };
+        return ensureProductImages(productData);
+    });
   } catch (error) {
     console.error("Error fetching featured products:", error);
     // Fallback in case of index error etc.
     const fallbackQuery = query(productsCollection, limit(count));
     const fallbackSnapshot = await getDocs(fallbackQuery);
-    return fallbackSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
+    return fallbackSnapshot.docs.map(doc => {
+        const productData = { id: doc.id, ...doc.data() };
+        return ensureProductImages(productData);
+    });
   }
 }, ['featured-products', (count: number) => count.toString()], { revalidate: 60 });
 
