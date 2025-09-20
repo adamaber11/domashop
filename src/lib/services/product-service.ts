@@ -8,6 +8,7 @@ import type { Product } from '@/lib/types';
 import { unstable_cache as cache, revalidatePath } from 'next/cache';
 import placeholderImages from '@/app/lib/placeholder-images.json';
 
+const productsCollection = collection(db, 'products');
 
 // Helper to ensure product has valid image URLs
 function ensureProductImages(product: any): Product {
