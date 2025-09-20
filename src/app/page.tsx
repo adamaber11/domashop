@@ -9,9 +9,10 @@ import { ArrowRight, ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
 export default async function HomePage() {
-  const featuredProducts = await getFeaturedProducts(8);
+  const featuredProducts = await getFeaturedProducts(10);
   const settings = await getSiteSettings();
 
   // Get 3 random products from the featured list for efficiency
@@ -42,11 +43,25 @@ export default async function HomePage() {
           Featured Products
         </h2>
         {featuredProducts.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
-            {featuredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+          <Carousel
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+            className="w-full"
+          >
+            <CarouselContent>
+              {featuredProducts.map((product) => (
+                <CarouselItem key={product.id} className="sm:basis-1/2 md:basis-1/3">
+                  <div className="p-1">
+                    <ProductCard product={product} />
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="absolute start-0 top-1/2 -translate-y-1/2 -translate-x-4 hidden md:flex" />
+            <CarouselNext className="absolute end-0 top-1/2 -translate-y-1/2 translate-x-4 hidden md:flex" />
+          </Carousel>
         ) : (
           <p className="text-center text-muted-foreground">
             No featured products available. Please check back later.
