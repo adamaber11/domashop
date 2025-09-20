@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { getPersonalizedRecommendations } from '@/ai/flows/personalized-product-recommendations';
-import { getProductsByCategory } from '@/lib/services/product-service';
+import { getProductsByCategoryName } from '@/lib/services/product-service';
 import type { Product } from '@/lib/types';
 import { ProductCard } from './product-card';
 import { Skeleton } from './ui/skeleton';
@@ -42,7 +42,7 @@ export default function PersonalizedRecommendations({ currentProductId }: Person
         // Fallback to simple category-based recommendations
         const currentProduct = await getProductById(currentProductId);
         if (currentProduct) {
-          const fallbackRecs = (await getProductsByCategory(currentProduct.category))
+          const fallbackRecs = (await getProductsByCategoryName(currentProduct.category))
             .filter(p => p.id !== currentProductId)
             .slice(0, 3);
           setRecommendations(fallbackRecs);
