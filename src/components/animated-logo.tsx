@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -87,7 +88,7 @@ export function AnimatedLogo() {
 
   return (
     <div className="mb-8 text-center h-20 flex items-center justify-center" onClick={() => router.push('/')}>
-      <h1 className="font-extrabold font-headline text-5xl md:text-6xl inline-block tracking-tighter cursor-pointer">
+      <h1 className="font-extrabold font-headline text-5xl md:text-6xl inline-block tracking-tighter cursor-pointer notranslate">
         {renderLogo()}
         <span className="animate-caret-blink border-r-4 border-foreground ms-1"></span>
       </h1>

@@ -54,7 +54,7 @@ export function MobileNav({ settings, onLinkClick }: MobileNavProps) {
       <div className="p-4 border-b">
         <Link href="/" onClick={onLinkClick} className="flex items-center space-x-2">
             <ShoppingCart className="h-8 w-8 text-primary" />
-            <span className="font-extrabold font-headline text-3xl">
+            <span className="font-extrabold font-headline text-3xl notranslate">
                 {settings ? (
                   <>{settings.logoTextPart1}<span className="text-primary">{settings.logoTextPart2}</span>{settings.logoTextPart3}</>
                 ) : (

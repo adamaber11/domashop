@@ -22,7 +22,7 @@ export async function Footer() {
           <div className="space-y-4 md:col-span-1 sm:col-span-2">
              <Link href="/" className="flex items-center space-x-2">
                 <ShoppingCart className="h-8 w-8 text-primary" />
-                <span className="font-extrabold font-headline inline-block text-3xl text-foreground">
+                <span className="font-extrabold font-headline inline-block text-3xl text-foreground notranslate">
                     {settings.logoTextPart1}<span className="text-primary">{settings.logoTextPart2}</span>{settings.logoTextPart3}
                 </span>
             </Link>
@@ -67,7 +67,7 @@ export async function Footer() {
           </div>
         </div>
         
-        <div className="mt-12 border-t border-border pt-6 text-center text-sm">
+        <div className="mt-12 border-t border-border pt-6 text-center text-sm notranslate">
           <p>&copy; {new Date().getFullYear()} {settings.logoTextPart1}{settings.logoTextPart2}{settings.logoTextPart3} Online Shop. All rights reserved.</p>
         </div>
       </div>

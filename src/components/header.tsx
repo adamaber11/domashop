@@ -127,7 +127,7 @@ export function Header() {
                 {loadingSettings ? (
                   <Skeleton className="h-8 w-32" />
                 ) : (
-                  <span className="font-extrabold font-headline sm:inline-block text-3xl">
+                  <span className="font-extrabold font-headline sm:inline-block text-3xl notranslate">
                       {settings?.logoTextPart1}<span className="text-primary">{settings?.logoTextPart2}</span>{settings?.logoTextPart3}
                   </span>
                 )}
