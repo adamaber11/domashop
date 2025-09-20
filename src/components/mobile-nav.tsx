@@ -22,7 +22,7 @@ import type { SiteSettings } from '@/lib/types';
 import { CurrencySelector } from './currency-selector';
 import { generateColorFromString } from '@/lib/utils';
 import { Separator } from './ui/separator';
-import { useCategories } from '@/hooks/use-categories';
+import { categoriesHierarchy, specialCategories } from '@/lib/data';
 
 
 interface MobileNavProps {
@@ -32,7 +32,6 @@ interface MobileNavProps {
 export function MobileNav({ settings, onLinkClick }: MobileNavProps) {
   const pathname = usePathname();
   const { user, loading: authLoading, signOut: firebaseSignOut } = useAuth();
-  const { categories, loading: categoriesLoading } = useCategories();
   const { clearCart } = useCart();
 
   const handleLinkClick = (href: string) => {
@@ -49,9 +48,6 @@ export function MobileNav({ settings, onLinkClick }: MobileNavProps) {
 
   const navLinkClasses = "flex items-center w-full p-4 text-lg font-semibold";
   const activeLinkClasses = "bg-accent text-accent-foreground";
-
-  const hierarchicalCategories = categories.filter(c => c.subcategories.length > 0);
-  const specialCategories = categories.filter(c => c.subcategories.length === 0 && c.parentId === null);
 
   return (
     <div className="flex flex-col h-full">
@@ -88,7 +84,7 @@ export function MobileNav({ settings, onLinkClick }: MobileNavProps) {
                             All Categories
                         </Link>
                         {specialCategories.map(cat => (
-                            <div key={cat.id}>
+                            <div key={cat.slug}>
                                 <Separator className="bg-border" />
                                 <Link href={`/${cat.slug}`} onClick={() => { handleLinkClick(`/${cat.slug}`); onLinkClick?.(); }} className={cn("block py-3 ps-8 text-base", pathname === `/${cat.slug}` && "font-bold text-primary")}>
                                 {cat.name}
@@ -96,11 +92,8 @@ export function MobileNav({ settings, onLinkClick }: MobileNavProps) {
                             </div>
                         ))}
                         <Separator className="bg-border" />
-                        {categoriesLoading ? (
-                          <div className="p-4 space-y-2"><Skeleton className="h-6 w-3/4" /><Skeleton className="h-6 w-3/4" /></div>
-                        ) : (
-                          hierarchicalCategories.map((mainCat) => (
-                             <Accordion key={mainCat.id} type="single" collapsible className="w-full">
+                        {categoriesHierarchy.map((mainCat) => (
+                             <Accordion key={mainCat.slug} type="single" collapsible className="w-full">
                                 <AccordionItem value={mainCat.slug} className="border-b-0">
                                      <AccordionTrigger className="ps-8 pe-4 py-3 text-base hover:no-underline">
                                         {mainCat.name}
@@ -108,7 +101,7 @@ export function MobileNav({ settings, onLinkClick }: MobileNavProps) {
                                     <AccordionContent className="bg-background">
                                         <div className="ps-12 divide-y">
                                             {mainCat.subcategories.map((subCat) => (
-                                                <Link key={subCat.id} href={`/category/${subCat.slug}`} onClick={() => { handleLinkClick(`/category/${subCat.slug}`); onLinkClick?.(); }} className={cn("block py-3 text-base", pathname === `/category/${subCat.slug}` && "font-bold text-primary")}>
+                                                <Link key={subCat.slug} href={`/category/${subCat.slug}`} onClick={() => { handleLinkClick(`/category/${subCat.slug}`); onLinkClick?.(); }} className={cn("block py-3 text-base", pathname === `/category/${subCat.slug}` && "font-bold text-primary")}>
                                                     {subCat.name}
                                                 </Link>
                                             ))}
@@ -116,8 +109,7 @@ export function MobileNav({ settings, onLinkClick }: MobileNavProps) {
                                     </AccordionContent>
                                 </AccordionItem>
                             </Accordion>
-                          ))
-                        )}
+                          ))}
                     </AccordionContent>
                   </AccordionItem>
                 </Accordion>
@@ -177,5 +169,3 @@ export function MobileNav({ settings, onLinkClick }: MobileNavProps) {
     </div>
   );
 }
-
-    

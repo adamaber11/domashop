@@ -15,7 +15,7 @@ import {
   DropdownMenuPortal,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { ChevronDown, LogIn, UserPlus, LogOut, User as UserIcon, LayoutDashboard, Loader2 } from 'lucide-react';
+import { ChevronDown, LogIn, UserPlus, LogOut, User as UserIcon, LayoutDashboard } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { useAuth } from '@/context/auth-context';
@@ -23,13 +23,12 @@ import { Skeleton } from './ui/skeleton';
 import { useCart } from '@/context/cart-context';
 import { CurrencySelector } from './currency-selector';
 import { generateColorFromString } from '@/lib/utils';
-import { useCategories } from '@/hooks/use-categories';
+import { categoriesHierarchy, specialCategories } from '@/lib/data';
 
 
 export function NavigationBar() {
   const pathname = usePathname();
   const { user, loading: authLoading, signOut: firebaseSignOut } = useAuth();
-  const { categories, loading: categoriesLoading } = useCategories();
   const { clearCart } = useCart();
 
   const navLinkClasses = "text-base transition-colors relative after:content-[''] after:absolute after:bottom-0 after:start-1/2 after:-translate-x-1/2 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:origin-center after:transition-transform after:duration-300";
@@ -41,9 +40,6 @@ export function NavigationBar() {
     clearCart();
   };
 
-  const hierarchicalCategories = categories.filter(c => c.subcategories.length > 0);
-  const specialCategories = categories.filter(c => c.subcategories.length === 0 && c.parentId === null);
-  
   return (
     <nav className="bg-background border-b sticky top-20 z-40 hidden md:block">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -58,9 +54,9 @@ export function NavigationBar() {
                 <div tabIndex={0} role="button" aria-haspopup="true" aria-expanded="false" className={cn(
                   navLinkClasses,
                   'flex items-center gap-1 focus:outline-none cursor-pointer',
-                   pathname.startsWith('/category') ? activeClasses : inactiveClasses
+                   pathname.startsWith('/category') || specialCategories.some(c => pathname === `/${c.slug}`) ? activeClasses : inactiveClasses
                 )}>
-                  {categoriesLoading ? <Loader2 className="animate-spin" /> : 'Categories'}
+                  Categories
                   <ChevronDown className="h-4 w-4" />
                 </div>
               </DropdownMenuTrigger>
@@ -69,14 +65,14 @@ export function NavigationBar() {
                    <Link href="/category">All Categories</Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                {specialCategories.map((cat) => (
-                  <DropdownMenuItem key={cat.id} asChild>
+                 {specialCategories.map((cat) => (
+                  <DropdownMenuItem key={cat.slug} asChild>
                     <Link href={`/${cat.slug}`}>{cat.name}</Link>
                   </DropdownMenuItem>
                 ))}
-                {specialCategories.length > 0 && <DropdownMenuSeparator />}
-                {hierarchicalCategories.map((mainCategory) => (
-                  <DropdownMenuSub key={mainCategory.id}>
+                <DropdownMenuSeparator />
+                {categoriesHierarchy.map((mainCategory) => (
+                  <DropdownMenuSub key={mainCategory.slug}>
                     <DropdownMenuSubTrigger>
                       <span>{mainCategory.name}</span>
                     </DropdownMenuSubTrigger>
@@ -87,7 +83,7 @@ export function NavigationBar() {
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             {mainCategory.subcategories.map((subCategory) => (
-                                <DropdownMenuItem key={subCategory.id} asChild>
+                                <DropdownMenuItem key={subCategory.slug} asChild>
                                     <Link href={`/category/${subCategory.slug}`}>{subCategory.name}</Link>
                                 </DropdownMenuItem>
                             ))}
@@ -160,5 +156,3 @@ export function NavigationBar() {
     </nav>
   );
 }
-
-    

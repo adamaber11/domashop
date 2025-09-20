@@ -48,7 +48,7 @@ export const getAllProducts = cache(async (): Promise<Product[]> => {
 }, ['all-products'], { revalidate: 60 });
 
 
-export const getProductsByCategory = cache(async (categoryNames: string | string[]): Promise<Product[]> => {
+export const getProductsByCategoryName = cache(async (categoryNames: string | string[]): Promise<Product[]> => {
   try {
     // Ensure categoryNames is always an array
     const names = Array.isArray(categoryNames) ? categoryNames : [categoryNames];
@@ -64,7 +64,7 @@ export const getProductsByCategory = cache(async (categoryNames: string | string
     console.error(`Error fetching products for categories ${categoryNames}:`, error);
     throw new Error('Failed to fetch category products.');
   }
-}, ['products-by-category'], { revalidate: 60 });
+}, ['products-by-category-name'], { revalidate: 60 });
 
 
 export const getOnSaleProducts = cache(async (): Promise<Product[]> => {
