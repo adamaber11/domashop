@@ -1,0 +1,20 @@
+
+{
+    "prod_001": { "src": "https://placehold.co/800x600/E2D6C5/443027", "width": 800, "height": 600, "hint": "vintage camera" },
+    "prod_002": { "src": "https://placehold.co/800x600/E2D6C5/443027", "width": 800, "height": 600, "hint": "wireless headphones" },
+    "prod_003": { "src": "https://placehold.co/800x600/E2D6C5/443027", "width": 800, "height": 600, "hint": "ceramic mug" },
+    "prod_004": { "src": "https://placehold.co/800x600/E2D6C5/443027", "width": 800, "height": 600, "hint": "leather journal" },
+    "prod_005": { "src": "https://placehold.co/800x600/E2D6C5/443027", "width": 800, "height": 600, "hint": "smart watch" },
+    "prod_006": { "src": "https://placehold.co/800x600/E2D6C5/443027", "width": 800, "height": 600, "hint": "yoga mat" },
+    "prod_007": { "src": "https://placehold.co/800x600/E2D6C5/443027", "width": 800, "height": 600, "hint": "coffee beans" },
+    "prod_008": { "src": "https://placehold.co/800x600/E2D6C5/443027", "width": 800, "height": 600, "hint": "running shoes" },
+    "prod_009": { "src": "https://placehold.co/800x600/E2D6C5/443027", "width": 800, "height": 600, "hint": "potted plant" },
+    "prod_010": { "src": "https://placehold.co/800x600/E2D6C5/443027", "width": 800, "height": 600, "hint": "fountain pen" },
+    "prod_011": { "src": "https://placehold.co/800x600/E2D6C5/443027", "width": 800, "height": 600, "hint": "wool scarf" },
+    "prod_012": { "src": "https://placehold.co/800x600/E2D6C5/443027", "width": 800, "height": 600, "hint": "bluetooth speaker" },
+    "hero_1": { "src": "https://placehold.co/1200x500/ADC9C3/2C3E50", "width": 1200, "height": 500, "hint": "landscape mountains" },
+    "hero_2": { "src": "https://placehold.co/1200x500/34495E/ECF0F1", "width": 1200, "height": 500, "hint": "city skyline" },
+    "hero_3": { "src": "https://placehold.co/1200x500/F1C40F/34495E", "width": 1200, "height": 500, "hint": "store interior" },
+    "about_banner": { "src": "https://placehold.co/1600x600/BDC3C7/2C3E50", "width": 1600, "height": 600, "hint": "team business" },
+    "founder_image": { "src": "https://placehold.co/200x200/3498DB/FFFFFF", "width": 200, "height": 200, "hint": "founder portrait" }
+}

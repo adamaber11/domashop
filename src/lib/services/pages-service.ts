@@ -6,6 +6,7 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
 import type { PagesContent, AboutPageContent, ContactPageContent } from '@/lib/types';
 import { revalidatePath } from 'next/cache';
 import { unstable_cache as cache } from 'next/cache';
+import placeholderImages from '@/app/lib/placeholder-images.json';
 
 
 const PAGES_COLLECTION = 'pages';
@@ -19,8 +20,8 @@ const defaultAboutContent: AboutPageContent = {
   vision: "رؤيتنا هي أن نكون المتجر الإلكتروني الرائد الذي تجد فيه كل فتاة ما يعكس أسلوبها وشغفها. نحلم بعالم يكون فيه التسوق رحلة لاكتشاف الذات والجمال.",
   founderName: "Eng. Adam Aber Desouky",
   founderTitle: "CEO & Founder",
-  bannerImageUrl: "https://picsum.photos/seed/about-girls/1600/600",
-  founderImageUrl: "https://picsum.photos/seed/team1/200",
+  bannerImageUrl: placeholderImages.about_banner.src,
+  founderImageUrl: placeholderImages.founder_image.src,
 };
 
 const defaultContactContent: ContactPageContent = {

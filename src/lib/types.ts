@@ -1,3 +1,4 @@
+
 import type { User as FirebaseUser, UserInfo, UserMetadata } from 'firebase/auth';
 import type { Timestamp } from 'firebase/firestore';
 

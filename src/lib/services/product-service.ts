@@ -117,9 +117,10 @@ export async function searchProducts(searchQuery: string, count: number): Promis
 }
 
 
-export async function addProduct(productData: Omit<Product, 'id' | 'reviewCount' | 'averageRating'>): Promise<string> {
+export async function addProduct(productData: Omit<Product, 'id' | 'reviewCount' | 'averageRating'>, id: string): Promise<string> {
   try {
-    const docRef = await addDoc(productsCollection, {
+    const docRef = doc(db, 'products', id);
+    await setDoc(docRef, {
       ...productData,
       reviewCount: 0,
       averageRating: 0,
@@ -129,7 +130,7 @@ export async function addProduct(productData: Omit<Product, 'id' | 'reviewCount'
     revalidatePath('/admin/products');
     revalidatePath('/admin/analytics');
     revalidatePath('/');
-    return docRef.id;
+    return id;
   } catch (error) {
     console.error("Error adding product:", error);
     throw new Error('Failed to add product.');

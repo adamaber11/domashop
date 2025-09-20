@@ -27,10 +27,8 @@ const productSchema = z.object({
   onSale: z.boolean().default(false),
   salePrice: z.coerce.number().optional(),
   isFeatured: z.boolean().default(false),
-  imageUrl1: z.string().min(1, 'Please enter a URL for Image 1.'),
-  imageUrl2: z.string().min(1, 'Please enter a URL for Image 2.'),
-  imageUrl3: z.string().min(1, 'Please enter a URL for Image 3.'),
-  imageHint: z.string().min(2, 'Image hint is required.'),
+  // Image URLs are static based on ID, so they are not editable here.
+  // This simplifies the form and logic.
 }).refine(data => {
     if (data.onSale && (!data.salePrice || data.salePrice <= 0)) {
         return false;
@@ -60,10 +58,6 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
             onSale: false,
             salePrice: undefined,
             isFeatured: false,
-            imageUrl1: '',
-            imageUrl2: '',
-            imageUrl3: '',
-            imageHint: '',
         },
     });
 
@@ -82,10 +76,6 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
                         onSale: fetchedProduct.onSale || false,
                         salePrice: fetchedProduct.salePrice,
                         isFeatured: fetchedProduct.isFeatured || false,
-                        imageUrl1: fetchedProduct.imageUrls[0] || '',
-                        imageUrl2: fetchedProduct.imageUrls[1] || '',
-                        imageUrl3: fetchedProduct.imageUrls[2] || '',
-                        imageHint: fetchedProduct.imageHint,
                     });
                 } else {
                     notFound();
@@ -106,6 +96,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
     async function onSubmit(values: ProductFormValues) {
         if (!product) return;
         try {
+            // We only update fields that are in the form, image URLs are kept as they are.
             const productData = {
                 name: values.name,
                 description: values.description,
@@ -115,8 +106,6 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
                 onSale: values.onSale,
                 salePrice: values.salePrice,
                 isFeatured: values.isFeatured,
-                imageUrls: [values.imageUrl1, values.imageUrl2, values.imageUrl3],
-                imageHint: values.imageHint,
             };
             await updateProduct(product.id, productData);
             toast({
@@ -219,32 +208,6 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
                             </div>
                         </FormItem>
                     )} />
-
-                     <div className="space-y-4 rounded-md border p-4">
-                         <FormLabel>Product Images</FormLabel>
-                         <FormDescription>Enter exactly 3 public image URLs.</FormDescription>
-                        <FormField control={form.control} name="imageUrl1" render={({ field }) => (
-                            <FormItem><FormLabel>Image URL 1</FormLabel><FormControl><Input placeholder="https://example.com/image1.jpg" {...field} /></FormControl><FormMessage /></FormItem>
-                        )} />
-                        <FormField control={form.control} name="imageUrl2" render={({ field }) => (
-                            <FormItem><FormLabel>Image URL 2</FormLabel><FormControl><Input placeholder="https://example.com/image2.jpg" {...field} /></FormControl><FormMessage /></FormItem>
-                        )} />
-                        <FormField control={form.control} name="imageUrl3" render={({ field }) => (
-                            <FormItem><FormLabel>Image URL 3</FormLabel><FormControl><Input placeholder="https://example.com/image3.jpg" {...field} /></FormControl><FormMessage /></FormItem>
-                        )} />
-                    </div>
-
-                     <FormField
-                        control={form.control}
-                        name="imageHint"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Image AI Hint</FormLabel>
-                                <FormControl><Input {...field} placeholder="e.g., 'vintage camera'" /></FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
                     
                     <div className="flex justify-end gap-4">
                         <Button type="button" variant="outline" onClick={() => router.back()}>Cancel</Button>

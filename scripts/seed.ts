@@ -1,8 +1,21 @@
+
 // scripts/seed.ts
 import { collection, doc, writeBatch } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { products as mockProducts } from '@/lib/data';
 import type { Product, Review } from '@/lib/types';
+import placeholderImages from '@/app/lib/placeholder-images.json';
+
+// Helper to safely get placeholder images
+const getProductImages = (productId: keyof typeof placeholderImages) => {
+    const placeholder = placeholderImages[productId] || { src: "https://placehold.co/800x600/E2D6C5/443027", hint: "default product" };
+    // For seeding, we can just use the same image for all 3 slots if only one is defined.
+    return [placeholder.src, placeholder.src, placeholder.src];
+};
+const getProductHint = (productId: keyof typeof placeholderImages) => {
+    return (placeholderImages[productId] || { hint: "default product" }).hint;
+};
+
 
 async function seedDatabase() {
   console.log('Starting to seed the database...');
@@ -28,6 +41,8 @@ async function seedDatabase() {
       reviewCount,
       averageRating,
       stock: productData.stock ?? 15, // Add default stock
+      imageUrls: getProductImages(productData.id as keyof typeof placeholderImages),
+      imageHint: getProductHint(productData.id as keyof typeof placeholderImages)
     };
     
     batch.set(productRef, finalProductData);

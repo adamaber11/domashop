@@ -6,6 +6,7 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
 import type { SiteSettings } from '@/lib/types';
 import { revalidatePath } from 'next/cache';
 import { unstable_cache as cache } from 'next/cache';
+import placeholderImages from '@/app/lib/placeholder-images.json';
 
 
 const SETTINGS_DOC_ID = 'siteConfig';
@@ -24,9 +25,9 @@ const defaultSettings: Omit<SiteSettings, 'id'> = {
     tiktok: '#',
   },
   heroImages: [
-    { src: "https://picsum.photos/seed/101/1200/500", alt: "A stunning landscape with mountains and a lake.", hint: "landscape mountains" },
-    { src: "https://picsum.photos/seed/102/1200/500", alt: "A modern city skyline at night with illuminated buildings.", hint: "city skyline" },
-    { src: 'https://picsum.photos/seed/welcome-hero/1200/500', alt: 'Welcome banner', hint: 'store interior' }
+    { src: placeholderImages.hero_1.src, alt: "A stunning landscape with mountains and a lake.", hint: placeholderImages.hero_1.hint },
+    { src: placeholderImages.hero_2.src, alt: "A modern city skyline at night with illuminated buildings.", hint: placeholderImages.hero_2.hint },
+    { src: placeholderImages.hero_3.src, alt: 'Welcome banner', hint: placeholderImages.hero_3.hint }
   ],
   heroCarouselDelay: 4000,
   currencies: [

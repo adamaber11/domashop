@@ -1,8 +1,8 @@
 
 import type { Product } from './types';
 
-// New simplified category structure
 export const mainCategories = [
+    { name: "Offers (العروض)", slug: "offers" },
     { name: "Handmade (هاند ميد)", slug: "handmade" },
     { name: "Skincare (عناية بالبشرة)", slug: "skincare" },
     { name: "Accessories (إكسسوارات)", slug: "accessories" },
@@ -12,22 +12,17 @@ export const mainCategories = [
     { name: "Makeup (مكياج)", slug: "makeup" },
 ];
 
-// Special categories that link to separate pages
-export const specialCategories = [
-    { name: "Offers (العروض)", slug: "offers" },
-];
+// No longer needed as they are merged into mainCategories
+export const specialCategories: { name: string, slug: string }[] = [];
 
 
-// A flat list of all category names for use in product forms, etc.
-// This is derived from the new structures above.
-export const allCategories = [
-    ...specialCategories.map(c => c.name),
-    ...mainCategories.map(c => c.name)
-].sort();
+export const allCategories = mainCategories.map(c => c.name).sort();
+
 
 // This is mock data for seeding the database.
-// I've updated the category fields to match the new structure.
-export const products: Omit<Product, 'reviewCount' | 'averageRating'>[] = [
+// The `imageUrls` and `imageHint` properties will be ignored here,
+// as they are now sourced from `placeholder-images.json` in the seed script.
+export const products: Omit<Product, 'reviewCount' | 'averageRating' | 'imageUrls' | 'imageHint'>[] = [
   {
     id: 'prod_001',
     name: 'Vintage Film Camera',
@@ -35,8 +30,6 @@ export const products: Omit<Product, 'reviewCount' | 'averageRating'>[] = [
     price: 175.00,
     category: 'Accessories (إكسسوارات)',
     stock: 10,
-    imageUrls: ['https://picsum.photos/seed/1/800/600', 'https://picsum.photos/seed/101/800/600', 'https://picsum.photos/seed/102/800/600'],
-    imageHint: 'vintage camera',
     reviews: [
       { id: 'rev_001', author: 'Alex D.', rating: 5, text: 'Absolutely love the nostalgic feel of the photos!', date: '2023-05-20' },
       { id: 'rev_002', author: 'Ben C.', rating: 4, text: 'A bit of a learning curve, but worth it for the quality.', date: '2023-06-11' },
@@ -51,8 +44,6 @@ export const products: Omit<Product, 'reviewCount' | 'averageRating'>[] = [
     salePrice: 99.99,
     category: 'Accessories (إكسسوارات)',
     stock: 25,
-    imageUrls: ['https://picsum.photos/seed/2/800/600', 'https://picsum.photos/seed/104/800/600', 'https://picsum.photos/seed/105/800/600'],
-    imageHint: 'wireless headphones',
     reviews: [
       { id: 'rev_003', author: 'Chloe M.', rating: 5, text: 'The noise cancellation is a game changer for my commute.', date: '2023-07-01' },
       { id: 'rev_004', author: 'David S.', rating: 4, text: 'Great sound, but the fit is a little snug.', date: '2023-07-05' },
@@ -66,8 +57,6 @@ export const products: Omit<Product, 'reviewCount' | 'averageRating'>[] = [
     price: 28.50,
     category: 'Handmade (هاند ميد)',
     stock: 50,
-    imageUrls: ['https://picsum.photos/seed/3/800/600', 'https://picsum.photos/seed/107/800/600', 'https://picsum.photos/seed/108/800/600'],
-    imageHint: 'ceramic mug',
     reviews: [
       { id: 'rev_006', author: 'Frank G.', rating: 5, text: 'My new favorite mug for morning coffee. It\'s a work of art.', date: '2023-09-10' },
     ],
@@ -79,8 +68,6 @@ export const products: Omit<Product, 'reviewCount' | 'averageRating'>[] = [
     price: 35.00,
     category: 'Handmade (هاند ميد)',
     stock: 0,
-    imageUrls: ['https://picsum.photos/seed/4/800/600', 'https://picsum.photos/seed/110/800/600', 'https://picsum.photos/seed/111/800/600'],
-    imageHint: 'leather journal',
     reviews: [
       { id: 'rev_007', author: 'Grace H.', rating: 5, text: 'The leather is so soft and smells amazing. A joy to write in.', date: '2023-03-12' },
       { id: 'rev_008', author: 'Henry I.', rating: 3, text: 'Paper is a bit thin for fountain pens, but otherwise nice.', date: '2023-04-02' },
@@ -95,8 +82,6 @@ export const products: Omit<Product, 'reviewCount' | 'averageRating'>[] = [
     salePrice: 199.00,
     category: 'Accessories (إكسسوارات)',
     stock: 18,
-    imageUrls: ['https://picsum.photos/seed/5/800/600', 'https://picsum.photos/seed/113/800/600', 'https://picsum.photos/seed/114/800/600'],
-    imageHint: 'smart watch',
     reviews: [
       { id: 'rev_009', author: 'Ivy J.', rating: 4, text: 'Does everything I need it to. Wish the battery life was a bit longer.', date: '2023-10-22' },
       { id: 'rev_010', author: 'Jack K.', rating: 5, text: 'Sleek design and the fitness tracking is very accurate.', date: '2023-11-01' },
@@ -109,8 +94,6 @@ export const products: Omit<Product, 'reviewCount' | 'averageRating'>[] = [
     price: 65.00,
     category: 'Skincare (عناية بالبشرة)',
     stock: 30,
-    imageUrls: ['https://picsum.photos/seed/6/800/600', 'https://picsum.photos/seed/116/800/600', 'https://picsum.photos/seed/117/800/600'],
-    imageHint: 'yoga mat',
     reviews: [
       { id: 'rev_011', author: 'Karen L.', rating: 5, text: 'No slipping at all, even in hot yoga. Fantastic mat!', date: '2023-08-30' },
       { id: 'rev_012', author: 'Leo M.', rating: 2, text: 'Has a strong rubber smell that won\'t go away.', date: '2023-09-05' },
@@ -123,8 +106,6 @@ export const products: Omit<Product, 'reviewCount' | 'averageRating'>[] = [
     price: 18.99,
     category: 'Handmade (هاند ميد)',
     stock: 100,
-    imageUrls: ['https://picsum.photos/seed/7/800/600', 'https://picsum.photos/seed/119/800/600', 'https://picsum.photos/seed/120/800/600'],
-    imageHint: 'coffee beans',
     reviews: [
       { id: 'rev_013', author: 'Mia N.', rating: 5, text: 'Smooth, rich, and not bitter. My new go-to coffee.', date: '2024-01-15' },
       { id: 'rev_014', author: 'Noah O.', rating: 5, text: 'The best coffee I have ever made at home.', date: '2024-01-20' },
@@ -139,8 +120,6 @@ export const products: Omit<Product, 'reviewCount' | 'averageRating'>[] = [
     salePrice: 109.99,
     category: 'Shoes (أحذية)',
     stock: 40,
-    imageUrls: ['https://picsum.photos/seed/8/800/600', 'https://picsum.photos/seed/122/800/600', 'https://picsum.photos/seed/123/800/600'],
-    imageHint: 'running shoes',
     reviews: [
       { id: 'rev_015', author: 'Olivia P.', rating: 4, text: 'Very comfortable, but they run a half size small.', date: '2023-12-10' },
       { id: 'rev_016', author: 'Peter Q.', rating: 5, text: 'Like running on clouds. Great support for my long runs.', date: '2023-12-18' },
@@ -153,8 +132,6 @@ export const products: Omit<Product, 'reviewCount' | 'averageRating'>[] = [
     price: 22.00,
     category: 'Handmade (هاند ميد)',
     stock: 8,
-    imageUrls: ['https://picsum.photos/seed/9/800/600', 'https://picsum.photos/seed/125/800/600', 'https://picsum.photos/seed/126/800/600'],
-    imageHint: 'potted plant',
     reviews: [
         { id: 'rev_017', author: 'Quinn R.', rating: 5, text: 'Arrived in perfect condition and looks great on my desk.', date: '2024-02-01' },
     ]
@@ -166,8 +143,6 @@ export const products: Omit<Product, 'reviewCount' | 'averageRating'>[] = [
     price: 85.00,
     category: 'Handmade (هاند ميد)',
     stock: 12,
-    imageUrls: ['https://picsum.photos/seed/10/800/600', 'https://picsum.photos/seed/128/800/600', 'https://picsum.photos/seed/129/800/600'],
-    imageHint: 'fountain pen',
     reviews: [
         { id: 'rev_018', author: 'Rachel S.', rating: 1, text: 'It leaked ink all over my bag. Very disappointed.', date: '2023-11-11' },
         { id: 'rev_019', author: 'Sam T.', rating: 5, text: 'A beautiful and functional pen. Writing with it is a dream.', date: '2023-11-25' },
@@ -180,8 +155,6 @@ export const products: Omit<Product, 'reviewCount' | 'averageRating'>[] = [
     price: 45.00,
     category: 'Clothing (ملابس)',
     stock: 60,
-    imageUrls: ['https://picsum.photos/seed/11/800/600', 'https://picsum.photos/seed/131/800/600', 'https://picsum.photos/seed/132/800/600'],
-    imageHint: 'wool scarf',
     reviews: [
         { id: 'rev_020', author: 'Tina U.', rating: 5, text: 'So warm and not itchy at all! I\'ve worn it every day.', date: '2023-12-01' },
     ]
@@ -193,15 +166,9 @@ export const products: Omit<Product, 'reviewCount' | 'averageRating'>[] = [
     price: 59.99,
     category: 'Accessories (إكسسوارات)',
     stock: 3,
-    imageUrls: ['https://picsum.photos/seed/12/800/600', 'https://picsum.photos/seed/134/800/600', 'https://picsum.photos/seed/135/800/600'],
-    imageHint: 'bluetooth speaker',
     reviews: [
         { id: 'rev_021', author: 'Uma V.', rating: 3, text: 'Sound quality is just okay. Good for the price, I guess.', date: '2024-01-05' },
         { id: 'rev_022', author: 'Victor W.', rating: 5, text: 'Surprisingly powerful for its size. The battery is great.', date: '2024-01-10' },
     ]
   }
 ].map(p => ({ ...p, reviews: p.reviews || [] }));
-
-    
-
-    
