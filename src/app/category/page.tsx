@@ -1,5 +1,5 @@
 
-import { categories } from "@/lib/data";
+import { categoriesHierarchy } from "@/lib/data";
 import Link from "next/link";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight } from "lucide-react";
@@ -17,14 +17,12 @@ export default function CategoriesPage() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {categories.filter(c => c !== "All").map((category) => {
-          const categorySlug = category.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-');
-          return (
-            <Link href={`/category/${categorySlug}`} key={category} className="group">
+        {categoriesHierarchy.map((category) => (
+            <Link href={`/category/${category.slug}`} key={category.slug} className="group">
               <Card className="h-full flex flex-col justify-center items-center text-center p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
                 <CardHeader>
                   <CardTitle className="font-headline text-xl text-foreground group-hover:text-primary">
-                    {category}
+                    {category.name}
                   </CardTitle>
                 </CardHeader>
                 <div className="mt-2 text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -32,8 +30,7 @@ export default function CategoriesPage() {
                 </div>
               </Card>
             </Link>
-          );
-        })}
+          ))}
       </div>
     </div>
   );
