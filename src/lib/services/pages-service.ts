@@ -13,13 +13,13 @@ const ABOUT_DOC_ID = 'about';
 const CONTACT_DOC_ID = 'contact';
 
 const defaultAboutContent: AboutPageContent = {
-  headline: "About Doma Online Shop",
-  subheading: "Your trusted partner in discovering quality, style, and innovation. We are more than just a store; we are a community of enthusiasts dedicated to bringing you the best.",
-  mission: "To provide an unparalleled online shopping experience by offering a curated selection of high-quality products, exceptional customer service, and a seamless, user-friendly platform. We aim to inspire and delight our customers with every click.",
-  vision: "To be the go-to online destination for shoppers seeking unique and inspiring products. We envision a world where shopping is not just a transaction, but an experience of discovery and joy.",
+  headline: "عالمك الخاص... كل ما تحتاجينه",
+  subheading: "مرحبًا بكِ في وجهتك الأولى لكل ما هو عصري ومميز. من الأزياء والجمال إلى الإكسسوارات التي تبرز شخصيتك، نحن هنا لنلبي كل احتياجاتك.",
+  mission: "مهمتنا هي توفير تجربة تسوق فريدة وممتعة، نقدم فيها تشكيلة واسعة من المنتجات عالية الجودة التي تم اختيارها بعناية لتناسب ذوق كل فتاة عصرية. نسعى لإلهامك ومساعدتك على التعبير عن نفسك بثقة.",
+  vision: "رؤيتنا هي أن نكون المتجر الإلكتروني الرائد الذي تجد فيه كل فتاة ما يعكس أسلوبها وشغفها. نحلم بعالم يكون فيه التسوق رحلة لاكتشاف الذات والجمال.",
   founderName: "Eng. Adam Aber Desouky",
   founderTitle: "CEO & Founder",
-  bannerImageUrl: "https://picsum.photos/seed/about/1600/600",
+  bannerImageUrl: "https://picsum.photos/seed/about-girls/1600/600",
   founderImageUrl: "https://picsum.photos/seed/team1/200",
 };
 
