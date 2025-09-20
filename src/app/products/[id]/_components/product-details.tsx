@@ -27,11 +27,11 @@ export function ProductDetails({ product }: ProductDetailsProps) {
 
   return (
     <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-start">
-      <div className="grid grid-cols-1 gap-6">
-        <ProductGallery imageUrls={product.imageUrls} imageHint={product.imageHint} />
+      <div className="relative">
         {product.onSale && (
           <Badge variant="destructive" className="absolute top-4 start-4 text-sm md:text-base z-10">Sale</Badge>
         )}
+        <ProductGallery imageUrls={product.imageUrls} imageHint={product.imageHint} />
       </div>
 
       <div className="space-y-6 md:sticky md:top-24">

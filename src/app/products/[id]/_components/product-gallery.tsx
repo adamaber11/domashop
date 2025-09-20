@@ -20,25 +20,28 @@ export function ProductGallery({ imageUrls, imageHint }: ProductGalleryProps) {
 
   return (
     <div className="space-y-4">
-       <Card className="overflow-hidden w-full aspect-square relative">
-         <ReactImageMagnify {...{
-            smallImage: {
-                alt: imageHint,
-                isFluidWidth: true,
-                src: selectedImage,
-                sizes: '(max-width: 480px) 100vw, (max-width: 1200px) 30vw, 360px'
-            },
-            largeImage: {
-                src: selectedImage,
-                width: 1200,
-                height: 1200,
-            },
-            enlargedImageContainerDimensions: {
-                width: '120%',
-                height: '100%'
-            },
-            lensStyle: { backgroundColor: 'rgba(0,0,0,.6)' },
-         }} />
+      <Card className="overflow-hidden w-full aspect-square relative">
+        <div className="w-full h-full">
+            <ReactImageMagnify {...{
+                smallImage: {
+                    alt: imageHint,
+                    isFluidWidth: true,
+                    src: selectedImage,
+                    sizes: '(max-width: 767px) 100vw, (max-width: 1200px) 50vw, 450px'
+                },
+                largeImage: {
+                    src: selectedImage,
+                    width: 1200,
+                    height: 1200,
+                },
+                enlargedImageContainerClassName: 'z-20 hidden md:block border-l',
+                enlargedImageContainerDimensions: {
+                    width: '120%',
+                    height: '100%'
+                },
+                lensStyle: { backgroundColor: 'rgba(0,0,0,.6)' },
+            }} />
+        </div>
       </Card>
       
       {imageUrls.length > 1 && (
