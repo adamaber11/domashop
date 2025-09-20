@@ -2,7 +2,7 @@
 'use server';
 
 import { db } from '@/lib/firebase';
-import { collection, getDocs, doc, addDoc, updateDoc, deleteDoc, query, where, orderBy, writeBatch } from 'firebase/firestore';
+import { collection, getDocs, doc, addDoc, updateDoc, deleteDoc, query, where, orderBy, writeBatch, limit } from 'firebase/firestore';
 import type { Category } from '@/lib/types';
 import { unstable_cache as cache, revalidatePath } from 'next/cache';
 import { initialCategories } from '@/lib/data';
@@ -40,7 +40,7 @@ export const getCategoriesHierarchy = cache(async (): Promise<Category[]> => {
     console.error("Error fetching category hierarchy:", error);
     throw new Error('Failed to fetch categories.');
   }
-}, ['categories-hierarchy'], { revalidate: 30 });
+}, ['categories-hierarchy'], { revalidate: 60 });
 
 
 export const getCategoryBySlug = cache(async (slug: string): Promise<Category | null> => {
@@ -65,7 +65,7 @@ export const getCategoryBySlug = cache(async (slug: string): Promise<Category | 
         console.error(`Error fetching category by slug ${slug}:`, error);
         throw new Error('Failed to fetch category data.');
     }
-}, ['category-by-slug'], { revalidate: 30 });
+}, ['category-by-slug'], { revalidate: 60 });
 
 
 export async function addCategory(name: string, parentId: string | null): Promise<Category> {
