@@ -12,6 +12,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuPortal,
+  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { ChevronDown, LogIn, UserPlus, LogOut, User as UserIcon, LayoutDashboard } from 'lucide-react';
@@ -73,7 +74,7 @@ export function NavigationBar() {
                 {categoriesHierarchy.map((mainCategory) => (
                   <DropdownMenuSub key={mainCategory.slug}>
                     <DropdownMenuSubTrigger>
-                      <span>{mainCategory.name}</span>
+                      <span className="notranslate">{mainCategory.name}</span>
                     </DropdownMenuSubTrigger>
                     <DropdownMenuPortal>
                         <DropdownMenuSubContent>
