@@ -1,79 +1,41 @@
 
 import type { Product } from './types';
 
-// Static category data for the site
-export const specialCategories = [
-    { name: "Offers (العروض)", slug: "offers" },
-    { name: "New Arrivals (المنتجات الجديدة)", slug: "new-arrivals" },
-    { name: "Sale (الخصومات)", slug: "sale" },
+// New simplified category structure
+export const mainCategories = [
+    { name: "الهاند ميد", slug: "handmade" },
+    { name: "العناية بالبشرة", slug: "skincare" },
+    { name: "الاكسسوارات", slug: "accessories" },
+    { name: "الملابس", slug: "clothing" },
+    { name: "الشنط", slug: "bags" },
+    { name: "الاحذية", slug: "shoes" },
+    { name: "الميكب", slug: "makeup" },
 ];
 
-export const categoriesHierarchy = [
-  {
-    name: "Fashion (الأزياء)",
-    slug: "fashion",
-    subcategories: [
-      { name: "Dresses (فساتين)", slug: "dresses" },
-      { name: "Tops & T-Shirts (تيشرتات وبلايز)", slug: "tops-t-shirts" },
-      { name: "Pants & Skirts (بناطيل وجيبات)", slug: "pants-skirts" },
-      { name: "Hijab & Modest Wear (ملابس محجبات)", slug: "hijab-modest-wear" },
-      { name: "Shoes (أحذية)", slug: "shoes" },
-    ],
-  },
-  {
-    name: "Beauty (الجمال)",
-    slug: "beauty",
-    subcategories: [
-      { name: "Makeup (مكياج)", slug: "makeup" },
-      { name: "Skincare (عناية بالبشرة)", slug: "skincare" },
-      { name: "Haircare (العناية بالشعر)", slug: "haircare" },
-      { name: "Perfumes (عطور)", slug: "perfumes" },
-    ],
-  },
-  {
-    name: "Accessories (إكسسوارات)",
-    slug: "accessories",
-    subcategories: [
-      { name: "Bags (شنط)", slug: "bags" },
-      { name: "Jewelry (إكسسوارات وحُلي)", slug: "jewelry" },
-      { name: "Sunglasses (نظارات شمسية)", slug: "sunglasses" },
-      { name: "Watches (ساعات)", slug: "watches" },
-    ],
-  },
-  {
-    name: "Lifestyle (ستايل حياتي)",
-    slug: "lifestyle",
-    subcategories: [
-      { name: "Home Decor (ديكور بسيط للبنات)", slug: "home-decor" },
-      { name: "Stationery (مستلزمات مكتبية للبنات)", slug: "stationery" },
-      { name: "Tech Gadgets (إكسسوارات موبايل ولابتوب ستايل بناتي)", slug: "tech-gadgets" },
-    ],
-  },
-  {
-    name: "Health & Fitness (الصحة والرشاقة)",
-    slug: "health-fitness",
-    subcategories: [
-      { name: "Sportswear (ملابس رياضية للبنات)", slug: "sportswear" },
-      { name: "Supplements (مكملات غذائية/فيتامينات مخصصة للبنات)", slug: "supplements" },
-      { name: "Yoga & Wellness (منتجات يوغا واسترخاء)", slug: "yoga-wellness" },
-    ],
-  },
+// Special categories that link to separate pages
+export const specialCategories = [
+    { name: "العروض", slug: "offers" },
+    { name: "New Arrivals", slug: "new-arrivals" },
+    { name: "Sale", slug: "sale" },
 ];
+
 
 // A flat list of all category names for use in product forms, etc.
+// This is derived from the new structures above.
 export const allCategories = [
     ...specialCategories.map(c => c.name),
-    ...categoriesHierarchy.flatMap(c => [c.name, ...c.subcategories.map(s => s.name)])
+    ...mainCategories.map(c => c.name)
 ].sort();
 
 // This is mock data for seeding the database.
+// I've updated the category fields to match the new structure.
 export const products: Omit<Product, 'reviewCount' | 'averageRating'>[] = [
   {
     id: 'prod_001',
     name: 'Vintage Film Camera',
     description: 'Capture timeless moments with this classic 35mm film camera. Features manual controls for a truly authentic photography experience. Perfect for both beginners and seasoned photographers.',
     price: 175.00,
-    category: 'Tech Gadgets (إكسسوارات موبايل ولابتوب ستايل بناتي)',
+    category: 'الاكسسوارات',
     stock: 10,
     imageUrls: ['https://picsum.photos/seed/1/800/600', 'https://picsum.photos/seed/101/800/600', 'https://picsum.photos/seed/102/800/600'],
     imageHint: 'vintage camera',
@@ -89,7 +51,7 @@ export const products: Omit<Product, 'reviewCount' | 'averageRating'>[] = [
     price: 129.99,
     onSale: true,
     salePrice: 99.99,
-    category: 'Tech Gadgets (إكسسوارات موبايل ولابتوب ستايل بناتي)',
+    category: 'الاكسسوارات',
     stock: 25,
     imageUrls: ['https://picsum.photos/seed/2/800/600', 'https://picsum.photos/seed/104/800/600', 'https://picsum.photos/seed/105/800/600'],
     imageHint: 'wireless headphones',
@@ -104,7 +66,7 @@ export const products: Omit<Product, 'reviewCount' | 'averageRating'>[] = [
     name: 'Handcrafted Ceramic Mug',
     description: 'Enjoy your favorite beverage in this unique, handcrafted ceramic mug. Each mug is one-of-a-kind, featuring a beautiful glaze and a comfortable, sturdy handle.',
     price: 28.50,
-    category: 'Home Decor (ديكور بسيط للبنات)',
+    category: 'الهاند ميد',
     stock: 50,
     imageUrls: ['https://picsum.photos/seed/3/800/600', 'https://picsum.photos/seed/107/800/600', 'https://picsum.photos/seed/108/800/600'],
     imageHint: 'ceramic mug',
@@ -117,7 +79,7 @@ export const products: Omit<Product, 'reviewCount' | 'averageRating'>[] = [
     name: 'Classic Leather Journal',
     description: 'A beautiful, rustic leather-bound journal for your thoughts, sketches, and notes. Contains 200 pages of high-quality, acid-free paper that\'s perfect for any pen.',
     price: 35.00,
-    category: 'Stationery (مستلزمات مكتبية للبنات)',
+    category: 'الهاند ميد',
     stock: 0,
     imageUrls: ['https://picsum.photos/seed/4/800/600', 'https://picsum.photos/seed/110/800/600', 'https://picsum.photos/seed/111/800/600'],
     imageHint: 'leather journal',
@@ -133,7 +95,7 @@ export const products: Omit<Product, 'reviewCount' | 'averageRating'>[] = [
     price: 249.00,
     onSale: true,
     salePrice: 199.00,
-    category: 'Watches (ساعات)',
+    category: 'الاكسسوارات',
     stock: 18,
     imageUrls: ['https://picsum.photos/seed/5/800/600', 'https://picsum.photos/seed/113/800/600', 'https://picsum.photos/seed/114/800/600'],
     imageHint: 'smart watch',
@@ -147,7 +109,7 @@ export const products: Omit<Product, 'reviewCount' | 'averageRating'>[] = [
     name: 'Eco-Friendly Yoga Mat',
     description: 'Find your zen on this eco-friendly yoga mat, made from natural tree rubber. Provides excellent grip and cushioning for your practice, while being kind to the planet.',
     price: 65.00,
-    category: 'Yoga & Wellness (منتجات يوغا واسترخاء)',
+    category: 'العناية بالبشرة',
     stock: 30,
     imageUrls: ['https://picsum.photos/seed/6/800/600', 'https://picsum.photos/seed/116/800/600', 'https://picsum.photos/seed/117/800/600'],
     imageHint: 'yoga mat',
@@ -161,7 +123,7 @@ export const products: Omit<Product, 'reviewCount' | 'averageRating'>[] = [
     name: 'Gourmet Morning Coffee',
     description: 'Start your day with this medium-roast gourmet coffee. A balanced blend of beans from South America with notes of chocolate and citrus. Whole bean, 12oz bag.',
     price: 18.99,
-    category: 'Lifestyle (ستايل حياتي)',
+    category: 'الهاند ميد',
     stock: 100,
     imageUrls: ['https://picsum.photos/seed/7/800/600', 'https://picsum.photos/seed/119/800/600', 'https://picsum.photos/seed/120/800/600'],
     imageHint: 'coffee beans',
@@ -177,7 +139,7 @@ export const products: Omit<Product, 'reviewCount' | 'averageRating'>[] = [
     price: 130.00,
     onSale: true,
     salePrice: 109.99,
-    category: 'Shoes (أحذية)',
+    category: 'الاحذية',
     stock: 40,
     imageUrls: ['https://picsum.photos/seed/8/800/600', 'https://picsum.photos/seed/122/800/600', 'https://picsum.photos/seed/123/800/600'],
     imageHint: 'running shoes',
@@ -191,7 +153,7 @@ export const products: Omit<Product, 'reviewCount' | 'averageRating'>[] = [
     name: 'Minimalist Succulent Plant',
     description: 'Add a touch of green to your space with this easy-to-care-for succulent. Comes in a stylish, minimalist ceramic pot that fits any decor.',
     price: 22.00,
-    category: 'Home Decor (ديكور بسيط للبنات)',
+    category: 'الهاند ميد',
     stock: 8,
     imageUrls: ['https://picsum.photos/seed/9/800/600', 'https://picsum.photos/seed/125/800/600', 'https://picsum.photos/seed/126/800/600'],
     imageHint: 'potted plant',
@@ -204,7 +166,7 @@ export const products: Omit<Product, 'reviewCount' | 'averageRating'>[] = [
     name: 'Elegant Fountain Pen',
     description: 'Experience the art of writing with this elegant fountain pen. Features a smooth-writing gold nib and a balanced body for comfortable use. A timeless gift for any writer.',
     price: 85.00,
-    category: 'Stationery (مستلزمات مكتبية للبنات)',
+    category: 'الهاند ميد',
     stock: 12,
     imageUrls: ['https://picsum.photos/seed/10/800/600', 'https://picsum.photos/seed/128/800/600', 'https://picsum.photos/seed/129/800/600'],
     imageHint: 'fountain pen',
@@ -218,7 +180,7 @@ export const products: Omit<Product, 'reviewCount' | 'averageRating'>[] = [
     name: 'Cozy Wool Scarf',
     description: 'Stay warm in style with this incredibly soft and cozy wool scarf. The classic plaid pattern and high-quality fabric make it a winter essential.',
     price: 45.00,
-    category: 'Hijab & Modest Wear (ملابس محجبات)',
+    category: 'الملابس',
     stock: 60,
     imageUrls: ['https://picsum.photos/seed/11/800/600', 'https://picsum.photos/seed/131/800/600', 'https://picsum.photos/seed/132/800/600'],
     imageHint: 'wool scarf',
@@ -231,7 +193,7 @@ export const products: Omit<Product, 'reviewCount' | 'averageRating'>[] = [
     name: 'Sonic Portable Speaker',
     description: 'Take your music anywhere with the Sonic portable Bluetooth speaker. Delivers impressive sound from a compact, water-resistant design. 15-hour battery life.',
     price: 59.99,
-    category: 'Tech Gadgets (إكسسوارات موبايل ولابتوب ستايل بناتي)',
+    category: 'الاكسسوارات',
     stock: 3,
     imageUrls: ['https://picsum.photos/seed/12/800/600', 'https://picsum.photos/seed/134/800/600', 'https://picsum.photos/seed/135/800/600'],
     imageHint: 'bluetooth speaker',

@@ -3,27 +3,10 @@
 import { ProductCard } from '@/components/product-card';
 import { notFound } from 'next/navigation';
 import { getProductsByCategoryName } from '@/lib/services/product-service';
-import { categoriesHierarchy } from '@/lib/data';
+import { mainCategories } from '@/lib/data';
 
 function findCategoryBySlug(slug: string) {
-    for (const mainCategory of categoriesHierarchy) {
-        if (mainCategory.slug === slug) {
-            return {
-                ...mainCategory,
-                // Include subcategory names for product fetching
-                allCategoryNames: [mainCategory.name, ...mainCategory.subcategories.map(s => s.name)]
-            };
-        }
-        for (const subCategory of mainCategory.subcategories) {
-            if (subCategory.slug === slug) {
-                return {
-                    ...subCategory,
-                    allCategoryNames: [subCategory.name] // Only fetch for this specific subcategory
-                };
-            }
-        }
-    }
-    return null;
+    return mainCategories.find(c => c.slug === slug) || null;
 }
 
 export default async function CategoryPage({ params }: { params: { slug: string } }) {
@@ -33,7 +16,8 @@ export default async function CategoryPage({ params }: { params: { slug: string 
     notFound();
   }
 
-  const products = await getProductsByCategoryName(category.allCategoryNames);
+  // Fetch products for the specific category name
+  const products = await getProductsByCategoryName(category.name);
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">

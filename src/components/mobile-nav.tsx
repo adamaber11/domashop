@@ -22,7 +22,7 @@ import type { SiteSettings } from '@/lib/types';
 import { CurrencySelector } from './currency-selector';
 import { generateColorFromString } from '@/lib/utils';
 import { Separator } from './ui/separator';
-import { categoriesHierarchy, specialCategories } from '@/lib/data';
+import { mainCategories, specialCategories } from '@/lib/data';
 
 
 interface MobileNavProps {
@@ -46,7 +46,7 @@ export function MobileNav({ settings, onLinkClick }: MobileNavProps) {
     onLinkClick?.();
   };
 
-  const navLinkClasses = "flex items-center w-full p-4 text-lg font-semibold";
+  const navLinkClasses = "flex items-center w-full p-4 text-lg font-semibold notranslate";
   const activeLinkClasses = "bg-accent text-accent-foreground";
 
   return (
@@ -79,36 +79,23 @@ export function MobileNav({ settings, onLinkClick }: MobileNavProps) {
                     <AccordionTrigger className={cn(navLinkClasses, "py-0 hover:no-underline", pathname.startsWith('/category') && activeLinkClasses)}>
                       Categories
                     </AccordionTrigger>
-                    <AccordionContent className="bg-muted/50">
+                    <AccordionContent className="bg-muted/50 notranslate">
                         <Link href="/category" onClick={() => { handleLinkClick('/category'); onLinkClick?.(); }} className={cn("block py-3 ps-8 text-base", pathname === '/category' && "font-bold text-primary")}>
                             All Categories
                         </Link>
+                        <Separator className="bg-border" />
                         {specialCategories.map(cat => (
                             <div key={cat.slug}>
-                                <Separator className="bg-border" />
                                 <Link href={`/${cat.slug}`} onClick={() => { handleLinkClick(`/${cat.slug}`); onLinkClick?.(); }} className={cn("block py-3 ps-8 text-base", pathname === `/${cat.slug}` && "font-bold text-primary")}>
                                 {cat.name}
                                 </Link>
+                                <Separator className="bg-border" />
                             </div>
                         ))}
-                        <Separator className="bg-border" />
-                        {categoriesHierarchy.map((mainCat) => (
-                             <Accordion key={mainCat.slug} type="single" collapsible className="w-full">
-                                <AccordionItem value={mainCat.slug} className="border-b-0">
-                                     <AccordionTrigger className="ps-8 pe-4 py-3 text-base hover:no-underline">
-                                        {mainCat.name}
-                                    </AccordionTrigger>
-                                    <AccordionContent className="bg-background">
-                                        <div className="ps-12 divide-y">
-                                            {mainCat.subcategories.map((subCat) => (
-                                                <Link key={subCat.slug} href={`/category/${subCat.slug}`} onClick={() => { handleLinkClick(`/category/${subCat.slug}`); onLinkClick?.(); }} className={cn("block py-3 text-base", pathname === `/category/${subCat.slug}` && "font-bold text-primary")}>
-                                                    {subCat.name}
-                                                </Link>
-                                            ))}
-                                        </div>
-                                    </AccordionContent>
-                                </AccordionItem>
-                            </Accordion>
+                        {mainCategories.map((mainCat) => (
+                             <Link key={mainCat.slug} href={`/category/${mainCat.slug}`} onClick={() => { handleLinkClick(`/category/${mainCat.slug}`); onLinkClick?.(); }} className={cn("block py-3 ps-8 text-base", pathname === `/category/${mainCat.slug}` && "font-bold text-primary")}>
+                                {mainCat.name}
+                            </Link>
                           ))}
                     </AccordionContent>
                   </AccordionItem>
@@ -141,13 +128,13 @@ export function MobileNav({ settings, onLinkClick }: MobileNavProps) {
               <Link href="/account" onClick={onLinkClick} className="flex items-center space-x-3">
                 <Avatar className="h-14 w-14 cursor-pointer">
                   <AvatarImage src={user.photoURL || undefined} alt={user.displayName || 'User Avatar'} />
-                  <AvatarFallback style={{ backgroundColor: generateColorFromString(user.uid) }}>
+                  <AvatarFallback style={{ backgroundColor: generateColorFromString(user.uid) }} className="notranslate">
                     {user.displayName?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <p className="font-semibold">{user.displayName || user.firstName || 'Account'}</p>
-                  <p className="text-sm text-muted-foreground">{user.email}</p>
+                  <p className="font-semibold notranslate">{user.displayName || user.firstName || 'Account'}</p>
+                  <p className="text-sm text-muted-foreground notranslate">{user.email}</p>
                 </div>
               </Link>
               <Button variant="outline" className="w-full" onClick={handleSignOut}>

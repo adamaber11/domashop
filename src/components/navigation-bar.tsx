@@ -8,10 +8,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuPortal,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
@@ -23,7 +19,7 @@ import { Skeleton } from './ui/skeleton';
 import { useCart } from '@/context/cart-context';
 import { CurrencySelector } from './currency-selector';
 import { generateColorFromString } from '@/lib/utils';
-import { categoriesHierarchy, specialCategories } from '@/lib/data';
+import { mainCategories, specialCategories } from '@/lib/data';
 
 
 export function NavigationBar() {
@@ -31,7 +27,7 @@ export function NavigationBar() {
   const { user, loading: authLoading, signOut: firebaseSignOut } = useAuth();
   const { clearCart } = useCart();
 
-  const navLinkClasses = "text-base transition-colors relative after:content-[''] after:absolute after:bottom-0 after:start-1/2 after:-translate-x-1/2 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:origin-center after:transition-transform after:duration-300";
+  const navLinkClasses = "text-base transition-colors relative after:content-[''] after:absolute after:bottom-0 after:start-1/2 after:-translate-x-1/2 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:origin-center after:transition-transform after:duration-300 notranslate";
   const activeClasses = "text-primary after:scale-x-100";
   const inactiveClasses = "text-foreground/80 hover:text-primary hover:after:scale-x-100";
 
@@ -60,7 +56,7 @@ export function NavigationBar() {
                   <ChevronDown className="h-4 w-4" />
                 </div>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-60">
+              <DropdownMenuContent align="start" className="w-60 notranslate">
                 <DropdownMenuItem asChild>
                    <Link href="/category">All Categories</Link>
                 </DropdownMenuItem>
@@ -71,25 +67,10 @@ export function NavigationBar() {
                   </DropdownMenuItem>
                 ))}
                 <DropdownMenuSeparator />
-                {categoriesHierarchy.map((mainCategory) => (
-                  <DropdownMenuSub key={mainCategory.slug}>
-                    <DropdownMenuSubTrigger>
-                      <span className="notranslate">{mainCategory.name}</span>
-                    </DropdownMenuSubTrigger>
-                    <DropdownMenuPortal>
-                        <DropdownMenuSubContent>
-                             <DropdownMenuItem asChild>
-                                <Link href={`/category/${mainCategory.slug}`}>All {mainCategory.name}</Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            {mainCategory.subcategories.map((subCategory) => (
-                                <DropdownMenuItem key={subCategory.slug} asChild>
-                                    <Link href={`/category/${subCategory.slug}`}>{subCategory.name}</Link>
-                                </DropdownMenuItem>
-                            ))}
-                        </DropdownMenuSubContent>
-                    </DropdownMenuPortal>
-                  </DropdownMenuSub>
+                {mainCategories.map((mainCategory) => (
+                  <DropdownMenuItem key={mainCategory.slug} asChild>
+                    <Link href={`/category/${mainCategory.slug}`}>{mainCategory.name}</Link>
+                  </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
@@ -116,7 +97,7 @@ export function NavigationBar() {
                   <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                     <Avatar className="h-10 w-10 cursor-pointer transition-transform hover:scale-110">
                       <AvatarImage src={user.photoURL || undefined} alt={user.displayName || user.email || 'User Avatar'} />
-                      <AvatarFallback style={{ backgroundColor: generateColorFromString(user.uid) }}>
+                      <AvatarFallback style={{ backgroundColor: generateColorFromString(user.uid) }} className="notranslate">
                         {user.displayName?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
