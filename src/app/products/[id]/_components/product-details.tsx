@@ -27,14 +27,14 @@ export function ProductDetails({ product }: ProductDetailsProps) {
 
   return (
     <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-start">
-      <div className="w-full relative">
+      <div className="grid grid-cols-1 gap-6">
         <ProductGallery imageUrls={product.imageUrls} imageHint={product.imageHint} />
         {product.onSale && (
           <Badge variant="destructive" className="absolute top-4 start-4 text-sm md:text-base z-10">Sale</Badge>
         )}
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-6 md:sticky md:top-24">
         <div className="space-y-2">
           <StockBadge stock={product.stock} />
           <h1 className="font-headline text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight">{product.name}</h1>

@@ -25,15 +25,19 @@ export function ProductGallery({ imageUrls, imageHint }: ProductGalleryProps) {
             smallImage: {
                 alt: imageHint,
                 isFluidWidth: true,
-                src: selectedImage
+                src: selectedImage,
+                sizes: '(max-width: 480px) 100vw, (max-width: 1200px) 30vw, 360px'
             },
             largeImage: {
                 src: selectedImage,
                 width: 1200,
-                height: 1200
+                height: 1200,
+            },
+            enlargedImageContainerDimensions: {
+                width: '120%',
+                height: '100%'
             },
             lensStyle: { backgroundColor: 'rgba(0,0,0,.6)' },
-            shouldUsePositiveSpaceLens: true,
          }} />
       </Card>
       
