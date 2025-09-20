@@ -1,4 +1,5 @@
 
+
 import type { User as FirebaseUser, UserInfo, UserMetadata } from 'firebase/auth';
 import type { Timestamp } from 'firebase/firestore';
 
@@ -98,6 +99,7 @@ export interface SiteSettings {
   heroImages: HeroImage[];
   heroCarouselDelay: number;
   currencies: Currency[];
+  discoverProductIds: string[];
 }
 
 

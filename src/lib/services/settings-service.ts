@@ -40,7 +40,8 @@ const defaultSettings: Omit<SiteSettings, 'id'> = {
     { code: 'KWD', name: 'Kuwaiti Dinar', rate: 0.31 },
     { code: 'BHD', name: 'Bahraini Dinar', rate: 0.38 },
     { code: 'OMR', name: 'Omani Rial', rate: 0.38 },
-  ]
+  ],
+  discoverProductIds: ['prod_001', 'prod_002', 'prod_003'],
 };
 
 export const getSiteSettings = cache(async (): Promise<SiteSettings> => {
@@ -53,6 +54,9 @@ export const getSiteSettings = cache(async (): Promise<SiteSettings> => {
       const settings = { ...defaultSettings, ...data };
       if (!settings.currencies || settings.currencies.length === 0) {
         settings.currencies = defaultSettings.currencies;
+      }
+      if (!settings.discoverProductIds || settings.discoverProductIds.length !== 3) {
+        settings.discoverProductIds = defaultSettings.discoverProductIds;
       }
       return { id: docSnap.id, ...settings } as SiteSettings;
     } else {

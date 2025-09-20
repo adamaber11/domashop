@@ -12,10 +12,12 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDes
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { getSiteSettings, updateSiteSettings } from '@/lib/services/settings-service';
-import type { SiteSettings } from '@/lib/types';
+import { getAllProducts } from '@/lib/services/product-service';
+import type { SiteSettings, Product } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Separator } from '@/components/ui/separator';
 import { Trash2 } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const settingsSchema = z.object({
     welcomeHeadline: z.string().min(5, 'Headline must be at least 5 characters.'),
@@ -40,6 +42,7 @@ const settingsSchema = z.object({
         name: z.string().min(3, 'Name is required.'),
         rate: z.coerce.number().positive('Exchange rate must be positive.'),
     })).min(1, 'At least one currency is required.'),
+    discoverProductIds: z.array(z.string()).length(3, 'You must select exactly 3 products.'),
 });
 
 type SettingsFormValues = z.infer<typeof settingsSchema>;
@@ -48,6 +51,7 @@ export default function SettingsPage() {
     const router = useRouter();
     const { toast } = useToast();
     const [settings, setSettings] = useState<SiteSettings | null>(null);
+    const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
 
     const form = useForm<SettingsFormValues>({
@@ -67,6 +71,7 @@ export default function SettingsPage() {
             heroImages: [],
             heroCarouselDelay: 2000,
             currencies: [],
+            discoverProductIds: [],
         },
     });
 
@@ -81,20 +86,34 @@ export default function SettingsPage() {
     });
 
     useEffect(() => {
-        const fetchSettings = async () => {
+        const fetchInitialData = async () => {
             try {
-                const fetchedSettings = await getSiteSettings();
+                const [fetchedSettings, fetchedProducts] = await Promise.all([
+                    getSiteSettings(),
+                    getAllProducts()
+                ]);
                 setSettings(fetchedSettings);
-                form.reset(fetchedSettings);
+                setProducts(fetchedProducts);
+
+                const discoverProductIds = fetchedSettings.discoverProductIds || [];
+                form.reset({
+                    ...fetchedSettings,
+                    discoverProductIds: [
+                        discoverProductIds[0] || '',
+                        discoverProductIds[1] || '',
+                        discoverProductIds[2] || '',
+                    ],
+                });
+
             } catch (error) {
-                console.error("Failed to fetch site settings:", error);
-                toast({ title: 'Error', description: 'Failed to load site settings.', variant: 'destructive' });
+                console.error("Failed to fetch site settings or products:", error);
+                toast({ title: 'Error', description: 'Failed to load initial data.', variant: 'destructive' });
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchSettings();
+        fetchInitialData();
     }, [form, toast]);
     
 
@@ -151,6 +170,40 @@ export default function SettingsPage() {
                             <FormField control={form.control} name="welcomeSubheading" render={({ field }) => (
                                 <FormItem><FormLabel>Welcome Subheading</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                             )} />
+                        </CardContent>
+                    </Card>
+
+                     <Card>
+                        <CardHeader>
+                            <CardTitle>Discover Something New Section</CardTitle>
+                            <CardDescription>Select the three products to feature on the homepage.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            {[0, 1, 2].map(index => (
+                                <FormField
+                                    key={index}
+                                    control={form.control}
+                                    name={`discoverProductIds.${index}`}
+                                    render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Product Slot {index + 1}</FormLabel>
+                                        <Select onValueChange={field.onChange} value={field.value}>
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select a product" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {products.map(p => (
+                                                    <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                        <FormMessage />
+                                    </FormItem>
+                                    )}
+                                />
+                            ))}
                         </CardContent>
                     </Card>
 

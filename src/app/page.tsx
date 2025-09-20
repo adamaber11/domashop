@@ -3,20 +3,23 @@
 
 import { HeroCarousel } from "@/components/hero-carousel";
 import { ProductCard } from "@/components/product-card";
-import { getFeaturedProducts } from "@/lib/services/product-service";
+import { getFeaturedProducts, getProductById } from "@/lib/services/product-service";
 import { getSiteSettings } from "@/lib/services/settings-service";
 import { ArrowRight, ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import type { Product } from "@/lib/types";
 
 export default async function HomePage() {
   const featuredProducts = await getFeaturedProducts(10);
   const settings = await getSiteSettings();
 
-  // Get 3 random products from the featured list for efficiency
-  const randomProducts = [...featuredProducts].sort(() => 0.5 - Math.random()).slice(0, 3);
+  const discoverProducts = (await Promise.all(
+    (settings.discoverProductIds || []).map(id => getProductById(id))
+  )).filter((p): p is Product => !!p);
+
 
   return (
     <div className="space-y-16 md:space-y-24">
@@ -70,7 +73,7 @@ export default async function HomePage() {
       </div>
 
       {/* New Orange Promotion Section */}
-      {randomProducts.length >= 3 && (
+      {discoverProducts.length === 3 && (
         <div className="w-full bg-primary/10 py-16">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
                  <h2 className="font-headline text-3xl md:text-4xl font-bold mb-4 text-primary">
@@ -80,7 +83,7 @@ export default async function HomePage() {
                     Handpicked just for you. Click on any product to see more details.
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
-                    {randomProducts.map(product => {
+                    {discoverProducts.map(product => {
                         const imageUrl = product.imageUrls?.[0];
                         return (
                             <Link href={`/products/${product.id}`} key={product.id} className="group block">
