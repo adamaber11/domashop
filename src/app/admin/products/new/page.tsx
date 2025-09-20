@@ -14,7 +14,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import { addProduct } from '@/lib/services/product-service';
 import { allCategories } from '@/lib/data';
-import placeholderImages from '@/app/lib/placeholder-images.json';
+import { Separator } from '@/components/ui/separator';
 
 const productSchema = z.object({
   name: z.string().min(3, 'Product name must be at least 3 characters.'),
@@ -25,7 +25,8 @@ const productSchema = z.object({
   onSale: z.boolean().default(false),
   salePrice: z.coerce.number().optional(),
   isFeatured: z.boolean().default(false),
-  // Image URLs are now handled by the placeholder mapping, so we don't need them in the form
+  imageUrls: z.array(z.string().url("Please enter a valid URL.")).min(1, 'At least one image URL is required.'),
+  imageHint: z.string().min(2, 'Image hint is required.'),
 }).refine(data => {
     if (data.onSale && (!data.salePrice || data.salePrice <= 0)) {
         return false;
@@ -38,8 +39,7 @@ const productSchema = z.object({
 
 type ProductFormValues = z.infer<typeof productSchema>;
 
-// Generate a random product ID for new products
-const generateProductId = () => `prod_${Math.random().toString(36).substring(2, 10)}`;
+const generateProductId = () => `prod_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
 
 export default function NewProductPage() {
     const router = useRouter();
@@ -51,32 +51,36 @@ export default function NewProductPage() {
             name: '',
             description: '',
             price: 0,
-            stock: 0,
+            stock: 10,
             category: '',
             onSale: false,
             salePrice: undefined,
             isFeatured: false,
+            imageUrls: ['', '', ''],
+            imageHint: '',
         },
     });
 
     async function onSubmit(values: ProductFormValues) {
         try {
             const newProductId = generateProductId();
-            const placeholder = placeholderImages['prod_001'] || { src: "https://placehold.co/800x600/E2D6C5/443027", hint: "new product" };
+             // Filter out empty strings from imageUrls
+            const finalImageUrls = values.imageUrls.filter(url => url.trim() !== '');
+
+            if (finalImageUrls.length === 0) {
+                 toast({
+                    title: 'Image Required',
+                    description: 'Please provide at least one image URL for the product.',
+                    variant: 'destructive',
+                });
+                return;
+            }
 
             const productData = {
-                name: values.name,
-                description: values.description,
-                price: values.price,
-                stock: values.stock,
-                category: values.category,
-                onSale: values.onSale,
-                salePrice: values.salePrice,
-                isFeatured: values.isFeatured,
-                // Assign placeholder images for the new product
-                imageUrls: [placeholder.src, placeholder.src, placeholder.src],
-                imageHint: placeholder.hint,
+                ...values,
+                imageUrls: finalImageUrls,
             };
+
             await addProduct(productData, newProductId);
             toast({
                 title: 'Product Created',
@@ -112,7 +116,7 @@ export default function NewProductPage() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <FormField control={form.control} name="price" render={({ field }) => (
-                            <FormItem><FormLabel>Price</FormLabel><FormControl><Input type="number" step="0.01" {...field} /></FormControl><FormMessage /></FormItem>
+                            <FormItem><FormLabel>Price (USD)</FormLabel><FormControl><Input type="number" step="0.01" {...field} /></FormControl><FormMessage /></FormItem>
                         )} />
                         <FormField control={form.control} name="stock" render={({ field }) => (
                             <FormItem><FormLabel>Stock Quantity</FormLabel><FormControl><Input type="number" step="1" {...field} /></FormControl><FormMessage /></FormItem>
@@ -133,7 +137,32 @@ export default function NewProductPage() {
                             <FormMessage />
                         </FormItem>
                     )} />
+                    
+                    <Separator />
+                    
+                     <div className="space-y-4">
+                        <h3 className="text-lg font-medium">Product Images</h3>
+                         <FormDescription>Upload your images to a service like <a href="https://imgur.com/upload" target="_blank" rel="noopener noreferrer" className="underline">Imgur</a> and paste the direct image links below.</FormDescription>
+                        <FormField control={form.control} name="imageUrls.0" render={({ field }) => (
+                            <FormItem><FormLabel>Image URL 1 (Main)</FormLabel><FormControl><Input placeholder="https://i.imgur.com/your-image.jpeg" {...field} /></FormControl><FormMessage /></FormItem>
+                        )} />
+                         <FormField control={form.control} name="imageUrls.1" render={({ field }) => (
+                            <FormItem><FormLabel>Image URL 2</FormLabel><FormControl><Input placeholder="https://i.imgur.com/your-image.jpeg" {...field} /></FormControl><FormMessage /></FormItem>
+                        )} />
+                         <FormField control={form.control} name="imageUrls.2" render={({ field }) => (
+                            <FormItem><FormLabel>Image URL 3</FormLabel><FormControl><Input placeholder="https://i.imgur.com/your-image.jpeg" {...field} /></FormControl><FormMessage /></FormItem>
+                        )} />
+                         <FormField control={form.control} name="imageHint" render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>AI Image Hint</FormLabel>
+                                <FormControl><Input placeholder="e.g., 'vintage camera'" {...field} /></FormControl>
+                                <FormDescription>A short description (1-2 words) for AI image replacement suggestions.</FormDescription>
+                                <FormMessage />
+                            </FormItem>
+                        )} />
+                    </div>
 
+                    <Separator />
 
                     <div className="space-y-4">
                         <FormField control={form.control} name="onSale" render={({ field }) => (
@@ -144,7 +173,7 @@ export default function NewProductPage() {
                         )} />
                         {form.watch('onSale') && (
                              <FormField control={form.control} name="salePrice" render={({ field }) => (
-                                <FormItem><FormLabel>Sale Price</FormLabel><FormControl><Input type="number" step="0.01" {...field} /></FormControl><FormMessage /></FormItem>
+                                <FormItem><FormLabel>Sale Price (USD)</FormLabel><FormControl><Input type="number" step="0.01" {...field} /></FormControl><FormMessage /></FormItem>
                             )} />
                         )}
                     </div>
@@ -169,3 +198,5 @@ export default function NewProductPage() {
         </div>
     );
 }
+
+    
