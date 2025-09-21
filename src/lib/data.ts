@@ -6,12 +6,12 @@ export const specialCategories = [
 ];
 
 export const mainCategories = [
-    { name: "Makeup (مكياج)", slug: "makeup" },
     { name: "Skincare (عناية بالبشرة)", slug: "skincare" },
     { name: "Accessories (إكسسوارات)", slug: "accessories" },
     { name: "Clothing (ملابس)", slug: "clothing" },
     { name: "Bags (شنط)", slug: "bags" },
     { name: "Shoes (أحذية)", slug: "shoes" },
+    { name: "Makeup (مكياج)", slug: "makeup" },
     { name: "Handmade (هاند ميد)", slug: "handmade" },
 ];
 
