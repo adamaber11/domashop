@@ -147,7 +147,7 @@ export default function AdminUsersPage() {
                 <TableHead className="w-[80px]">Avatar</TableHead>
                 <TableHead>User</TableHead>
                 <TableHead>Role</TableHead>
-                <TableHead>Last Sign In</TableHead>
+                <TableHead>Email Verified</TableHead>
                 <TableHead className="text-end">Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -173,7 +173,9 @@ export default function AdminUsersPage() {
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      {user.metadata?.lastSignInTime ? new Date(user.metadata.lastSignInTime).toLocaleDateString() : 'N/A'}
+                      <Badge variant={user.emailVerified ? 'default' : 'outline'}>
+                        {user.emailVerified ? 'Yes' : 'No'}
+                      </Badge>
                     </TableCell>
                     <TableCell className="text-end">
                       <DropdownMenu>

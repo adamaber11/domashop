@@ -47,22 +47,10 @@ export const getAllUsers = cache(async (): Promise<SiteUser[]> => {
   try {
     const usersSnapshot = await getDocs(usersCollection);
     
-    // This function is for admin display purposes.
-    // Avoid returning sensitive or unnecessary data.
     const users = usersSnapshot.docs.map(doc => {
-      const data = doc.data();
       return {
         uid: doc.id,
-        email: data.email,
-        displayName: data.displayName,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        photoURL: data.photoURL,
-        // Mocking fields for display, as full Auth UserRecord is not available client-side
-        metadata: {
-            creationTime: new Date().toISOString(), // This is not the real creation time
-            lastSignInTime: new Date().toISOString(), // This is not the real sign-in time
-        }
+        ...doc.data()
       } as SiteUser;
     });
 
