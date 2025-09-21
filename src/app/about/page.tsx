@@ -46,28 +46,6 @@ export default async function AboutPage() {
             </p>
           </div>
         </div>
-
-        <div>
-          <h2 className="font-headline text-3xl font-bold text-center mb-8">The Founder</h2>
-          <div className="flex justify-center">
-            <Card className="text-center w-full max-w-xs">
-              <CardHeader>
-                <div className="relative w-32 h-32 rounded-full mx-auto overflow-hidden">
-                  <Image
-                    src={about.founderImageUrl}
-                    alt={`Founder ${about.founderName}`}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              </CardHeader>
-              <CardContent>
-                <CardTitle className="font-headline text-xl">{about.founderName}</CardTitle>
-                <p className="text-primary">{about.founderTitle}</p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
       </div>
     </div>
   );
