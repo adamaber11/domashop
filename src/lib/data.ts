@@ -1,4 +1,3 @@
-
 import type { Product } from './types';
 
 export const mainCategories = [
@@ -12,7 +11,6 @@ export const mainCategories = [
     { name: "Handmade (هاند ميد)", slug: "handmade" },
 ];
 
-// No longer needed as they are merged into mainCategories
 export const specialCategories: { name: string, slug: string }[] = [];
 
 

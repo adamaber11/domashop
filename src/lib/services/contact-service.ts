@@ -7,6 +7,7 @@ import type { ContactMessage } from '@/lib/types';
 import { revalidatePath } from 'next/cache';
 import { unstable_cache as cache } from 'next/cache';
 
+const messagesCollection = collection(db, 'contactMessages');
 
 export async function saveContactMessage(data: { name: string; email: string; subject: string; message: string; }) {
   try {
@@ -22,7 +23,6 @@ export async function saveContactMessage(data: { name: string; email: string; su
   }
 }
 
-const messagesCollection = collection(db, 'contactMessages');
 export const getAllMessages = cache(async (): Promise<ContactMessage[]> => {
   try {
     const q = query(messagesCollection, orderBy('date', 'desc'));

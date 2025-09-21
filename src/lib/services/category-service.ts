@@ -1,16 +1,17 @@
-
 'use server';
 
 import { db } from '@/lib/firebase';
 import { collection, getDocs, doc, addDoc, updateDoc, deleteDoc, query, where, orderBy, writeBatch, limit } from 'firebase/firestore';
 import type { Category } from '@/lib/types';
 import { unstable_cache as cache, revalidatePath } from 'next/cache';
-import { initialCategories } from '@/lib/data';
+import { mainCategories } from '@/lib/data';
 
 const categoriesCollection = collection(db, 'categories');
 
 function createSlug(name: string): string {
-  return name.toLowerCase()
+  // Extract English part from "Category (Translation)"
+  const englishName = name.split('(')[0].trim();
+  return englishName.toLowerCase()
     .replace(/\s+/g, '-') // Replace spaces with -
     .replace(/[^\w-]+/g, '') // Remove all non-word chars
     .replace(/--+/g, '-') // Replace multiple - with single -
@@ -122,22 +123,13 @@ export async function seedInitialCategories(): Promise<{ success: boolean; messa
 
         const batch = writeBatch(db);
 
-        for (const mainCat of initialCategories) {
-            const mainCatRef = doc(collection(db, 'categories'));
-            batch.set(mainCatRef, {
-                name: mainCat.name,
-                slug: mainCat.slug,
+        for (const cat of mainCategories) {
+            const catRef = doc(categoriesCollection);
+            batch.set(catRef, {
+                name: cat.name,
+                slug: cat.slug,
                 parentId: null
             });
-
-            for (const subCat of mainCat.subcategories) {
-                const subCatRef = doc(collection(db, 'categories'));
-                batch.set(subCatRef, {
-                    name: subCat.name,
-                    slug: subCat.slug,
-                    parentId: mainCatRef.id
-                });
-            }
         }
         await batch.commit();
         revalidatePath('/admin/categories');

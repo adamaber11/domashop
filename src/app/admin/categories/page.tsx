@@ -1,4 +1,3 @@
-
 'use server';
 
 import { getCategoriesHierarchy, seedInitialCategories } from '@/lib/services/category-service';

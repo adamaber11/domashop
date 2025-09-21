@@ -1,4 +1,3 @@
-
 'use server';
 
 import { db } from '@/lib/firebase';
@@ -18,10 +17,7 @@ const defaultAboutContent: AboutPageContent = {
   subheading: "مرحبًا بكِ في وجهتك الأولى لكل ما هو عصري ومميز. من الأزياء والجمال إلى الإكسسوارات التي تبرز شخصيتك، نحن هنا لنلبي كل احتياجاتك.",
   mission: "مهمتنا هي توفير تجربة تسوق فريدة وممتعة، نقدم فيها تشكيلة واسعة من المنتجات عالية الجودة التي تم اختيارها بعناية لتناسب ذوق كل فتاة عصرية. نسعى لإلهامك ومساعدتك على التعبير عن نفسك بثقة.",
   vision: "رؤيتنا هي أن نكون المتجر الإلكتروني الرائد الذي تجد فيه كل فتاة ما يعكس أسلوبها وشغفها. نحلم بعالم يكون فيه التسوق رحلة لاكتشاف الذات والجمال.",
-  founderName: "Eng. Adam Aber Desouky",
-  founderTitle: "CEO & Founder",
   bannerImageUrl: placeholderImages.about_banner.src,
-  founderImageUrl: placeholderImages.founder_image.src,
 };
 
 const defaultContactContent: ContactPageContent = {

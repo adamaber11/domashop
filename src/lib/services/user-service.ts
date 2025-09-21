@@ -1,4 +1,3 @@
-
 'use server';
 
 import { db } from '@/lib/firebase';
@@ -7,6 +6,7 @@ import type { SiteUser, ShippingAddress } from '@/lib/types';
 import { revalidatePath } from 'next/cache';
 import { unstable_cache as cache } from 'next/cache';
 
+const usersCollection = collection(db, 'users');
 
 export const getUserById = cache(async (uid: string): Promise<SiteUser | null> => {
     try {
@@ -45,7 +45,6 @@ export async function updateUserProfile(uid: string, data: {
 
 export const getAllUsers = cache(async (): Promise<SiteUser[]> => {
   try {
-    const usersCollection = collection(db, 'users');
     const usersSnapshot = await getDocs(usersCollection);
     
     // This function is for admin display purposes.
@@ -76,7 +75,6 @@ export const getAllUsers = cache(async (): Promise<SiteUser[]> => {
 
 export const getTotalUsersCount = cache(async (): Promise<number> => {
     try {
-        const usersCollection = collection(db, 'users');
         const snapshot = await getCountFromServer(usersCollection);
         return snapshot.data().count;
     } catch (error) {
