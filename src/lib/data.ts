@@ -1,7 +1,11 @@
+
 import type { Product } from './types';
 
-export const mainCategories = [
+export const specialCategories = [
     { name: "Offers (العروض)", slug: "offers" },
+];
+
+export const mainCategories = [
     { name: "Makeup (مكياج)", slug: "makeup" },
     { name: "Skincare (عناية بالبشرة)", slug: "skincare" },
     { name: "Accessories (إكسسوارات)", slug: "accessories" },
@@ -11,10 +15,8 @@ export const mainCategories = [
     { name: "Handmade (هاند ميد)", slug: "handmade" },
 ];
 
-export const specialCategories: { name: string, slug: string }[] = [];
 
-
-export const allCategories = mainCategories.map(c => c.name).sort();
+export const allCategories = [...mainCategories.map(c => c.name), ...specialCategories.map(c => c.name)].sort();
 
 
 // This is mock data for seeding the database.
@@ -170,3 +172,5 @@ export const products: Omit<Product, 'reviewCount' | 'averageRating' | 'imageUrl
     ]
   }
 ].map(p => ({ ...p, reviews: p.reviews || [] }));
+
+    
