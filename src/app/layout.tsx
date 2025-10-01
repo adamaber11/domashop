@@ -1,4 +1,3 @@
-
 import type { Metadata } from "next";
 import { Playfair_Display, PT_Sans } from "next/font/google";
 import "./globals.css";
@@ -10,7 +9,6 @@ import { AuthProvider } from "@/context/auth-context";
 import { CartProvider } from "@/context/cart-context";
 import { CurrencyProvider } from "@/context/currency-context";
 import { getSiteSettings } from "@/lib/services/settings-service";
-
 
 const ptSans = PT_Sans({
   subsets: ["latin"],
@@ -24,25 +22,52 @@ const playfairDisplay = Playfair_Display({
   variable: "--font-playfair-display",
 });
 
-
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
   const title = `${settings.logoTextPart1}${settings.logoTextPart2}${settings.logoTextPart3} Online Shop`;
   const description = settings.welcomeSubheading;
+  const siteUrl = "https://doma-shop.vercel.app"; // عدلها للينك موقعك الرسمي
+  const ogImage = `${siteUrl}/og-image.png`; // لو عندك صورة og مخصوص ضيفها في public
 
   return {
-    title: title,
-    description: description,
+    title,
+    description,
     keywords: [
-    "Online Shop", "Doma Store", "eCommerce Egypt", "Buy Online", "Handmade Products", 
-    "Electronics Online", "Fashion Online", "Home Decor", "Accessories", "Gifts Online", 
-    "Kitchen Tools", "Mobile Phones", "Laptops Online", "Beauty Products", "Health & Care", 
-    "Kids Toys", "Sports Equipment", "متجر إلكتروني", "دوما شوب", "تسوق أونلاين", 
-    "منتجات هاند ميد", "اكسسوارات", "ديكور المنزل", "أجهزة إلكترونية", "ملابس أونلاين", 
-    "مستحضرات تجميل", "منتجات العناية بالصحة", "أدوات المطبخ", "هواتف محمولة", "لاب توب", 
-    "ألعاب أطفال", "معدات رياضية", "هدايا"
-    ]
-  }
+      "Online Shop", "Doma Store", "eCommerce Egypt", "Buy Online", "Handmade Products", 
+      "Electronics Online", "Fashion Online", "Home Decor", "Accessories", "Gifts Online", 
+      "Kitchen Tools", "Mobile Phones", "Laptops Online", "Beauty Products", "Health & Care", 
+      "Kids Toys", "Sports Equipment", "متجر إلكتروني", "دوما شوب", "تسوق أونلاين", 
+      "منتجات هاند ميد", "اكسسوارات", "ديكور المنزل", "أجهزة إلكترونية", "ملابس أونلاين", 
+      "مستحضرات تجميل", "منتجات العناية بالصحة", "أدوات المطبخ", "هواتف محمولة", "لاب توب", 
+      "ألعاب أطفال", "معدات رياضية", "هدايا"
+    ],
+    verification: {
+      google: "Q93NKffchZec6bIJJZWfLdrOh__ENY5f6NLi00joc7s",
+    },
+    openGraph: {
+      title,
+      description,
+      url: siteUrl,
+      siteName: "Doma Online Shop",
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: "Doma Online Shop",
+        },
+      ],
+      locale: "en_US",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImage],
+      creator: "@yourtwitterhandle", // لو عندك حساب تويتر ضيفه
+    },
+  };
 }
 
 export default function RootLayout({
@@ -50,7 +75,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-
   return (
     <html lang="en">
       <body
@@ -71,3 +95,4 @@ export default function RootLayout({
     </html>
   );
 }
+
