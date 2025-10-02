@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +15,7 @@ import { ChevronDown, LogIn, UserPlus, LogOut, User as UserIcon, LayoutDashboard
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { useAuth } from '@/context/auth-context';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Skeleton } from './ui/skeleton';
 import { useCart } from '@/context/cart-context';
 import { CurrencySelector } from './currency-selector';
 import { generateColorFromString } from '@/lib/utils';
@@ -24,6 +25,8 @@ export function NavigationBar() {
   const pathname = usePathname();
   const { user, loading: authLoading, signOut: firebaseSignOut } = useAuth();
   const { clearCart } = useCart();
+  const [scrollingUp, setScrollingUp] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   const navLinkClasses = "text-base transition-colors relative after:content-[''] after:absolute after:bottom-0 after:start-1/2 after:-translate-x-1/2 after:h-[2px] after:w-full after:bg-primary after:scale-x-0 after:origin-center after:transition-transform after:duration-300 notranslate";
   const activeClasses = "text-primary after:scale-x-100";
@@ -34,8 +37,28 @@ export function NavigationBar() {
     clearCart();
   };
 
+  // مراقبة السكروول
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY < lastScrollY) {
+        setScrollingUp(true); // السكروول لأعلى
+      } else {
+        setScrollingUp(false); // السكروول لأسفل
+      }
+      setLastScrollY(window.scrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
+
   return (
-    <nav className="bg-background border-b hidden md:block">
+    <nav
+      className={cn(
+        "bg-background border-b transition-transform duration-300 hidden md:block",
+        scrollingUp ? "translate-y-0" : "-translate-y-full"
+      )}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14">
           <div className="flex items-center gap-8">
@@ -45,21 +68,27 @@ export function NavigationBar() {
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <div tabIndex={0} role="button" aria-haspopup="true" aria-expanded="false" className={cn(
-                  navLinkClasses,
-                  'flex items-center gap-1 focus:outline-none cursor-pointer',
-                   pathname.startsWith('/category') || specialCategories.some(c => pathname === `/${c.slug}`) ? activeClasses : inactiveClasses
-                )}>
+                <div
+                  tabIndex={0}
+                  role="button"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                  className={cn(
+                    navLinkClasses,
+                    'flex items-center gap-1 focus:outline-none cursor-pointer',
+                    pathname.startsWith('/category') || specialCategories.some(c => pathname === `/${c.slug}`) ? activeClasses : inactiveClasses
+                  )}
+                >
                   Categories
                   <ChevronDown className="h-4 w-4" />
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="w-60 notranslate">
                 <DropdownMenuItem asChild>
-                   <Link href="/category">All Categories</Link>
+                  <Link href="/category">All Categories</Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                 {specialCategories.map((cat) => (
+                {specialCategories.map((cat) => (
                   <DropdownMenuItem key={cat.slug} asChild>
                     <Link href={`/${cat.slug}`}>{cat.name}</Link>
                   </DropdownMenuItem>
@@ -80,9 +109,9 @@ export function NavigationBar() {
               Contact Us
             </Link>
           </div>
-          
+
           <div className="flex items-center space-x-4">
-             <CurrencySelector />
+            <CurrencySelector />
 
             {authLoading ? (
               <div className="flex items-center space-x-2">
