@@ -1,35 +1,44 @@
-'use server';
+"use client";
 
-import { notFound } from 'next/navigation';
-import { getProductById } from '@/lib/services/product-service';
-import { Separator } from '@/components/ui/separator';
-import PersonalizedRecommendations from '@/components/personalized-recommendations';
-import { ProductDetails } from './_components/product-details';
-import { ProductReviews } from './_components/product-reviews';
+import { useState } from "react";
 
-export default async function ProductDetailPage({ params }: { params: { id: string } }) {
-  const product = await getProductById(params.id);
-  
-  if (!product) {
-    notFound();
-  }
-  
+export function ProductDetails({ product }: { product: any }) {
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-      <ProductDetails product={product} />
-      
-      <Separator className="my-8 md:my-12" />
+    <div className="space-y-6">
+      <h1 className="text-2xl md:text-3xl font-bold">{product.name}</h1>
+      <p className="text-lg text-gray-600">{product.description}</p>
 
-      <div className="grid md:grid-cols-3 gap-12">
-        <div className="md:col-span-2">
-           <ProductReviews productId={product.id} />
-        </div>
-
-        <div className="mt-8 md:mt-0">
-            <h2 className="font-headline text-2xl md:text-3xl font-bold mb-8">You Might Also Like</h2>
-            <PersonalizedRecommendations currentProductId={product.id} />
-        </div>
+      {/* تفاصيل المنتج */}
+      <div className="space-y-2 text-sm text-gray-700">
+        <p><span className="font-semibold">النوع:</span> {product.type}</p>
+        <p><span className="font-semibold">الماركة:</span> {product.brand}</p>
+        <p><span className="font-semibold">الخامة:</span> {product.material}</p>
+        <p><span className="font-semibold">بلد الصنع:</span> {product.madeIn}</p>
       </div>
+
+      {/* المقاس اختياري */}
+      {product.sizes && product.sizes.length > 0 && (
+        <div className="mt-4">
+          <span className="font-semibold">المقاس:</span>
+          <div className="flex gap-2 mt-2">
+            {product.sizes.map((size: string) => (
+              <button
+                key={size}
+                onClick={() => setSelectedSize(size)}
+                className={`px-4 py-2 border rounded ${
+                  selectedSize === size
+                    ? "bg-green-600 text-white"
+                    : "bg-white text-gray-800"
+                }`}
+              >
+                {size}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
