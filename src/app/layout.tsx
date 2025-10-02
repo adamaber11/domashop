@@ -73,7 +73,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${cairo.variable} font-sans text-sm`} 
+        className={`${cairo.variable} font-sans text-sm`}
       >
         <AuthProvider>
           <CurrencyProvider>
