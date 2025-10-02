@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -27,7 +26,6 @@ import { getSiteSettings } from '@/lib/services/settings-service';
 import { useCurrency } from '@/context/currency-context';
 import { formatPrice } from '@/lib/utils';
 import { Skeleton } from './ui/skeleton';
-
 
 export function Header() {
   const { itemCount } = useCart();
@@ -103,9 +101,8 @@ export function Header() {
     </div>
   );
 
-
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="w-full border-b bg-background">
       <div className="container flex h-20 items-center justify-between px-5">
         <div className="flex items-center gap-2">
             <div className="md:hidden">
