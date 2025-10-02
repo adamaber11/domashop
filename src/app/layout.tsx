@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Playfair_Display, PT_Sans } from "next/font/google";
+import { Cairo } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/header";
 import { NavigationBar } from "@/components/navigation-bar";
@@ -10,24 +10,19 @@ import { CartProvider } from "@/context/cart-context";
 import { CurrencyProvider } from "@/context/currency-context";
 import { getSiteSettings } from "@/lib/services/settings-service";
 
-const ptSans = PT_Sans({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-pt-sans",
-});
-
-const playfairDisplay = Playfair_Display({
-  subsets: ["latin"],
-  weight: ["400", "700", "900"],
-  variable: "--font-playfair-display",
+// استدعاء خط Cairo
+const cairo = Cairo({
+  subsets: ["latin", "arabic"],
+  weight: ["400", "500", "700"],
+  variable: "--font-cairo",
 });
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
   const title = `${settings.logoTextPart1}${settings.logoTextPart2}${settings.logoTextPart3} Online Shop`;
   const description = settings.welcomeSubheading;
-  const siteUrl = "https://doma-shop.vercel.app"; // عدلها للينك موقعك الرسمي
-  const ogImage = `${siteUrl}/og-image.png`; // لو عندك صورة og مخصوص ضيفها في public
+  const siteUrl = "https://doma-shop.vercel.app"; 
+  const ogImage = `${siteUrl}/og-image.png`; 
 
   return {
     title,
@@ -65,7 +60,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title,
       description,
       images: [ogImage],
-      creator: "@yourtwitterhandle", // لو عندك حساب تويتر ضيفه
+      creator: "@yourtwitterhandle",
     },
   };
 }
@@ -78,7 +73,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${ptSans.variable} ${playfairDisplay.variable} font-body`}
+        className={`${cairo.variable} font-sans text-sm`} 
       >
         <AuthProvider>
           <CurrencyProvider>
@@ -95,4 +90,3 @@ export default function RootLayout({
     </html>
   );
 }
-
