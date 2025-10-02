@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -10,7 +9,7 @@ import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
 import { Separator } from '@/components/ui/separator';
@@ -51,12 +50,9 @@ export default function CheckoutPage() {
     },
   });
 
-   useEffect(() => {
+  useEffect(() => {
     if (user) {
-      // Set email from auth context
       form.setValue('email', user.email || '');
-
-      // Fetch user profile to get name and address
       const fetchUserProfile = async () => {
         const userProfile = await getUserById(user.uid);
         if (userProfile) {
@@ -68,16 +64,14 @@ export default function CheckoutPage() {
             form.setValue('shippingZip', userProfile.shippingAddress.zip || '');
           }
         } else {
-            form.setValue('shippingName', user.displayName || '');
+          form.setValue('shippingName', user.displayName || '');
         }
       };
       fetchUserProfile();
     }
   }, [user, form]);
 
-
   if (cart.length === 0) {
-    // Redirect to home if cart is empty, but wait for client-side navigation
     if (typeof window !== 'undefined') {
       router.push('/');
     }
@@ -96,7 +90,7 @@ export default function CheckoutPage() {
         customerName: values.shippingName,
         customerEmail: values.email,
         customerPhone: values.shippingPhone,
-        total: cartTotal, // Store total in base currency (USD)
+        total: cartTotal,
         status: 'Processing',
         items: cart,
         shippingAddress: {
@@ -134,7 +128,9 @@ export default function CheckoutPage() {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <Card>
-                <CardHeader><CardTitle className="font-headline text-2xl">Shipping & Contact Information</CardTitle></CardHeader>
+                <CardHeader>
+                  <CardTitle className="font-headline text-2xl">Shipping & Contact Information</CardTitle>
+                </CardHeader>
                 <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <FormField control={form.control} name="shippingName" render={({ field }) => (
                     <FormItem className="sm:col-span-2">
@@ -143,21 +139,21 @@ export default function CheckoutPage() {
                       <FormMessage />
                     </FormItem>
                   )} />
-                   <FormField control={form.control} name="email" render={({ field }) => (
+                  <FormField control={form.control} name="email" render={({ field }) => (
                     <FormItem>
                       <FormLabel>Email Address</FormLabel>
                       <FormControl><Input placeholder="you@example.com" {...field} /></FormControl>
                       <FormMessage />
                     </FormItem>
                   )} />
-                   <FormField control={form.control} name="shippingPhone" render={({ field }) => (
+                  <FormField control={form.control} name="shippingPhone" render={({ field }) => (
                     <FormItem>
                       <FormLabel>Phone Number</FormLabel>
                       <FormControl><Input placeholder="+1 234 567 890" {...field} /></FormControl>
                       <FormMessage />
                     </FormItem>
                   )} />
-                   <FormField control={form.control} name="shippingAddress" render={({ field }) => (
+                  <FormField control={form.control} name="shippingAddress" render={({ field }) => (
                     <FormItem className="sm:col-span-2">
                       <FormLabel>Address</FormLabel>
                       <FormControl><Input placeholder="123 Main St" {...field} /></FormControl>
@@ -171,14 +167,14 @@ export default function CheckoutPage() {
                       <FormMessage />
                     </FormItem>
                   )} />
-                   <FormField control={form.control} name="shippingState" render={({ field }) => (
+                  <FormField control={form.control} name="shippingState" render={({ field }) => (
                     <FormItem>
                       <FormLabel>State</FormLabel>
                       <FormControl><Input {...field} /></FormControl>
                       <FormMessage />
                     </FormItem>
                   )} />
-                   <FormField control={form.control} name="shippingZip" render={({ field }) => (
+                  <FormField control={form.control} name="shippingZip" render={({ field }) => (
                     <FormItem>
                       <FormLabel>ZIP Code</FormLabel>
                       <FormControl><Input {...field} /></FormControl>
@@ -188,7 +184,12 @@ export default function CheckoutPage() {
                 </CardContent>
               </Card>
 
-               <Card>
+              {/* Shipping Info Message */}
+              <p className="text-green-600 font-semibold">
+                🚚 الشحن من 3 أيام إلى 7 أيام
+              </p>
+
+              <Card>
                 <CardHeader>
                   <CardTitle className="font-headline text-2xl">Payment Method</CardTitle>
                 </CardHeader>
@@ -206,16 +207,20 @@ export default function CheckoutPage() {
             </form>
           </Form>
         </div>
-        
+
         <div className="lg:col-span-1 lg:sticky lg:top-24">
           <Card>
-            <CardHeader><CardTitle className="font-headline text-2xl">Your Order</CardTitle></CardHeader>
+            <CardHeader>
+              <CardTitle className="font-headline text-2xl">Your Order</CardTitle>
+            </CardHeader>
             <CardContent className="space-y-4">
               {cart.map(({ product, quantity }) => {
                 const price = product.onSale && product.salePrice ? product.salePrice : product.price;
                 return (
                   <div key={product.id} className="flex justify-between items-center text-sm">
-                    <span className="font-medium">{product.name} <span className="text-muted-foreground">x {quantity}</span></span>
+                    <span className="font-medium">
+                      {product.name} <span className="text-muted-foreground">x {quantity}</span>
+                    </span>
                     <span>{formatPrice(price * quantity, selectedCurrency)}</span>
                   </div>
                 );
@@ -232,3 +237,4 @@ export default function CheckoutPage() {
     </div>
   );
 }
+
