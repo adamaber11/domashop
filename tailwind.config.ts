@@ -113,4 +113,8 @@ export default {
     },
   },
   plugins: [require('tailwindcss-animate')],
-} satisfies Config;
+};
+
+// CSS إضافي للتأكد من إزالة أي border-radius موروث من مكتبات أو CSS خارجي
+// أضف ده في globals.css أو ملف CSS الرئيسي:
+
