@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -15,12 +14,11 @@ import { ChevronDown, LogIn, UserPlus, LogOut, User as UserIcon, LayoutDashboard
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { useAuth } from '@/context/auth-context';
-import { Skeleton } from './ui/skeleton';
+import { Skeleton } from '@/components/ui/skeleton';
 import { useCart } from '@/context/cart-context';
 import { CurrencySelector } from './currency-selector';
 import { generateColorFromString } from '@/lib/utils';
 import { mainCategories, specialCategories } from '@/lib/data';
-
 
 export function NavigationBar() {
   const pathname = usePathname();
@@ -37,7 +35,7 @@ export function NavigationBar() {
   };
 
   return (
-    <nav className="bg-background border-b sticky top-20 z-40 hidden md:block">
+    <nav className="bg-background border-b hidden md:block">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14">
           <div className="flex items-center gap-8">
