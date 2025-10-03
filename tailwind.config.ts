@@ -80,9 +80,14 @@ export default {
         'caret-blink': 'caret-blink 1.25s ease-out infinite',
         fadeIn: 'fadeIn 0.5s ease-in-out',
       },
+
+      // ✨ هنا الإضافة الجديدة
+      backgroundSize: {
+        'full-contain': 'contain', // عشان تعمل bg-full-contain
+        'full-cover': 'cover',     // عشان تعمل bg-full-cover
+      },
     },
   },
   plugins: [require('tailwindcss-animate')],
 };
-
 
